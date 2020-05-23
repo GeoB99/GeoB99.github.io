@@ -1,0 +1,57 @@
+/* Filename: StyleSheet.css
+ *
+ * Purpose: CSS file for style sheets
+ *
+ * Created by: George Bișoc (Fraizeraust)
+ *
+*/
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #36393f;
+    color: #ffffff;
+    font-family: Tahoma, Helvetica, sans-serif;
+}
+
+h1, h2, h3, h4 {
+    margin-bottom: 0px;
+    margin-top: 6px;
+}
+
+code {
+    font-family: Consolas, "Courier New";
+    color: crimson;
+    background-color: #f1f1f1;
+    padding: 2px;
+    font-size: 105%;
+}
+
+hr#thick {
+    border-width: 3px;
+}
+
+div {
+    line-height: 20px;
+    margin: 13px;
+    text-align: justify;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+p {
+   padding-left: 25px;
+}
+
+a {
+   color: #faebd7;
+}
+
+a:visited {
+   color: #b0c4de;
+}
+
+a:hover {
+   color: #ff0000;
+}
