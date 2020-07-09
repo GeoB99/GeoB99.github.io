@@ -1,0 +1,169 @@
+﻿<!-- Filename: ps.html -->
+<!-- Purpose: Process Manager (Ps) documentation -->
+<!-- Created by George Bișoc (Fraizeraust) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>Process Manager (Kernel)</title>
+      <link href = "../../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
+      <h2>&nbsp;Process Manager (Kernel)</h2>
+      <h4>&nbsp;<a href = "ntoskrnl.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "../../../index.html"><< Home Page</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <h1>&nbsp;Process Manager summary</h1>
+
+      <p>
+         The process manager of the Executive deals with maintaining, creation of processes, management of internal process data and thread management. A function that lies down in this module starts with a prefix of
+         <b>Ps</b>. Functions that begin with <b>Psp</b> are so called -- private functions. A private function is a function that is originally not within export routines list and they're used only in the internal
+         source code files of the said module.
+      </p>
+
+      <p>
+         An important distinction to make is that not every function in process manager kernel service begins with <b>Ps</b>. In fact, shim application management of the said kernel service has functions that start
+         with <b>Apphelp</b>.
+      </p>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- PspQueryLdtInformation -->
+      <h1>&nbsp;&#129154; PspQueryLdtInformation</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         This function queries the local descriptor table (LDT) information of a specific process.
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <p>
+         This function takes a number of 4 parameters, it is unknown the nature of the said parameters and what are they. However it is noted that this function returns a value of NTSTATUS. An example of NTSTATUS values returned
+         by this function are STATUS_INFO_LENGTH_MISMATCH, STATUS_INVALID_LDT_SIZE and STATUS_INVALID_LDT_OFFSET.
+      </p>
+
+      <p>
+         Functions called for this routine are:
+      </p>
+      <pre>
+         - _SEH_prolog
+         - KeWaitForSingleObject
+         - KeReleaseMutex
+         - _SEH_epilog
+      </pre>
+
+      <!-- Add a separator -->
+      <hr>
+      <br>
+
+      <!-- PsChangeJobMemoryUsage -->
+      <h1>&nbsp;&#129154; PsChangeJobMemoryUsage</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         This function changes the memory usage of a specific process job.
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <p>
+         This function takes a number of 2 parameters, it is unknown the nature of the said parameters and what are they. It is noted that this function returns a BOOLEAN value.
+      </p>
+
+      <p>
+         Funtions called for this routine are:
+      </p>
+      <pre>
+         - KiAcquireGuardedMutex
+         - IoSetIoCompletion
+         - KeSignalGateBoostPriority
+         - KiCheckForKernelApcDelivery
+      </pre>
+
+      <!-- Add a separator -->
+      <hr>
+      <br>
+
+      <!-- PspSetLdtInformation -->
+      <h1>&nbsp;&#129154; PspSetLdtInformation</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         Sets the LDT information to a specific process given the process executive.
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+NTSTATUS
+NTAPI
+PspSetLdtInformation(IN PEPROCESS Process,
+                     IN PROCESS_LDT_INFORMATION LdtInformation,
+                     IN ULONG InformationLength)
+      </pre>
+
+      <p>
+         <b>Process</b> is a pointer to a EPROCESS structure, the executive process. <b>LdtInformation</b> contains information about Local Descriptor Table (LDT) entries. <b>InformationLength</b>
+         is the size length, in bytes, of the second parameter which is LdtInformation. The function returns a NTSTATUS value, that is, STATUS_SUCCESS if the operation completed successfully or
+         STATUS_ACCESS_VIOLATION if a specific address is invalid or not allowable for read/write that the caller tried to access it.
+      </p>
+
+      <p>
+         The called functions for this routine are:
+      </p>
+      <pre>
+         - _SEH_prolog
+         - ExAllocatePoolWithQuotaTag
+         - PspIsDescriptorValid
+         - KeWaitForSingleObject
+         - ExFreePoolWithTag
+         - ExAllocatePoolWithTag
+         - Ke386SetLdtProcess
+         - PsReturnProcessNonPagedPoolQuota
+         - PspCreateLdt
+         - PsChargeProcessNonPagedPoolQuota
+         - KeReleaseMutex
+         - Ke386SetDescriptorProcess
+         - _SEH_epilog
+      </pre>
+
+      <!-- Add a separator -->
+      <hr>
+      <br>
+
+      <!-- PspVdmInitialize -->
+      <h1>&nbsp;&#129154; PspVdmInitialize</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         Initializes the Virtual DOS Machine (DOS) in boot phase.
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+NTSTATUS
+NTAPI
+PspVdmInitialize(VOID)
+      </pre>
+
+      <p>
+         The function takes no parameters, it merely initializes the VDM during boot phase specifically during process manager initialization procedure -- first phase (PspInitPhase0).
+         PspInitPhase0 is invoked by PsInitSystem, the completion of the 1st phase leads with the preparation for the 2nd phase initialization. PspVdmInitialize returns a NTSTATUS value,
+         STATUS_SUCCESS respectively. The function invokes the Executive to add the VDM resource in the system resources list which in turn the kernel is responsible for managing such resource
+         for whatever purpose in the context of VDM.
+      </p>
+
+      <p>
+         The called function for this routine is:
+      </p>
+      <pre>
+         - ExInitializeResourceLite
+      </pre>
+   </body>
+</html>

@@ -40,6 +40,18 @@ div {
     padding: 5px;
 }
 
+pre#prototype {
+    border-style: solid;
+    border-width: 3px;
+    border-color: #D3D3D3;
+    background-color: #F2F2F2;
+    color: black;
+    font-size: 12pt;
+    vertical-align: top;
+    margin-left: 0.5in;
+    margin-right: 8in;
+}
+
 p {
    padding-left: 25px;
 }
