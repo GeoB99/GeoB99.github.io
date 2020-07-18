@@ -27,7 +27,7 @@
 
       <p>
          The Run-Time library (RTL) is a kernel executive module that provides the Run-Time interface and routines for the NT kernel itself and kernel mode drivers. The
-         library comprises a set of functions for string operations, arithemtic operations, data type conversions a whole lot more. Functions that belong in the RTL
+         library comprises a set of functions for string operations, arithemtic operations, data type conversions and a whole lot more. Functions that belong in the RTL
          executive module of the Executive realm of the kernel denote with a prefix as <b>Rtl</b> whereas private Run-Time library functions that aren't exported
          nor used outside of the said module start with <b>Rtlp</b>.
       </p>
@@ -82,7 +82,7 @@ RtlGetNtProductType(OUT PNT_PRODUCT_TYPE ProductType)
 
       <h3>&nbsp;&nbsp;&nbsp;<u>Remarks</u></h3>
       <p>
-         As told in the section of the function above, RtlGetNtProductType queries thorough the Registry to grab the product type of the operating system. In comparisong to the
+         As told in the section of the function above, RtlGetNtProductType queries thorough the Registry to grab the product type of the operating system. In comparison to the
          user mode variant of the function in NTDLL layer, the user mode variant caches the product type data from a particular kernel data structure, <b>_KUSER_SHARED_DATA</b>.
          This structure is managed internally and initialized by the NT kernel during boot initialization phase.
       </p>
