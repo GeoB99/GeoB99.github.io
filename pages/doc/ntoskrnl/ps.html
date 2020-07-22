@@ -71,16 +71,28 @@
       <h1>&nbsp;&#129154; PsChangeJobMemoryUsage</h1>
       <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
       <p>
-         This function changes the memory usage of a specific process job.
+         This function changes the memory usage of a specific process job, given the Executive job.
       </p>
 
       <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+BOOLEAN
+NTAPI
+PsChangeJobMemoryUsage(IN PEJOB Job,
+                       ???)
+      </pre>
+
       <p>
-         This function takes a number of 2 parameters, it is unknown the nature of the said parameters and what are they. It is noted that this function returns a BOOLEAN value.
+         <b>Job</b> is a pointer to a Executive Job (EJOB) structure. The purpose of the second parameter is unknown but here are some interesting notes about it. The second parameter
+         takes a signed datatype integer, the content behind the argument is not indefinite. The function is called from various places, notably from <code>MiRemoveVadCharges</code>
+         and <code>NtAllocateVirtualMemory</code> functions.
       </p>
 
       <p>
-         Funtions called for this routine are:
+         As the function relates to modifying the memory usage of a job process, the last parameter could indicate one of the various purposes: 1) it takes specific macro defined values,
+         2) it takes a subset of enumeration value, 3) it takes a size parameter to define the next usage for further memory allocation or 4) it takes a "difference size", that is,
+         it tells the called function internally to make up the difference between the previous and the current memory usage by the job. The function returns a BOOLEAN value, <b>TRUE</b>
+         if the function completed successfully at changing the job memory usage, <b>FALSE</b> otherwise. The functions called for this routine are:
       </p>
       <pre>
          - KiAcquireGuardedMutex
