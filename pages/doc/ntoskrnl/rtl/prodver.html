@@ -1,0 +1,67 @@
+﻿<!-- Filename: prodver.html -->
+<!-- Purpose: Run-Time Library product & version functions documentation -->
+<!-- Created by George Bișoc (Fraizeraust) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>Run-Time Library product & version functions (Kernel)</title>
+      <link href = "../../../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
+      <h2>&nbsp;Run-Time Library product & version functions (Kernel)</h2>
+      <h4>&nbsp;<a href = "../rtl.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "../../../../index.html"><< Home Page</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- RtlGetNtProductType -->
+      <h1>&nbsp;&#129154; RtlGetNtProductType</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         Retrieves the NT type product of the operating system.
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+BOOLEAN
+NTAPI
+RtlGetNtProductType(OUT PNT_PRODUCT_TYPE ProductType)
+      </pre>
+
+      <p>
+         <b>ProductType</b> is a pointer to a NT_PRODUCT_TYPE enumeration. The product type can be either Workstation (WinNT), Server (ServerNT) and Advanced Server (LanmanNT).
+         The product type defines the usage of the operating system (Workstation in this case, is regarded for daily-life low-end user usage). This kernel mode function relies
+         on the Registry to query the type of the operating system product. The function returns <b>TRUE</b> on success, <b>FALSE</b> otherwise. In the latter case, <u>WinNT</u>
+         is returned to the output argument parameter of the function to the caller as the default product type on failure.
+      </p>
+
+      <p>
+         The called functions for this routine are:
+      </p>
+      <pre>
+         - RtlInitUnicodeString
+         - ZwOpenKey
+         - ExAllocatePoolWithTag
+         - ZwQueryValueKey
+         - RtlEqualUnicodeString
+         - ExFreePoolWithTag
+         - ZwClose
+      </pre>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Remarks</u></h3>
+      <p>
+         As told in the section of the function above, RtlGetNtProductType queries thorough the Registry to grab the product type of the operating system. In comparison to the
+         user mode variant of the function in NTDLL layer, the user mode variant caches the product type data from a particular kernel data structure, <b>_KUSER_SHARED_DATA</b>.
+         This structure is managed internally and initialized by the NT kernel during boot initialization phase.
+      </p>
+   </body>
+</html>
