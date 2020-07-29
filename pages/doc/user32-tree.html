@@ -1,0 +1,165 @@
+﻿<!-- Filename: user32-tree.html -->
+<!-- Purpose: User32 user-mode library layout tree -->
+<!-- Created by George Bișoc (Fraizeraust) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>User32 layout tree</title>
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
+      <h2>&nbsp;User32 source tree</h2>
+      <h4>&nbsp;<a href = "documentation.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "../../index.html"><< Home Page</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <h1>&nbsp;<u>User32 user-mode library layout tree</u></h1>
+
+      <ul class = "tree">
+         <li>d:
+            <ul>
+               <li>nt
+                  <ul>
+                     <li>windows (Windows Subsystem)
+                        <ul>
+                           <li>core (Core Windows Kernel Subsystem)
+                              <ul>
+
+                                 <!-- Native USER Window Manager -->
+                                 <li>ntuser (Native USER Window Manager)
+                                    <ul>
+
+                                       <!-- USER user-mode library -->
+                                       <li>client (USER user-mode library)
+                                          <ul>
+                                             <li>acons.c</li>
+                                             <li>btnctl.c</li>
+                                             <li>callback.c</li>
+                                             <li>classc.c</li>
+                                             <li>cldib.c</li>
+                                             <li>clenum.c</li>
+                                             <li>clhook.c</li>
+                                             <li>client.c</li>
+                                             <li>clinit.c</li>
+                                             <li>clmenu.c</li>
+                                             <li>clmsg.c</li>
+                                             <li>clrect.c</li>
+                                             <li>clres.c</li>
+                                             <li>cltxt.h</li>
+                                             <li>combodir.c</li>
+                                             <li>comboini.c</li>
+                                             <li>connect.c</li>
+                                             <li>csrstubs.c</li>
+                                             <li>ddemlcli.c</li>
+                                             <li>ddemlwp.c</li>
+                                             <li>ddetrack.c</li>
+                                             <li>dlgbegin.c</li>
+                                             <li>dlgend.c</li>
+                                             <li>dlgmgr.c</li>
+                                             <li>dlgmgr2.c</li>
+                                             <li>dlgmgrc.c</li>
+                                             <li>dmmnem.c</li>
+                                             <li>draw.c</li>
+                                             <li>drawtext.c</li>
+                                             <li>edecrare.c</li>
+                                             <li>editec.c</li>
+                                             <li>editml.c</li>
+                                             <li>editsl.c</li>
+                                             <li>edmlrare.c</li>
+                                             <li>fareast.c</li>
+                                             <li>fntsweep.c</li>
+                                             <li>getsetc.c</li>
+                                             <li>handles.c</li>
+                                             <li>hdata.c</li>
+                                             <li>help.c</li>
+                                             <li>hsz.c</li>
+                                             <li>imectl.c</li>
+                                             <li>immhotky.c</li>
+                                             <li>instance.c</li>
+                                             <li>lb1.c</li>
+                                             <li>lboxctl1.c</li>
+                                             <li>lboxctl2.c</li>
+                                             <li>lboxctl3.c</li>
+                                             <li>lboxrare.c</li>
+                                             <li>mdimenu.c</li>
+                                             <li>mdiwin.c</li>
+                                             <li>menuc.c</li>
+                                             <li>menuddc.c</li>
+                                             <li>mmcl.c</li>
+                                             <li>mngrayc.c</li>
+                                             <li>monitor.c</li>
+                                             <li>msgbox.c</li>
+                                             <li>ntcftxt.h</li>
+                                             <li>ntstubs.c</li>
+                                             <li>oemxlate.c</li>
+                                             <li>queuec.c</li>
+                                             <li>random.c</li>
+                                             <li>reader.c</li>
+                                             <li>register.c</li>
+                                             <li>rtlinit.c</li>
+                                             <li>rtlres.c</li>
+                                             <li>sbapi.c</li>
+                                             <li>statctl.c</li>
+                                             <li>stdptcl.c</li>
+                                             <li>strings.c</li>
+                                             <li>usercli.h</li>
+                                             <li>winable.c</li>
+                                             <li>winmgrc.c</li>
+                                             <li>wsprintf.c</li>
+                                             <li>wstrings.c</li>
+                                             <li>xact.c</li>
+                                             <li>combo.c</li>
+                                             <li>wow.c</li>
+                                          </ul>
+                                       </li>
+
+                                       <!-- Header files -->
+                                       <li>inc (Header Files)
+                                          <ul>
+                                             <li>ntcb.h</li>
+                                          </ul>
+                                       </li>
+
+                                       <!-- User32 Run-Time Library -->
+                                       <li>rtl (User32 Run-Time library)
+                                          <ul>
+                                             <li>chartran.c</li>
+                                             <li>draw.c</li>
+                                             <li>drawtext.c</li>
+                                             <li>menu.c</li>
+                                             <li>mmrtl.c</li>
+                                             <li>winmgr.c</li>
+                                             <li>wow.c</li>
+                                             <li>winevent.c</li>
+                                          </ul>
+                                       </li>
+                                    </ul>
+                                 </li>
+
+                                 <!-- Win32k Run-Time Library -->
+                                 <li>rtl (Win32k Run-Time Library)
+                                    <ul>
+                                       <li>debug.c</li>
+                                    </ul>
+                                 </li>
+                              </ul>
+                           </li>
+                        </ul>
+                     </li>
+                  </ul>
+               </li>
+            </ul>
+         </li>
+      </ul>
+   </body>
+</html>
