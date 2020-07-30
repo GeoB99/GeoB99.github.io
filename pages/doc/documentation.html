@@ -49,6 +49,22 @@
 
       <h1>&nbsp;<u>Windows Server 2003 layout source tree</u></h1>
 
+      <p>
+         The layout source paths tree of Windows components were taken by extracting the path strings embedded in debug checked build files. This helps understanding the structure
+         of a module and determining how a certain component works. The strings were extracted with <a href = "https://docs.microsoft.com/en-us/sysinternals/downloads/strings">Strings Sysinternals</a>.
+      </p>
+
+      <div>
+         <code>
+            ./strings.exe -nobanner ./filename | grep -e "^[a-zA-Z]:\\\\"  | sort -u
+         </code>
+      </div>
+
+      <p>
+         Where <code>filename</code> is the file of interest that you want to extract the embedded path strings of the file. This command has to be ran in a *nix-like shell (Cygwin or Git SCM Bash in Windows).
+         You can also output the data stream pointed by the command into a text file. The strings will be sorted in alphabetical order after the string extraction is complete.
+      </p>
+
       <ul>
          <li>
             <a href = "ntoskrnl/tree.html">NT kernel layout tree</a>
