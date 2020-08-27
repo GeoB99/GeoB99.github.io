@@ -41,12 +41,12 @@ PspDeleteVdmObjects(IN PEPROCESS Process)
          <b>Process</b> is a pointer to a Executive process (EPROCESS). The function internally frees the <b>VdmObjects</b> member of the EPROCESS structure and deletes the Executive
          resource from the system's resources list. Besides that, the function also deallocates the memory pool block within the memory space of the Virtual DOS Machine (VDM) objects.
          A peculiarity to take into consideration regard this function is that this function returns the process pool quota (PsReturnProcessPagedPoolQuota and PsReturnProcessNonPagedPoolQuota
-         being called respectively). A possible theory is that the returned paged pool quota is from the deallocated VDM objects that were taking up the space in the memory area.
+         being called respectively). A possible theory is that the returned paged pool quota is from the allocated Executive process pointed by EPROCESS.
       </p>
 
       <p>
-         In a non-paged pool scenario however, the actual pool quota returned comes from the allocated Executive process pointed by EPROCESS, that is guaranteed to stay in the physical
-         memory area. This function doesn't return anything. The called functions for this routine are:
+         In a non-paged pool scenario however, the actual pool quota returned comes from the VDM objects which are about to be deallocated from the memory, that is guaranteed to stay in the physical
+         memory area. The VDM objects are allocated in a non paged pool on a per process basis in <code>Ke386CallBios</code>. This function doesn't return anything. The called functions for this routine are:
       </p>
       <pre>
          - ExFreePoolWithTag
