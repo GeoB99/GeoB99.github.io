@@ -132,5 +132,37 @@ PspSetLdtSize(IN PEPROCESS Process,
          - PsReturnProcessNonPagedPoolQuota
          - _SEH_epilog
       </pre>
+
+      <!-- Add a separator -->
+      <hr>
+      <br>
+
+      <!-- PspDeleteLdt -->
+      <h1>&nbsp;&#129154; PspDeleteLdt</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         Deletes the Local Descriptor Table (LDT) resources previously created by <code>PspCreateLdt</code>.
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+VOID
+NTAPI
+PspDeleteLdt(IN PEPROCESS Process)
+      </pre>
+
+      <p>
+         <b>Process</b> is a pointer to a Executive process (EPROCESS). The function gathers the non-paged pool quota of the process and deallocates the memory pool block within the memory
+         space. The aforementioned memory pool is created by <code>PspCreateLdt</code> during the call of <code>ExAllocatePoolWithTag</code> function. The tag named for such pool memory
+         is <code>dLsP</code>. The function doesn't return anything.
+      </p>
+
+      <p>
+         The called functions for this routine are:
+      </p>
+      <pre>
+         - PsReturnProcessNonPagedPoolQuota
+         - ExFreePoolWithTag
+      </pre>
    </body>
 </html>
