@@ -57,11 +57,11 @@ hr#thick {
 
 div {
     line-height: 20px;
-    margin: 13px;
+    margin: 11px;
     text-align: justify;
     color: #ffffff;
     border-radius: 5px;
-    padding: 5px;
+    padding: 11px;
 }
 
 pre#prototype {
@@ -77,7 +77,8 @@ pre#prototype {
 }
 
 p {
-   padding-left: 25px;
+   padding-left: 11px;
+   padding-right: 11px;
 }
 
 a {
