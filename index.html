@@ -1,5 +1,5 @@
 ﻿<!-- Filename: index.html -->
-<!-- Purpose: Home tutorials page -->
+<!-- Purpose: Personal home page -->
 <!-- Created by George Bișoc (Fraizeraust) -->
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -7,50 +7,72 @@
 <html lang = "en">
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
-      <title>Home Page</title>
+      <title>Fraizeraust - Homepage</title>
       <link href = "StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "images/ROS.png">
+      <link rel = "icon" href = "images/Homepage-pic.png">
    </head>
 
    <body>
-      <img src = "images/ROS.png" alt = "ReactOS Icon" align = "left" height = "75" width = "75" hspace = "10">
-      <h1>&nbsp;ReactOS Tutorials</h1>
-      <h2>&nbsp;Home Page</h2>
+      <!-- Top title -->
+      <div id = "Header-Top">
+         <h1>Fraizeraust's Homepage</h1>
+         <br>
+         <h2>Welcome!</h2>
+      </div>
 
       <!-- Add a separator -->
       <hr id = "thick">
       <br>
 
-      <h1>&nbsp;What is ReactOS Tutorials?</h1>
+      <!-- Render the background, there's nothing else to do -->
+      <div id = "Background">
+         <div>
+            <h1>&nbsp;<u>Introduction</u></h1>
 
-      <p>
-         ReactOS Tutorials is a website personally created by Fraizeraust to host several tutorials or guidelines. The "ReactOS" in the name serves as a mean to indicate that the tutorials
-         could be useful for your ReactOS contribution. Besides tutorials, I also host a separate web-page where I publish documentation about Windows undocumented internals, notably functions and structures.
-         Check <a href = "pages/doc/documentation.html">this</a> page for further information about documentation research done by me.
-      </p>
+            <p>
+               Hello! I'm a 21 years old guy living in Italy whom goes by the nickname as Fraizeraust around the Internet. I'm a self-taught coder with C being the programming language of interest
+               and choice for me, but I also have some bits of expertise in C++, Lua (a scripting language) and web development languages (HTML and CSS). I'm also a multilingual person which I speak
+               fluently the following languages: English, Italian and Romanian (whose third language being my mother tongue).
 
-      <h1>&nbsp;<u>Tutorials List</u></h1>
+               Apart from coding I do also have several hobbies such as listening to music and whatnot. As main education I studied automotive engineering and worked as an automotive technician and my
+               goal is to pursue that career but I could as well opt in for other several trades in the future.
+            </p>
 
-      <ul>
-         <li>
-            <a href = "pages/first-setup-git.html">First time Git setup</a>
-         </li>
+            <h1>&nbsp;<u>Work & Contributions</u></h1>
 
-         <li>
-            <a href = "pages/reactos-source-tree.html">Understanding the ReactOS source tree</a>
-         </li>
+            <p>
+               The first contribution I've made in terms of coding is writing some scripts written in the Lua language for a 2D top-down shooter game called CS2D in 2015. At that time I began dwelling
+               and exploring the realm of coding. I programmed the first simple software in C, a CLI (Command Line Interface) calculator.
+            </p>
 
-         <li>
-            <a href = "pages/reactos-contributing.html">Contribute to ReactOS with your first patch</a>
-         </li>
+            <p>
+               In 2017 I discovered a project going by the name as ReactOS and in the same year I contributed for the first time translating some built-in software programs of the project in Romanian and
+               Italian. Later on I began learning how to use the Windows API, understanding the inner architecture and internals of Windows Server 2003 and whatnot. I've been a maintainer for a little while
+               for On-Screen Keyboard and developed a built-in program for the project for the first time -- the <a href="https://github.com/reactos/reactos/tree/master/base/applications/utilman">Accessibility Utility Manager</a>.
+               Currently I do not have a strict role or position within the project, I mostly contribute to stuff I am interested on or have enough knowledge and confidence to work. You can find my commit
+               contributions <a href = "https://github.com/reactos/reactos/commits?author=Fraizeraust">in this page</a>.
+            </p>
 
-         <li>
-            <a href = "pages/reactos-translate.html">How to translate ReactOS</a>
-         </li>
+            <h1>&nbsp;<u>Miscellaneous sites</u></h1>
 
-         <li>
-            <a href = "pages/reactos-build-gcc.html">How to compile ReactOS using RosBE (Windows)</a>
-         </li>
-      </ul>
+            <ul>
+               <li>
+                  <a href = "ros-tutorials-home.html">ReactOS Tutorials (section for hosting tutorials and other articles)</a>
+               </li>
+
+               <li>
+                  <a href = "pages/doc/documentation.html">ReactOS Tutorials Documentation (a small knowledge base of documentation internals of Windows)</a>
+               </li>
+
+               <li>
+                  <a href = "https://cernodile.com/reactos/archive">ReactOS Testing Contest Archive (courtesy of Cernodile for hosting the archive)</a>
+               </li>
+            </ul>
+         </div>
+      </div>
+
+      <footer>
+         <p>Fraizeraust's Homepage 2020 -- HTML 4.01 powered</p>
+      </footer>
    </body>
 </html>

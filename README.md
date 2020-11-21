@@ -1,7 +1,7 @@
-# ReactOS Tutorials
-ReactOS Tutorials is a website written in HTML & CSS where I personally provide tutorials as well as guidelines that could be useful for absolute beginners when contributing to ReactOS for the first time.
+# Personal website
+Here I host my personal website as well as the "ReactOS Tutorial" section of the site and whatnot.
 
-## When will you include XYZ tutorial?
+## When will you include XYZ tutorial/article in ReactOS Tutorials?
 I am doing this in my spare time and generally I post tutorials regarding stuff that I am familiar with or I've knowledge in the matter. Furthermore it's worth noting that initially the tutorial pages
 are stubs and rather incomplete and I gradually update them when I can.
 
@@ -19,4 +19,4 @@ WinDBG is my favourite debugging and reverse engineering tool of choice for my r
 The ReactOS icon used in this website is based off work by Aha-Soft, licensed under CC-BY-3.0. The icon be found at -- https://www.shareicon.net/reactos-102446.
 
 ## NOTE
-This repository is not affiliated with the ReactOS Organization and Team in any way!
+The "ReactOS Tutorials" site section bears no affiliation with the ReactOS Organization and Team in any way!
