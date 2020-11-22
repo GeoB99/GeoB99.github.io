@@ -1,0 +1,58 @@
+﻿<!-- Filename: PspDeleteVdmObjects.html -->
+<!-- Purpose: Documentation of the PspDeleteVdmObjects function -->
+<!-- Created by George Bișoc (Fraizeraust) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>PspDeleteVdmObjects (Virtual DOS Machine)</title>
+      <link href = "../../../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
+      <h2>&nbsp;PspDeleteVdmObjects function</h2>
+      <h4>&nbsp;<a href = "vdm.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "../../../../index.html"><< Home Page</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- PspDeleteVdmObjects -->
+      <h1>&nbsp;&#129154; PspDeleteVdmObjects</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         Deletes Virtual DOS Machine (DOS) objects. The function is called in a process deletion scenario (called by <b>PspDeleteProcess</b>).
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+VOID
+NTAPI
+PspDeleteVdmObjects(IN PEPROCESS Process)
+      </pre>
+
+      <p>
+         <b>Process</b> is a pointer to a Executive process (EPROCESS). The function internally frees the <b>VdmObjects</b> member of the EPROCESS structure and deletes the Executive
+         resource from the system's resources list. Besides that, the function also deallocates the memory pool block within the memory space of the Virtual DOS Machine (VDM) objects.
+         A peculiarity to take into consideration regard this function is that this function returns the process pool quota (PsReturnProcessPagedPoolQuota and PsReturnProcessNonPagedPoolQuota
+         being called respectively). A possible theory is that the returned paged pool quota is from the allocated Executive process pointed by EPROCESS.
+      </p>
+
+      <p>
+         In a non-paged pool scenario however, the actual pool quota returned comes from the VDM objects which are about to be deallocated from the memory, that is guaranteed to stay in the physical
+         memory area. The VDM objects are allocated in a non paged pool on a per process basis in <code>Ke386CallBios</code>. This function doesn't return anything. The called functions for this routine are:
+      </p>
+      <pre>
+         - ExFreePoolWithTag
+         - ExDeleteResourceLite
+         - PsReturnProcessPagedPoolQuota
+         - PsReturnProcessNonPagedPoolQuota
+      </pre>
+   </body>
+</html>

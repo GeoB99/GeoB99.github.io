@@ -1,0 +1,67 @@
+﻿<!-- Filename: PspSetLdtInformation.html -->
+<!-- Purpose: Documentation of the PspSetLdtInformation function -->
+<!-- Created by George Bișoc (Fraizeraust) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>PspSetLdtInformation (Local Descriptor Table)</title>
+      <link href = "../../../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
+      <h2>&nbsp;PspSetLdtInformation function</h2>
+      <h4>&nbsp;<a href = "ldt.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "../../../../index.html"><< Home Page</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- PspSetLdtInformation -->
+      <h1>&nbsp;&#129154; PspSetLdtInformation</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         Sets the LDT information to a specific process given the process executive.
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+NTSTATUS
+NTAPI
+PspSetLdtInformation(IN PEPROCESS Process,
+                     IN PROCESS_LDT_INFORMATION LdtInformation,
+                     IN ULONG InformationLength)
+      </pre>
+
+      <p>
+         <b>Process</b> is a pointer to a EPROCESS structure, the executive process. <b>LdtInformation</b> contains information about Local Descriptor Table (LDT) entries. <b>InformationLength</b>
+         is the size length, in bytes, of the second parameter which is LdtInformation. The function returns a NTSTATUS value, that is, STATUS_SUCCESS if the operation completed successfully or
+         STATUS_ACCESS_VIOLATION if a specific address is invalid or not allowable for read/write that the caller tried to access it.
+      </p>
+
+      <p>
+         The called functions for this routine are:
+      </p>
+      <pre>
+         - _SEH_prolog
+         - ExAllocatePoolWithQuotaTag
+         - PspIsDescriptorValid
+         - KeWaitForSingleObject
+         - ExFreePoolWithTag
+         - ExAllocatePoolWithTag
+         - Ke386SetLdtProcess
+         - PsReturnProcessNonPagedPoolQuota
+         - PspCreateLdt
+         - PsChargeProcessNonPagedPoolQuota
+         - KeReleaseMutex
+         - Ke386SetDescriptorProcess
+         - _SEH_epilog
+      </pre>
+   </body>
+</html>

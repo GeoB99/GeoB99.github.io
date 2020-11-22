@@ -23,74 +23,16 @@
       <hr id = "thick">
       <br>
 
-      <!-- PsChangeJobMemoryUsage -->
-      <h1>&nbsp;&#129154; PsChangeJobMemoryUsage</h1>
-      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
-      <p>
-         This function changes the memory usage of a specific process Executive job.
-      </p>
+      <h1>&nbsp;Functions</h1>
 
-      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
-      <pre id = "prototype">
-BOOLEAN
-NTAPI
-PsChangeJobMemoryUsage(IN ULONG Constant,
-                       IN SSIZE_T UsageAmount)
-      </pre>
+      <ul>
+         <li>
+            <a href = "PsChangeJobMemoryUsage.html">PsChangeJobMemoryUsage</a>
+         </li>
 
-      <p>
-         <b>Constant</b> is a parameter that must be set with a constant value of 10 (0x00000010) with the behaviour of this constant being discovered in Windows Server 2003. 
-         Currently it's yet to be understood what is the purpose of this parameter and what is it needed for. <b>UsageAmount</b> indicates the size difference, the necessary 
-         amount for the new memory usage to be changed for the job. The last parameter takes a signed integer value to describe the size. 
-         It's worth noting the parameter can take a negative integer which is also left to be understood the reasoning behind this.
-      </p>
-
-      <p>
-         This function is called from various places of the NT kernel, notably from <code>MiRemoveVadCharges</code> and <code>NtAllocateVirtualMemory</code>. It returns <b>TRUE</b>
-         when the function completed successfully at changing the memory usage of a job, <b>FALSE</b> otherwise. The called functions in this routine are:
-      </p>
-      <pre>
-         - KiAcquireGuardedMutex
-         - IoSetIoCompletion
-         - KeSignalGateBoostPriority
-         - KiCheckForKernelApcDelivery
-      </pre>
-
-      <!-- Add a separator -->
-      <hr>
-      <br>
-
-      <!-- PspRemoveProcessFromJob -->
-      <h1>&nbsp;&#129154; PspRemoveProcessFromJob</h1>
-      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
-      <p>
-         The function removes a process executive object from a job.
-      </p>
-
-      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
-      <pre id = "prototype">
-VOID
-NTAPI
-PspRemoveProcessFromJob(IN PEPROCESS Process,
-                        IN PEJOB Job)
-      </pre>
-
-      <p>
-         <b>Process</b> is a pointer to a Executive Process structure (EPROCESS). The first argument parameter is compulsory as it's needed to specify a process to be removed from a job, it mustn't
-         be NULL. <b>Job</b> is a pointer to a Executive Job structure (EJOB). As with the second parameter, the caller is expected to pass a valid job object to the callee function service.
-         The function acquires a resource within the calling thread in a waitable state, that is, the NT kernel ensures the said resource can be acquired for the calling thread within exclusive
-         usage when the wait state is finished.
-      </p>
-
-      <p>
-         The job object structure's information is modified in the middle of the calling execution when the function successfully acquired the internal job resource. APC (Asynchronous Procedure Call) delivery
-         is checked to ensure if there's kernel APC delivery prior to resource acquire procedure. The function doesn't return anything. The called functions for this routine are: 
-      </p>
-      <pre>
-         - ExAcquireResourceExclusiveLite
-         - PspFoldProcessAccountingIntoJob
-         - ExReleaseResourceLite
-         - KiCheckForKernelApcDelivery
-      </pre>
+         <li>
+            <a href = "PspRemoveProcessFromJob.html">PspRemoveProcessFromJob</a>
+         </li>
+      </ul>
    </body>
 </html>

@@ -23,146 +23,24 @@
       <hr id = "thick">
       <br>
 
-      <!-- PspQueryLdtInformation -->
-      <h1>&nbsp;&#129154; PspQueryLdtInformation</h1>
-      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
-      <p>
-         This function queries the local descriptor table (LDT) information of a specific process.
-      </p>
+      <h1>&nbsp;Functions</h1>
+      
+      <ul>
+         <li>
+            <a href = "PspDeleteLdt.html">PspDeleteLdt</a>
+         </li>
 
-      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
-      <p>
-         This function takes a number of 4 parameters, it is unknown the nature of the said parameters and what are they. However it is noted that this function returns a value of NTSTATUS. An example of NTSTATUS values returned
-         by this function are STATUS_INFO_LENGTH_MISMATCH, STATUS_INVALID_LDT_SIZE and STATUS_INVALID_LDT_OFFSET.
-      </p>
+         <li>
+            <a href = "PspQueryLdtInformation.html">PspQueryLdtInformation</a>
+         </li>
 
-      <p>
-         Functions called for this routine are:
-      </p>
-      <pre>
-         - _SEH_prolog
-         - KeWaitForSingleObject
-         - KeReleaseMutex
-         - _SEH_epilog
-      </pre>
+         <li>
+            <a href = "PspSetLdtInformation.html">PspSetLdtInformation</a> 
+         </li>
 
-      <!-- Add a separator -->
-      <hr>
-      <br>
-
-      <!-- PspSetLdtInformation -->
-      <h1>&nbsp;&#129154; PspSetLdtInformation</h1>
-      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
-      <p>
-         Sets the LDT information to a specific process given the process executive.
-      </p>
-
-      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
-      <pre id = "prototype">
-NTSTATUS
-NTAPI
-PspSetLdtInformation(IN PEPROCESS Process,
-                     IN PROCESS_LDT_INFORMATION LdtInformation,
-                     IN ULONG InformationLength)
-      </pre>
-
-      <p>
-         <b>Process</b> is a pointer to a EPROCESS structure, the executive process. <b>LdtInformation</b> contains information about Local Descriptor Table (LDT) entries. <b>InformationLength</b>
-         is the size length, in bytes, of the second parameter which is LdtInformation. The function returns a NTSTATUS value, that is, STATUS_SUCCESS if the operation completed successfully or
-         STATUS_ACCESS_VIOLATION if a specific address is invalid or not allowable for read/write that the caller tried to access it.
-      </p>
-
-      <p>
-         The called functions for this routine are:
-      </p>
-      <pre>
-         - _SEH_prolog
-         - ExAllocatePoolWithQuotaTag
-         - PspIsDescriptorValid
-         - KeWaitForSingleObject
-         - ExFreePoolWithTag
-         - ExAllocatePoolWithTag
-         - Ke386SetLdtProcess
-         - PsReturnProcessNonPagedPoolQuota
-         - PspCreateLdt
-         - PsChargeProcessNonPagedPoolQuota
-         - KeReleaseMutex
-         - Ke386SetDescriptorProcess
-         - _SEH_epilog
-      </pre>
-
-      <!-- Add a separator -->
-      <hr>
-      <br>
-
-      <!-- PspSetLdtSize -->
-      <h1>&nbsp;&#129154; PspSetLdtSize</h1>
-      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
-      <p>
-         Sets the Local Descriptor Table (LDT) size of a Executive process object.
-      </p>
-
-      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
-      <pre id = "prototype">
-NTSTATUS
-NTAPI
-PspSetLdtSize(IN PEPROCESS Process,
-              IN PROCESS_LDT_SIZE LdtSize,
-              IN ULONG InformationLength)
-      </pre>
-
-      <p>
-         <b>Process</b> is a pointer to a Executive process (EPROCESS). <b>LdtSize</b> is the Local Descriptor Table (LDT) size pointed by its particular structure -- <b>PROCESS_LDT_SIZE</b>.
-         <b>InformationLength</b> is the length size, in bytes, pointed by <b>LdtSize</b> parameter. The function is internally called by NtSetInformationProess() when <code>ProcessLdtSize</code>
-         information class is invoked. The function returns STATUS_SUCCESS if the size of LDT of a process has been set. Otherwise the function will return <b>STATUS_INFO_LENGTH_MISMATCH</b>
-         if the information length size doesn't match with the actual information parameter argument, <b>LdtSize</b>, <b>STATUS_INVALID_LDT_SIZE</b> or <b>STATUS_NO_LDT</b> if the given process
-         doesn't have a LDT.
-      </p>
-
-      <p>
-         The called functions for this routine are:
-      </p>
-      <pre>
-         - _SEH_prolog
-         - KeWaitForSingleObject
-         - KeReleaseMutex
-         - PspCreateLdt
-         - Ke386SetLdtProcess
-         - ExFreePoolWithTag
-         - PsReturnProcessNonPagedPoolQuota
-         - _SEH_epilog
-      </pre>
-
-      <!-- Add a separator -->
-      <hr>
-      <br>
-
-      <!-- PspDeleteLdt -->
-      <h1>&nbsp;&#129154; PspDeleteLdt</h1>
-      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
-      <p>
-         Deletes the Local Descriptor Table (LDT) resources previously created by <code>PspCreateLdt</code>.
-      </p>
-
-      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
-      <pre id = "prototype">
-VOID
-NTAPI
-PspDeleteLdt(IN PEPROCESS Process)
-      </pre>
-
-      <p>
-         <b>Process</b> is a pointer to a Executive process (EPROCESS). The function gathers the non-paged pool quota of the process and deallocates the memory pool block within the memory
-         space. The aforementioned memory pool is created by <code>PspCreateLdt</code> during the call of <code>ExAllocatePoolWithTag</code> function. The tag named for such pool memory
-         is <code>dLsP</code>. The function doesn't return anything.
-      </p>
-
-      <p>
-         The called functions for this routine are:
-      </p>
-      <pre>
-         - PsReturnProcessNonPagedPoolQuota
-         - ExFreePoolWithTag
-      </pre>
+         <li>
+            <a href = "PspSetLdtSize.html">PspSetLdtSize</a>
+         </li>
+      </ul>
    </body>
 </html>
