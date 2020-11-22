@@ -60,7 +60,7 @@ RtlGetNtProductType(OUT PNT_PRODUCT_TYPE ProductType)
       <h3>&nbsp;&nbsp;&nbsp;<u>Remarks</u></h3>
       <p>
          As told in the section of the function above, RtlGetNtProductType queries thorough the Registry to grab the product type of the operating system. In comparison to the
-         user mode variant of the function in NTDLL layer, the user mode variant caches the product type data from a particular kernel data structure, <b>_KUSER_SHARED_DATA</b>.
+         user mode variant of the function in NTDLL layer, the user mode variant caches the product type data from a particular kernel data structure, <code>_KUSER_SHARED_DATA</code>.
          This structure is managed internally and initialized by the NT kernel during boot initialization phase.
       </p>
    </body>
