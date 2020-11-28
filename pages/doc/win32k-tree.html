@@ -23,7 +23,36 @@
       <hr id = "thick">
       <br>
 
-      <h1>&nbsp;<u>Windows Kernel Subsystem layout tree</u></h1>
+      <h1>&nbsp;<u>Windows Subsystem Kernel layout tree</u></h1>
+
+      <p>
+         The Windows subsystem environment is divided amongst two chunks that make up the entirety of the said subsystem. The user mode, with client libraries used by applications
+         and components that interact within the user mode space (<b>Kernel32.dll</b>, <b>Gdi32.dll</b>, <b>User32.dll</b> et al) and a large portion being the kernel mode. The latter
+         portion is in itself left undocumented, with no major details or explanation provided about the inner implementation of the kernel mode side. And what I am referring about the
+         kernel mode portion is, without a doubt, <b>Win32k.sys</b>.
+      </p>
+
+      <p>
+         <b>Win32k.sys</b>, which is merely a kernel mode system driver, is responsible for graphics management -- what do you see on the screen. The kernel driver is separated into two
+         major subset components: <b>GDI</b> (also known as Graphics Device Interface) and USER (known as the window manager of Windows). GDI is implemented internally in a directory named
+         <b>ntgdi</b> (as you'd see in the tree layout below) whereas the window manager is named as <b>ntuser</b>. Within GDI source tree you'll see directories called <b>fontdrv</b>,
+         <b>gre</b> and <b>halftone</b>. <b>Gre</b> (or Graphics rendering engine) is what it makes up the most of GDI source code base for implementation of primitive graphics handling,
+         brushes, palette, colour objects and whatnot. When capturing the function calls in the call stack of Win32k with WinDBG, whilst in the course of debugging something, you may
+         get across kernel routines such as <code>GreSetDCOwnerEx</code> with the prefix Gre* denoting the function belongs to the GDI kernel module.
+      </p>
+
+      <p>
+         <b>ntuser</b>, or just USER, is the window manager that has the responsibility for the creation and management of USER objects such as windows, menus, cursor and other stuff. In other
+         words, USER is the internal compoment that provides graphical interaction between the system and user. An important remark is worth noting -- whilst GDI is primarily written in C++, USER
+         for its entirety remains written in C. It's not really surprising considering USER is a massive historic source code dating back with the very early versions of Windows (including the 9x editions as well such as Windows 95 and 98).
+         The inception of Win32k started with the development and release of the successive Windows operating system, Windows NT 4.0. With the 4.0 version of Windows NT all the GDI and USER code were moved
+         into a kernel mode system driver for the sake of improving overall performance in terms of handling GDI/USER objects in a timely fashion. Before that, the Windows subsystem core code was in a
+         server/client communication process called CSRSS.
+      </p>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
 
       <ul class = "tree">
          <li>d:

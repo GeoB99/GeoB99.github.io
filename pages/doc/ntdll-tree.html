@@ -25,6 +25,22 @@
 
       <h1>&nbsp;<u>Native API user-mode layer (NTDLL) layout source tree</u></h1>
 
+      <p>
+         The Native API, serving the purpose as a system call interface for subsystem environments, provides the Rtl section known as the Run-Time library as well as Loader and SxS (Side-by-Side Assembly)
+         module source codes. The base library service of the Windows subsystem, <b>Kernel32.dll</b>, makes a call into NTDLL which in turn invokes a specific kernel mode service
+         in the NT kernel to accomplish a request. <b>User32.dll</b> and <b>Gdi32.dll</b> libraries are exceptions as these make calls which are then trapped into kernel mode in Win32k.sys, not NTDLL!
+      </p>
+
+      <p>
+         With that said, whenever an application makes a function call to <code>IsProcessInJob</code> in <b>Kernel32.dll</b> library the call flow operation goes through NTDLL and then into the kernel
+         with the path leading to <code>NtIsProcessInJob</code> call. Windows ensures that whatever service call happening in user mode must be uniform, that is, the proper number of kernel mode services
+         in the NT kernel have to be requested for a specific work.
+      </p>
+
+       <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
       <ul class = "tree">
          <li>d:
             <ul>

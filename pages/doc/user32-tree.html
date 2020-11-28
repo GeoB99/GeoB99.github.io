@@ -25,6 +25,15 @@
 
       <h1>&nbsp;<u>User32 user-mode library layout tree</u></h1>
 
+      <p>
+         <b>User32.dll</b> is a user mode DLL library that provides windowing manager APIs to the client. An example of a call brought by the said library is <code>CreateWindowExW</code> which creates
+         a window with extended styles. The documented function calls in the <b>User32.dll</b> library rely on undocumented internal functions in Win32k, the kernel mode side of the Windows subsystem.
+      </p>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
       <ul class = "tree">
          <li>d:
             <ul>
