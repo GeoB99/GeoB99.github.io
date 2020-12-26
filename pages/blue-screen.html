@@ -1,0 +1,338 @@
+﻿<!-- Filename: blue-screen.html -->
+<!-- Purpose: "Understanding Blue Screens of Death (Part 1)" HTML page -->
+<!-- Created by George Bișoc (Fraizeraust) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>Understanding Blue Screens of Death (Part 1)</title>
+      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials</h1>
+      <h2>&nbsp;Understanding Blue Screens of Death (Part 1)</h2>
+      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- Contents table -->
+      <h1>&nbsp;<u>Table of Contents</u></h1>
+      <ol>
+         <li>
+            <a href = "#introduction">Introduction</a>
+         </li>
+
+         <li>
+            <a href = "#crash">Why does ReactOS/Windows have to crash?</a>
+         </li>
+
+         <li>
+            <a href = "#anatomy">The anatomy of a BSoD</a>
+         </li>
+
+         <li>
+            <a href = "#mechanism">The internal mechanism of a BSoD</a>
+         </li>
+
+         <li>
+            <a href = "#hardware-software">Is the crash caused by a hardware malfunction?</a>
+         </li>
+
+         <li>
+            <a href = "#winnt-win9x">Differences between Windows 9x and NT blue screen internal mechanism</a>
+         </li>
+
+         <li>
+            <a href = "#ref">References</a>
+         </li>
+      </ol>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+
+      <div id = "introduction">
+         <!-- Title -->
+         <h1><u>Introduction</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            Ahh, those blue screens. Everybody hates them and so do you. Especially when you're in the middle of something, like doing important work and out of a sudden a BSoD pops up
+            leaving all of your unsaved work lost forever. It's so frustrating, isn't it? Despite this, Windows (and ReactOS as well) have multitude of reasons why the system has to be
+            brought to a crash and in this article I'll cover the general tenets and aspects of the blue screen. In the Part II of the article I'll be covering how to actually
+            troubleshoot a BSoD using WinDBG and understanding crash dumps.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "crash">
+          <!-- Title -->
+         <h1><u>Why does ReactOS/Windows have to crash?</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            Before diving into the realm of blue screens, we must first understand the basic concept of what exactly a blue screen is. The Blue Screen of Death (or BSoD by its acronym) is typically
+            the ominous error screen displayed by Windows indicating a serious condition in which Windows couldn't proceed further. Such condition can be, for example, an illegal execution or phenomenas
+            that, if left un-guarded, could potentially corrupt the system further to the point of no recovery. In the NT programming realm we name BSoDs as <b>bugchecks</b> (and I'll name BSoDs with that term for the rest of the article).
+         </p>
+
+         <p>
+            What do I mean by that, exactly? For instance when the NT kernel, an important component of the Windows subsystem (e.g. Win32k) in the kernel space or kernel mode drivers were given a bogus pointer
+            which points to a certain area of memory that couldn't be accessed for a plethora of reasons, like, if the said pointer has an address that is not currently mapped into the memory or it
+            doesn't even exist in the first place the system has to immediately bring its own state to a sudden crash before making the situation way worse, like, writing corrupt data to the I/O storage.
+         </p>
+
+         <p>
+            Another instance of a fatal system crash is when some conditions have not been met in order for Windows to continue its normal operation. Let's take <a href = "https://docs.microsoft.com/en-us/windows-hardware/drivers/debugger/bug-check-0x3e--multiprocessor-configuration-not-supported">MULTIPROCESSOR_CONFIGURATION_NOT_SUPPORTED</a> bugcheck code for example.
+            This bugcheck occurs when Windows has caught that the hardware's multiple logical processors although none of them are symmetrical, that is, each of those have different types and level. It has no correlation with memory or I/O paging corruption whatsoever
+            as the physical/virtual memory areas weren't even touched at all. The NT kernel is baffled because of such differences and doesn't know how to tackle the aforementioned situation, going through a system crash
+            is the only option.
+         </p>
+
+         <p>
+            All in all, when it concerns the scenario of bugchecks, we all must ponder this thought that the situation is not black & white. A bugcheck can occur for various of reasons under a plethora of instances
+            depending on the conditions which Windows went through for the bugcheck to happen. Here's a screenshot with a few summarised points of why a bugcheck happens.
+         </p>
+         <a href = "../images/blue-screen/bsod-reasons.png" ><img src = "../images/blue-screen/bsod-reasons.png" alt = "BSOD Reasons"></a>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "anatomy">
+          <!-- Title -->
+         <h1><u>The anatomy of a BSoD</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            The basic structure of a bugcheck screen is as follows, taking the previous variant of the blue screen (used from Windows 2000 to 7, the latter like 8 and 10 have a different layout).
+         </p>
+         <a href = "../images/blue-screen/bsod.PNG" ><img src = "../images/blue-screen/bsod.PNG" alt = "BSOD"></a>
+         <p>
+            In this blue screen, I have numbered the sections as each of those have a specific meaning. Let's get started:
+         </p>
+
+         <p>
+            <b>1. Intro</b> -- The generic introduction description. Nothing special here.
+            <br>
+            <b>2. Bugcheck description</b> -- This is the actual description that differs for each bugcheck code that was used to indicate the crash. On some bugchecks the bugcheck code is directly
+            pointed whilst others may rather display a short summary description that's related to the specific bugcheck.
+            <br>
+            <b>3. Steps</b> -- As usual, generic description. It mostly tells you what to do in case of a bugcheck being invoked. This portion of the text can change depending on the bugcheck code that was invoked.
+            <br>
+            <b>4. Technical data</b> -- This is by far the most important piece in a blue screen. When a bugcheck occurs a STOP code is given alongside with 4 parameters. The STOP code indicates the type of bugcheck
+            with the 4 parameters indicating specific and particular information that is tied to the bugcheck. The last 4 parameters are unique on their own as every bugcheck issues those parameters accordingly, some
+            even do not issue any kind of information (the value is 0). In the latter case, if all the said 4 parameters are 0 (<b>0x00000000</b>) then the given bugcheck doesn't log out any extra information.
+            <br>
+            <b>5. Additional data</b> -- Provides the faulty process, the address and datestamp of the process in question.
+         </p>
+
+         <p>
+            The bugcheck texts are stored in a table as a special file with the <b>.mc</b> extension -- such file can be found <a href = "https://git.reactos.org/?p=reactos.git;a=blob;f=sdk/include/reactos/mc/bugcodes.mc;h=329b75a2e4e94631d5b102a1c13386e8d7256fa2;hb=HEAD">here</a>.
+            Internally the text strings are acquired by calling the kernel routine <code>KeGetBugMessageText</code> which bases upon the <code>RtlFindMessage</code> routine implementation to retrieve the bugcheck message text from the table within the memory space.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "mechanism">
+         <!-- Title -->
+         <h1><u>The internal mechanism of a BSoD</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            Whenever a bugcheck happens, the function calls that are responsible for bringing the system to a fatal crash are <code>KeBugCheckEx</code> and <code>KeBugCheck</code> exported for use by the kernel.
+         </p>
+<pre id = "prototype">
+DECLSPEC_NORETURN
+VOID
+NTAPI
+KeBugCheckEx(IN ULONG BugCheckCode,
+             IN ULONG_PTR BugCheckParameter1,
+             IN ULONG_PTR BugCheckParameter2,
+             IN ULONG_PTR BugCheckParameter3,
+             IN ULONG_PTR BugCheckParameter4)
+</pre>
+<pre id = "prototype">
+DECLSPEC_NORETURN
+VOID
+NTAPI
+KeBugCheck(IN ULONG BugCheckCode)
+</pre>
+         <p>
+            <b>BugCheckCode</b> parameter is the STOP bugcheck code that is being filled by the caller indicating the reason of the system crash. The last 4 parameters, whereas, provide extra information in regard to the bugcheck.
+            The only difference between these two functions is that <code>KeBugCheck</code> internally calls the extended variant of the function but issuing the last 4 parameters with 0 in Windows. Speaking of which, in Windows the extended
+            version of the function depends on an internal private helper function which is <code>KeBugCheck2</code>. In ReactOS, however, both these functions depend on a helper function named <code>KeBugCheckWithTf</code> (the abbreviation of Tf meaning <b>Trap frame</b>).
+         </p>
+
+         <p>
+            In this section of the article I'll be covering the mechanism in action of a bugcheck, detail by detail. The ReactOS bugcheck code implementation will be taken into account here, with the said implementation
+            being written <a href = "https://github.com/reactos/reactos/blob/master/ntoskrnl/ke/bug.c">here (filename bug.c)</a>. Let's get started:
+         </p>
+
+         <p>
+            <b>1. Power failure simulation detection</b> -- Initially the helper function checks if a power failure simulation has been performed for whatever reason by looking at the bugcheck code.
+            If that's the case then the helper will execute the bugcheck callbacks and calls the HAL to invoke a reboot.
+            <br>
+            <br>
+            <b>2. Hardware trigger & CPU context</b> -- The function proceeds further by obtaining the current interrupt request level (IRQL) which it'll be cached to the <code>DebuggerSavedIRQL</code> member
+            of the processor region control block (PKPRCB). This is necessary for later debugger usage. Afterwards, the helper captures the current context of the processor in the exact moment the caller invokes the bugcheck function.
+            Refer to <a href = "https://docs.microsoft.com/en-us/windows/win32/api/winnt/ns-winnt-context">this</a> in regard of which contents are in a CONTEXT data structure.
+            <br>
+            <br>
+            <b>3. Capture bugcheck code & perform additional tasks</b> -- Most of the time <code>KeBugCheckWithTf</code> will spend on determining the bugcheck code and perform specific tasks for the bugcheck that was being caught.
+            In this phase the helper also determines who's the responsible component at fault for calling the bugcheck function and it's <code>KiPcToFileHeader</code> where comes into action.
+         </p>
+
+         <p>
+            <code>KiPcToFileHeader</code> (Pc stands for Program counter) is an internal kernel routine not exported for use outside the kernel layer module (Ke). The function is responsible for determining
+            in which area the bugcheck call occurred. It does that by looping through the list head and obtaining a loader entry and base address. After that the said list entry is examined if it's a kernel one
+            (NT kernel or HAL) or if the entry comes from a driver. The first two entries in the list are reserved for the system, kernel and HAL. The list head is initialised by either looking for the list
+            from the kernel loader block (<code>KeLoaderBlock</code>) or from the process modules list (<code>PsLoadedModuleList</code>).
+         </p>
+
+         <p>
+            <b>4. Dump parameter images & driver name</b> -- If a device driver is deemed to be at fault for crashing the system the <code>KeBugCheckUnicodeToAnsi</code> function will be called to convert
+            the driver name string into ANSI as the bugcheck implementation doesn't take Unicode. Otherwise <code>KiDumpParameterImages</code> will get invoked to dump the image file name and datestamp.
+            <br>
+            <br>
+            <b>5. Check if a debugger is connected</b> -- In this phase the helper checks if a debugger is connected to the system and if that's so, the helper dumps all the bugcheck parameters with <code>DbgPrint</code>
+            and breaks into debugger using <code>KiBugCheckDebugBreak</code>.
+            <br>
+            <br>
+            <b>6. Disable interrupts & stall the CPU</b> -- At this point all the interrupts are disabled with the <code>_disable</code> intrinsic routine and the IRQL raised to <b>HIGH_LEVEL</b>.
+            <b>HIGH_LEVEL</b> is the highest IRQL in the ranking interrupt priority level, any related bugcheck routine can't be interrupted from execution. After that, all the iterated logical
+            processors in a loop are stalled (froze) by sending an IPI (Inter-Processor Packet Interface) to all logical processors enumerated in a loop iteration. The function that sends such IPI
+            is <code>KiIpiSend</code>. Alongside with that, <code>KeStallExecutionProcessor</code> is also used so that each logical processor receives the IPI accordingly in a timely fashion.
+            <br>
+            <br>
+            <b>7. Display the blue screen</b> -- The function that accomplishes this task is <code>KiDisplayBlueScreen</code>. Here's an interesting fact in this one, the kernel uses the BOOTVID
+            module (also called Boot Video) to display the actual blue screen. Basically <code>KiDisplayBlueScreen</code> acquires screen ownership and resets the display in VGA mode by using the
+            functions <code>InbvAcquireDisplayOwnership</code> and <code>InbvResetDisplay</code>. The function that sets the background in blue navy colour is <code>InbvSolidColorFill</code> with the
+            colour flag value, <code>BV_COLOR_BLUE</code> and the text colour to white using the <code>InbvSetTextColor</code> function and <code>BV_COLOR_WHITE</code> as the colour flag value. The bugcheck
+            text messages are captured and printed to the blue screen with <code>KeGetBugMessageText</code>.
+            <br>
+            <br>
+            <b>8. Write triage & crash dumps</b> -- We're almost done. At this stage the bugcheck implementation begins writing both the triage and crash dumps to disk. However, as of now ReactOS
+            doesn't currently implement such mechanism for writing dumps yet. This part will be covered in detail once code for it is implemented. In Windows however, this mechanism is being handled
+            by <code>IoIsTriageDumpEnabled</code>, <code>IoAddTriageDumpDataBlock</code> and <code>IoWriteCrashDump</code> functions. All of these belong to the I/O kernel module service, since
+            the processor is operating on a HIGH_LEVEL interrupt level the functions operate on very restrictive measures (they can't allocate blocks of memory and the like).
+            <br>
+            <br>
+            <b>9. Reboot</b> -- If the reboot is wanted the helper function unloads the symbols with <code>DbgUnLoadImageSymbols</code> and calls the HAL to perform the reboot procedure.
+         </p>
+
+         <p>
+            Here's a screenshot of summarised points of how the bugcheck mechanism works.
+         </p>
+         <a href = "../images/blue-screen/mechanism.png" ><img src = "../images/blue-screen/mechanism.png" alt = "BSOD Mechanism"></a>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "hardware-software">
+         <!-- Title -->
+         <h1><u>Is the crash caused by a hardware malfunction?</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            Generally bugchecks tend to happen due to buggy 3rd party kernel mode drivers and accidental occurrences by the NT kernel or critical components which in the latter case they rarely happen. But
+            what if the crash is caused by a hardware malfunction? Definitely and without a doubt bugchecks can happen due to that as well however it's tricky on the first sight to judge
+            if the hardware is at fault.
+         </p>
+
+         <p>
+            The prime factors to take into account are: 1) Does the crash happen frequently? 2) What's the STOP code and the 4 parameters indicating? The frequency of the crash
+            and the information pointed by the STOP code and the additional 4 parameters can give you a small hint of what roughly happened and besides that, the image filename is also important in this
+            context. As I have previously stated above, if the last parameters are 0 then the specific STOP bugcheck code doesn't issue any additional information. Another factor to take into account is
+            how the hardware behaves. Excessive I/O errors such as failures on copying data from the primary storage like from HDD to another storage because of bad sectors is a clear indication Windows
+            will bugcheck sooner or later.
+         </p>
+
+         <p>
+            Another example of a hardware malfunctioning is when Windows strangely fails to launch executable processes (or doing any kind of task regarding the matter). This could be due to faulty
+            RAM chips which memory cells are damaged and that can severely impact the well performing of paging data between two storages, allocating data to the physical memory and whatnot. As usual,
+            it's not of a big surprise Windows will crash sooner or later in this case too. In other words, the high chance of probability the hardware is at fault is when the crash occurs too frequently and/or
+            the hardware behaves abnormally.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "winnt-win9x">
+         <!-- Title -->
+         <h1><u>Differences between Windows 9x and NT blue screen internal mechanism</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            As you now understand how a bugcheck happens in a NT-based Windows architecture operating system, you may wonder one thing. What's the actual difference between Windows 9x and NT
+            in terms of bugcheck implementation? How come in versions of Windows like 95 you can press a key to continue the normal OS operation (although it won't do much) whilst in NT a
+            bugcheck is like an absolute death sentence? All of that lies down to the architecture differences.
+         </p>
+
+         <p>
+            In Windows 9x editions the Windows subsystem is encapsulated in a VxD driver (a.k.a Virtual Driver) which name is <b>VWIN32.VXD</b>. The function that is responsible for displaying
+            the bugcheck in 9x is <code>_VWIN32_FaultPopup</code> and that is implemented in the same VxD driver. Another variant of the routine that deals with the bugcheck implementation is
+            <code>VWIN32_BlueScreenPopup</code> (presumably the difference between those is that the former is an intrinsic whereas the other is not). The function is called each time an exception
+            within the subsystem occurs.
+         </p>
+
+         <p>
+            In addition, the software interrupts are not disabled nor masked as in the case of what <code>KeBugCheck(Ex)</code> does in the NT kernel. As a matter of fact is that <code>_VWIN32_FaultPopup</code>
+            waits for a keystroke by the user (hence the typical <u><b>Press any key to continue</b></u> message in the blue screen). <b>VWIN32.VXD</b> is still loaded in the memory and the user is able to bring Windows back
+            to the graphics shell even though the chance of successfully getting back into the shell and continuing the normal operation is pretty much minimal as the system may become unresponsive.
+         </p>
+
+         <p>
+            With all that being said, this explains why the blue screen in the 9x editions of Windows are less serious than in NT however. In 9x the user may willy nilly be able to continue using the system with
+            some issues, it's a hit and miss condition. But a bugcheck in NT indicates a fatal problem which the system cannot be recovered, what is left for the user to do is to restart the system.
+            Here's a screenshot of a few summarised points in regard of NT/9x bugcheck implementation differences.
+         </p>
+         <a href = "../images/blue-screen/winnt-win9x.png" ><img src = "../images/blue-screen/winnt-win9x.png" alt = "BSOD Differences"></a>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "ref">
+         <!-- Title -->
+         <h1><u>References</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            <a href = "https://www.setthings.com/en/blue-screen-of-death/">https://www.setthings.com/en/blue-screen-of-death/</a>
+            <br>
+            <a href = "https://faydoc.tripod.com/structures/12/1293.htm">https://faydoc.tripod.com/structures/12/1293.htm</a>
+            <br>
+            <a href = "https://betawiki.net/wiki/Blue_screen_of_death">https://betawiki.net/wiki/Blue_screen_of_death</a>
+            <br>
+            <a href = "https://en.wikipedia.org/wiki/VxD">https://en.wikipedia.org/wiki/VxD</a>
+         </p>
+      </div>
+   </body>
+</html>
