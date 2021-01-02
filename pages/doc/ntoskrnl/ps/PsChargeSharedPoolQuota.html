@@ -1,0 +1,52 @@
+﻿<!-- Filename: PsChargeSharedPoolQuota.html -->
+<!-- Purpose: Documentation of the PsChargeSharedPoolQuota function -->
+<!-- Created by George Bișoc (Fraizeraust) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>PsChargeSharedPoolQuota (Quota)</title>
+      <link href = "../../../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
+      <h2>&nbsp;PsChargeSharedPoolQuota function</h2>
+      <h4>&nbsp;<a href = "quota.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "../../../../index.html"><< Home Page</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- PsChargeSharedPoolQuota -->
+      <h1>&nbsp;&#129154; PsChargeSharedPoolQuota</h1>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Description</u></h3>
+      <p>
+         Charges the shared pool quota of a process (paged & non-paged).
+      </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Internals & Parameters</u></h3>
+      <pre id = "prototype">
+VOID
+NTAPI
+PsChargeSharedPoolQuota(IN PEPROCESS Process,
+                        IN ULONG PagedPoolToCharge,
+                        IN ULONG NonPagedPoolToCharge)
+      </pre>
+
+      <p>
+         <b>Process</b> is a pointer to a Executive process (EPROCESS). <b>PagedPoolToCharge</b> and <b>NonPagedPoolToCharge</b> are the argument parameters the caller has to fill the
+         specific amount of quota to be charged for the process. What does this function do is typically expanding the quota list both to the non-paged and paged memory pools at the same time. 
+         The function doesn't return anything. The called functions for this routine are:
+      </p>
+      <pre>
+         - PspExpandQuota (called 2 times)
+         - PspGivebackQuota
+      </pre>
+   </body>
+</html>
