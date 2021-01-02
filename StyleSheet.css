@@ -64,6 +64,10 @@ div {
     padding: 11px;
 }
 
+pre {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, Arial;
+}
+
 pre#prototype {
     border-style: solid;
     border-width: 3px;
