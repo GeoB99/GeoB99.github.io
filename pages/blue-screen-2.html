@@ -171,8 +171,8 @@
             A crash dump is a file containing debug information about the last instance of a bugcheck hit. Their extension is <b>.dmp</b> and can be opened by WinDBG or any tool
             that supports such extension. The crash dumps can range from simple dumps that provide the minimal information of a bugcheck to kernel and complete dumps. Complete dumps
             are large in size as the name implies, they contain the full details (minimal information + kernel debug information). As usual we'll be using WinDBG to read crash dumps.
-            To do so, go to <b>File > Open Crash Dump</b> and locate the path of the said dump. Usually the crash dumps are residing in <b>C:\Windows</b> directory path. WinDBG should
-            look as follows:
+            To do so, go to <b>File > Open Crash Dump</b> and locate the path of the said dump. Make sure WinDBG is running as administrator and the right bit architecture set (32-bit or 64-bit)
+            depending on your machine. Usually the crash dumps are residing in <b>C:\Windows</b> directory path. WinDBG should look as follows:
          </p>
          <a href = "../images/blue-screen/windbg-dump.png" ><img src = "../images/blue-screen/windbg-dump.png" alt = "WinDBG Dump"></a>
          <p>
