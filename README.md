@@ -12,7 +12,7 @@ WinDBG is my favourite debugging and reverse engineering tool of choice for my r
 
 ## Maintainers
 
- - George Bișoc (Fraizeraust - Owner)
+ - George Bișoc (GeoB99 - Owner)
  - Joann Mõndresku (Cernodile)
 
 ## ReactOS Icon
