@@ -48,13 +48,11 @@ PspSetLdtSize(
          doesn't have a LDT.
       </p>
 
-      <p>
-         The called functions for this routine are:
-      </p>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Called Functions</u></h3>
       <pre>
          - _SEH_prolog
          - KeWaitForSingleObject
-         - KeReleaseMutex
+         - KeReleaseMutex (called 2 times)
          - PspCreateLdt
          - Ke386SetLdtProcess
          - ExFreePoolWithTag

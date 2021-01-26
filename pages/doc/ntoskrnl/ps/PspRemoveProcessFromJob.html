@@ -48,8 +48,10 @@ PspRemoveProcessFromJob(
 
       <p>
          The job object structure's information is modified in the middle of the calling execution when the function successfully acquired the internal job resource. APC (Asynchronous Procedure Call) delivery
-         is checked to ensure if there's kernel APC delivery prior to resource acquire procedure. The function doesn't return anything. The called functions for this routine are: 
+         is checked to ensure if there's kernel APC delivery prior to resource acquire procedure. The function doesn't return anything.
       </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Called Functions</u></h3>
       <pre>
          - ExAcquireResourceExclusiveLite
          - PspFoldProcessAccountingIntoJob

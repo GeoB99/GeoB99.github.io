@@ -45,15 +45,13 @@ RtlGetNtProductType(
          is returned to the output argument parameter of the function to the caller as the default product type on failure.
       </p>
 
-      <p>
-         The called functions for this routine are:
-      </p>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Called Functions</u></h3>
       <pre>
-         - RtlInitUnicodeString
+         - RtlInitUnicodeString (called 5 times)
          - ZwOpenKey
          - ExAllocatePoolWithTag
          - ZwQueryValueKey
-         - RtlEqualUnicodeString
+         - RtlEqualUnicodeString (called 3 times)
          - ExFreePoolWithTag
          - ZwClose
       </pre>

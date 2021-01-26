@@ -46,22 +46,20 @@ PspSetLdtInformation(
          STATUS_ACCESS_VIOLATION if a specific address is invalid or not allowable for read/write that the caller tried to access it.
       </p>
 
-      <p>
-         The called functions for this routine are:
-      </p>
+      <h3>&nbsp;&nbsp;&nbsp;<u>Called Functions</u></h3>
       <pre>
          - _SEH_prolog
          - ExAllocatePoolWithQuotaTag
          - PspIsDescriptorValid
          - KeWaitForSingleObject
-         - ExFreePoolWithTag
+         - ExFreePoolWithTag (called 4 times)
          - ExAllocatePoolWithTag
-         - Ke386SetLdtProcess
-         - PsReturnProcessNonPagedPoolQuota
-         - PspCreateLdt
-         - PsChargeProcessNonPagedPoolQuota
+         - Ke386SetLdtProcess (called 4 times)
+         - PsReturnProcessNonPagedPoolQuota (called 2 times)
+         - PspCreateLdt (called 2 times)
+         - PsChargeProcessNonPagedPoolQuota (called 2 times)
          - KeReleaseMutex
-         - Ke386SetDescriptorProcess
+         - Ke386SetDescriptorProcess (called 2 times)
          - _SEH_epilog
       </pre>
    </body>

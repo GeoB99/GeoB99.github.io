@@ -48,8 +48,10 @@ PsChangeJobMemoryUsage(
 
       <p>
          This function is called from various places of the NT kernel, notably from <code>MiRemoveVadCharges</code> and <code>NtAllocateVirtualMemory</code>. It returns <b>TRUE</b>
-         when the function completed successfully at changing the memory usage of a job, <b>FALSE</b> otherwise. The called functions in this routine are:
+         when the function completed successfully at changing the memory usage of a job, <b>FALSE</b> otherwise.
       </p>
+
+      <h3>&nbsp;&nbsp;&nbsp;<u>Called Functions</u></h3>
       <pre>
          - KiAcquireGuardedMutex
          - IoSetIoCompletion
