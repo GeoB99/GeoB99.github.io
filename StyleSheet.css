@@ -65,7 +65,7 @@ div {
 }
 
 pre {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, Arial;
+    font-family: monospace;
 }
 
 pre#prototype {
