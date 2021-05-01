@@ -19,6 +19,11 @@ h1, h2, h3, h4 {
     margin-top: 6px;
 }
 
+img {
+    display: block;
+    margin: 0 auto;
+}
+
 /* footer and Header-Top entities are for the main home page */
 footer {
     position: fixed;

@@ -240,76 +240,76 @@
 
          <p>
             The cache manager is also in charge of cache coherency, among other stuff. Furthermore, the cache manager operates on the basis of caching data on virtual blocks unlike in other systems where data is cached
-            on logical blocks. The routines that belong to this module are prefixed with <code>Cc</code>.
+            on logical blocks. The routines that belong to this module are prefixed with <b>Cc</b>.
          </p>
 
          <p>
             <b>config</b> -- The config component, known as the Configuration Manager, is the very literal foundation of the <b>Registry</b> which is the central hierarchical database of data stored by applications,
-            device drivers, the system itself and so on. The routines that belong to this module are prefixed with <code>Cm</code>.
+            device drivers, the system itself and so on. The routines that belong to this module are prefixed with <b>Cm</b>.
          </p>
 
          <p>
-            <b>dbgk</b> -- Also called the User-Mode debugging support, nothing much has to be said further about this component. The routines that belong to this module are prefixed with <code>Dbgk</code>.
+            <b>dbgk</b> -- Also called the User-Mode debugging support, nothing much has to be said further about this component. The routines that belong to this module are prefixed with <b>Dbgk</b>.
          </p>
 
          <p>
             <b>ex</b> -- Interestingly enough, the Executive also comes with its own component named with the same terminology. The executive module provides several API routines ranging from timers, memory pool
             allocation, events, rundown protection mechanism and a whole lot more. In addition, the executive is also responsible for the rest of the NT kernel phase boot initialisation once it (the kernel) gained
-            control from the bootloader. Without a doubt, the executive is also responsible for shutdown phase procedure as well. The routines that belong to this module are prefixed with <code>Ex</code>.
+            control from the bootloader. Without a doubt, the executive is also responsible for shutdown phase procedure as well. The routines that belong to this module are prefixed with <b>Ex</b>.
          </p>
 
          <p>
             <b>fsrtl</b> -- The filesystem run-time library provides API calls for streams operation, Fast I/O entry points, mapped control block (MCB), UNC support and so on for filesystem drivers. Just like the cache manager is used
-            by filesystems for caching management, same is for for the filesystem Rtl used by filesystems for run-time operations. The routines that belong to this module are prefixed with <code>FsRtl</code>.
+            by filesystems for caching management, same is for for the filesystem Rtl used by filesystems for run-time operations. The routines that belong to this module are prefixed with <b>FsRtl</b>.
          </p>
 
          <p>
             <b>io</b> -- The I/O component is based into two main kernel managers: the I/O and PnP manager. The two manager components make up the whole I/O system of the kernel that is responsible for device drivers
             support, hardware I/O bus management, device loading/unloading, and so on. The PnP manager specifically accomplishes that purpose of providing a general interface where device drivers can be written based on that
-            interface. The I/O manager implements the concept of IRPs (I/O Request Packets). The routines that belong to this module are prefixed with <code>Io</code> and <code>Pnp</code>.
+            interface. The I/O manager implements the concept of IRPs (I/O Request Packets). The routines that belong to this module are prefixed with <b>Io</b> and <b>Pnp</b>.
          </p>
 
          <p>
-            <b>kd64</b> -- Kernel debugger implementation support. The routines that belong to this module are prefixed with <code>Kd</code>.
+            <b>kd64</b> -- Kernel debugger implementation support. The routines that belong to this module are prefixed with <b>Kd</b>.
          </p>
 
          <p>
-            <b>lpc</b> -- Local Procedure Communication is a component used for inter-process communication (IPC) across processes in the same system. The routines that belong to this module are prefixed with <code>Lpc</code>.
+            <b>lpc</b> -- Local Procedure Communication is a component used for inter-process communication (IPC) across processes in the same system. The routines that belong to this module are prefixed with <b>Lpc</b>.
          </p>
 
          <p>
             <b>mm</b> -- The memory manager is a fundamental part of the NT kernel that deals with the allocation of virtual and physical memory, virtual address handling, paging support, trimming, flushing
-            of dirty data and so forth. This component implements the foundation of concepts such as memory-mapped files, shared memory, copy-on-write, etc. The routines that belong to this module are prefixed with <code>Mm</code>.
+            of dirty data and so forth. This component implements the foundation of concepts such as memory-mapped files, shared memory, copy-on-write, etc. The routines that belong to this module are prefixed with <b>Mm</b>.
          </p>
 
          <p>
             <b>ob</b> -- The object manager is an ubiquitous component of not just the NT kernel but the whole Windows operating system (and ReactOS for that matter). The idea that everything is a object in the system is only because
             of that component. The object manager is responsible for everything that is about the objects themselves, from object creation to the cleanup and destruction of the said object. The object manager also creates a subset of its
-            own objects and it contains a centralised pool sector where all objects are monitored and tracked. The routines that belong to this module are prefixed with <code>Ob</code>.
+            own objects and it contains a centralised pool sector where all objects are monitored and tracked. The routines that belong to this module are prefixed with <b>Ob</b>.
          </p>
 
          <p>
             <b>po</b> -- The power manager, as the name implies, is in charge for the power state handling of the system. Interestingly enough, the power manager is closely tied with the I/O manager as it implements a subset of IRPs
-            specifically for that component, called <b>Power IRPs</b> which are classified as special IRPs. The routines that belong this module are prefixed with <code>Po</code>.
+            specifically for that component, called <b>Power IRPs</b> which are classified as special IRPs. The routines that belong this module are prefixed with <b>Po</b>.
          </p>
 
          <p>
             <b>ps</b> -- The process structure, also called Process/Threads Manager, is responsible for the creation and termination of the processes and threads in Windows. Besides that, the process structure provides several
             API calls for process/threads manipulation such as querying/setting internal information to these entities, quota handling of processes, thread/process execution alteration and so on. In the very same module, the
-            process structure implements Win32 specific callbacks. The routines that belong to this module are prefixed with <code>Ps</code> (although it's worth noting that application shim support in the kernel do not share
-            the same prefix but begin with <code>Apphelp</code> instead).
+            process structure implements Win32 specific callbacks. The routines that belong to this module are prefixed with <b>Ps</b> (although it's worth noting that application shim support in the kernel do not share
+            the same prefix but begin with <b>Apphelp</b> instead).
          </p>
 
          <p>
             <b>rtl</b> -- The Run-Time Library is a collection set of routines exported for use by the kernel and kernel mode drivers alike. Routines such as data type conversion, string manipulation, arithmetic operations, 
-            locale handling, heap memory allocation and so on. The routines that belong to this module are prefixed with <code>Rtl</code>.
+            locale handling, heap memory allocation and so on. The routines that belong to this module are prefixed with <b>Rtl</b>.
          </p>
 
          <p>
             <b>se</b> -- Security Reference Monitoring (SRM in short or just Se) is a component of the Executive with the task of monitoring the overall activity of objects, their access rights, setting up barriers against unauthorised
             access, limiting such access thorough privileges, groups, ACLs and DACLs (access control lists and discretionary access control lists), and so on. The security manager is the basis of the security concepts
             of the NT kernel, and especially, with the implementation of <b>access tokens</b>. As the object manager is to object creation, the security manager is to object security monitoring. Furthermore, it also performs
-            security auditing, accounting, etc. The routines that belong to this module are prefixed with <code>Se</code>.
+            security auditing, accounting, etc. The routines that belong to this module are prefixed with <b>Se</b>.
          </p>
 
          <p>
@@ -319,12 +319,12 @@
 
          <p>
             <b>Vf</b> -- Driver Verifier wasn't something that was introduced with the early development of the kernel, until many years. This module basically stresses the kernel mode drivers in odd ways in order to make them
-            fail. This drastically helps with bugs hunting, further making the drivers more stable. The routines that belong to this module are prefixed with <code>Vf</code>.
+            fail. This drastically helps with bugs hunting, further making the drivers more stable. The routines that belong to this module are prefixed with <b>Vf</b>.
          </p>
 
          <p>
             <b>wmi</b> -- The last component of the Executive concerns mostly with the Windows subsystem environment, which name being Windows Management Instrumentation. It is responsible for the management of other components and
-            monitoring the overall activity of the Windows subsystem environment. The routines that belong to this module are prefixed with <code>Wmi</code>.
+            monitoring the overall activity of the Windows subsystem environment. The routines that belong to this module are prefixed with <b>Wmi</b>.
          </p>
 
          <h3>&nbsp;&#129154; The Kernel</h3>
@@ -332,14 +332,14 @@
             The kernel is a minimalistic, simple designed yet robust in charge with interrupt handling and dispatching, thread scheduling, multiprocessor synchronisation support, trap and exception dispatching.
             Sometimes other documentations refer to it as a microkernel which in fact is true, concerning its nature and especially the idea behind of having an API library like the Executive. Every component in the kernel mode
             space have their own subset of objects and the kernel is not exempt from this. As a matter of fact, the kernel offers several objects such as mutexes, semaphores, timers, threads, locks and whatnot. The routines that belong
-            to the kernel are prefixed as <code>Ke</code>.
+            to the kernel are prefixed as <b>Ke</b>.
          </p>
 
          <h3>&nbsp;&#129154; Hardware Abstraction Layer</h3>
          <p>
             The scope of HAL is to hide hardware differences by abstracting hardware specific features or specifications onto code so that there won't be any overhead for the kernel, and at the same time providing a consistent infrastructure
             in the kernel space. Even though the HAL is separate from the kernel and the Executive, this component doesn't operate fully independently on its own. Both the HAL and kernel cooperate together, most of the time. The routines that
-            belong to this module are prefixed with <code>Hal</code>.
+            belong to this module are prefixed with <b>Hal</b>.
          </p>
       </div>
 
