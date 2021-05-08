@@ -1,0 +1,403 @@
+﻿<!-- Filename: nt-internals-part2.html -->
+<!-- Purpose: "Introduction to the NT kernel development (Part 2)" HTML page -->
+<!-- Created by George Bișoc (GeoB99) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>Introduction to the NT kernel development (Part 2)</title>
+      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials</h1>
+      <h2>&nbsp;Introduction to the NT kernel development (Part 2)</h2>
+      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- Contents table -->
+      <h1>&nbsp;<u>Table of Contents</u></h1>
+      <ol>
+         <li>
+            <a href = "#introduction">Introduction</a>
+         </li>
+
+         <li>
+            <a href = "#prefix">Topology of the routine prefixes in the NT kernel</a>
+         </li>
+
+         <li>
+            <a href = "#conventions">Function conventions in the NT kernel</a>
+         </li>
+
+         <li>
+            <a href = "#datatypes">Prime data types in the NT kernel</a>
+         </li>
+
+         <li>
+            <a href = "#syscall">System calls and NTDLL</a>
+         </li>
+
+         <li>
+            <a href = "#strsht">Startup and shutdown procedure of the NT kernel</a>
+         </li>
+      </ol>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+
+      <div id = "introduction">
+         <!-- Title -->
+         <h1><u>Introduction</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            In this chapter we'll cover some further topics about the NT kernel, namely the system calls interface in NT, the basic data types used, function conventions and syntax topology of the prefix routines and
+            the startup and shutdown mechanism procedure of the kernel.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "prefix">
+         <!-- Title -->
+         <h1><u>Topology of the routine prefixes in the NT kernel</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            The more you explore around the kernel you may find a plethora of functions across different components of the kernel that adhere to a set of rules regarding function prefixing. Consider this as an example:
+         </p>
+         <a href = "../images/nt-internals/part2/func.png"><img src = "../images/nt-internals/part2/func.png" alt = "Function"></a>
+         <p>
+            It can be quite alien at first as you may were probably getting used to POSIX call interface syntax like <code>write()</code> or <code>read()</code>, but in reality it makes things easier to understand. Concerning the kernel's layered nature, Microsoft had to organise a set of syntax
+            conventions for the kernel to meet the design principles of the kernel, which such syntax rules regarding function prefixes got adopted in ReactOS as our aim is to have a compatible and interoperable operating system both
+            at API and ABI levels. This syntax interface that both Windows and ReactOS follow can be explained in this screenshot.
+         </p>
+         <a href = "../images/nt-internals/part2/syntax.png"><img src = "../images/nt-internals/part2/syntax.png" alt = "Syntax"></a>
+         <p>
+            In case it's still confusing to you, I'll further explain detail by detail each case that are seen in the screenshot.
+            <br>
+            <br>
+            <b>function_attribute</b> -- Not every function in the kernel comes with it, but some do. The function attribute is a compiler specific that instructs the compiler that the function behaves in a certain
+            pattern or way. <b>DECLSPEC_NORETURN</b> in this example means that the function never returns and thus the code calling the said function is unreachable, that is, it has no end. Some examples of attributes
+            can be found in <a href = "https://git.reactos.org/?p=reactos.git;a=blob;f=sdk/include/xdk/ntbasedef.h;hb=249f2388bd7ce086578119b50c988ba752169fc1#l164">this header</a> within ReactOS source code.
+            <br>
+            <br>
+            <b>function_data_type</b> -- This is the obvious one, as each function must have a data type that represents the function itself. The NT API (and consequently the Windows API as well) come with a collection of data types.
+            <br>
+            <br>
+            <b>function_call_convention</b> -- Similar to the function attribute, the calling convention is a mechanism scheme that judges how a function returns the value, how are the parameters treated and where do they come from and what's the relationship between this function
+            and the others. For instance, <b>NTAPI</b> is a Microsoft specific standard declaration calling convention which means the routine in question belongs to the NT API (in the Windows world however, the convention is <b>WINAPI</b>).
+            <br>
+            <br>
+            <b>Prefix & Action & Suffix</b> -- The basic rule when writing a name of the function is that every routine must come up with a prefix that is tied to the respective module, the purpose of the function (hence the <b>action</b> which is the combination of a verb and subject
+            such as <code>NtQueryInformationToken</code> or vice-versa) and a suffix. The suffix usually consists of <b>Ex</b> which means that the routine is an extension of the original one that adds more functionality in code.
+            This is for the sake of preserving backwards compatibility with the older API calls, so that early versions of software that use such APIs can still benefit of the older function calls whereas the new software
+            can benefit of using the newer/extended ones.
+            <br>
+            <br>
+            <b>p (private)</b> -- A private routine, as the name implies, is a function that is only used within the module's file itself and cannot be used outside of that file. Think of it like a static defined function for example, where the scope is visible only on that file. Nearly
+            every component of the Executive take use of this naming, an example of such a private routine is <code>SepCreateTokenLock</code>.
+            <br>
+            <br>
+            <b>i (internal)</b> -- Same as the private routine, that it cannot be used outside of the respective module's file. Only one module of the Executive adopts such naming and that is the Memory Manager and the separate entity, the Kernel. Examples of routines are <code>KiPcToFileHeader</code> and
+            <code>MiInitializePoolEvents</code>.
+            <br>
+            <br>
+            <b>f (fastcall routine)</b> -- A fastcall routine is a function whose parameter arguments are passed to registers, whenever possible. This is a mere slight optimisation, if used properly. Notable modules that implement
+            fastcall functions are the Object and I/O managers. This naming syntax can be used alognside with private or internal routine naming. Examples of functions are <code>IofCallDriver</code> and <code>ObfReferenceObject</code>.
+            It's worth noting however that not all of the functions declared with fastcall convention are prefixed as such.
+         </p>
+
+         <p>
+            This prefix naming scheme doesn't apply only to the NT kernel but to the whole infrastructure space in the NT world, including the base kernel services and without a doubt, the NTDLL. Here are some other examples
+            of prefixes notably known in Windows. 
+         </p>
+         <a href = "../images/nt-internals/part2/prefixes.png"><img src = "../images/nt-internals/part2/prefixes.png" alt = "Prefixes"></a>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "conventions">
+         <!-- Title -->
+         <h1><u>Function conventions in the NT kernel</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            Previously we've talked about the <b>NTAPI</b> calling convention which is the standard for every function belonging to the NT API. Albeit even the API itself is further divided into
+            several sections based on different calling conventions that represent them. Here I'll show you some of those function calling conventions and explaining their purpose.
+         </p>
+
+         <p>
+            <b>NTHALAPI</b> -- Denotes that the functions belong to the HAL API. The following routines can be imported.
+            <br>
+            <b>NTKERNELAPI</b> -- ReactOS specific. Denotes that the functions belong to the kernel. The following routines can be imported.
+            <br>
+            <b>NTKRNLVISTAAPI</b> -- ReactOS specific. Same as <b>NTKERNELAPI</b> but with the difference that such routines declared with this convention belong to the NT Vista+ APIs.
+            <br>
+            <b>NTSYSCALLAPI</b> -- Denotes that the functions are NT system calls.
+            <br>
+            <b>NTSYSAPI</b> -- Same as the <b>NTSYSCALLAPI</b> calling convention.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "datatypes">
+          <!-- Title -->
+         <h1><u>Prime data types in the NT kernel</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            The NT code infrastructure, as well as the whole code of Windows (and ReactOS) have a defined set of data types on its own. Whether it's <b>DWORD</b>, <b>BOOL</b>, <b>HFONT</b> and such, these
+            data types are ominous in the whole ecosystem of the source code base. For a list of data types used in Windows/ReactOS, you can check it <a href = "https://docs.microsoft.com/en-us/windows/win32/winprog/windows-data-types">here</a>.
+         </p>
+
+         <p>
+            Enough said, here are some of the data types widely used in the kernel:
+            <br>
+            <br>
+            <b>BOOLEAN</b> -- Boolean type value.
+            <br>
+            <b>HANDLE</b> -- A handle.
+            <br>
+            <b>ULONG</b> -- Unsigned long, integer.
+            <br>
+            <b>UCHAR/CHAR</b> Unsigned and signed (other variant) character.
+            <br>
+            <b>PSTR/PWSTR</b> -- Pointer to a string (and the Unicode variant).
+            <br>
+            <b>NTSTATUS</b> -- A NT status code value. Both the kernel and kernel mode drivers return a NT status code to indicate the condition of an operation by a function. For a list of complete NTSTATUS codes, <a href = "https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55">check here</a>.
+         </p>
+
+         <p>
+            What is known about is that data structures are widely used across the kernel to abstract the kernel data. A notable structure is <a href = "https://docs.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-list_entry">LIST_ENTRY</a> for doubly linked lists. Keep in mind that not every data type is used in the kernel, <b>BOOL</b>
+            being an example. Even though <b>BOOL</b> is also a boolean value, this is strictly used in Windows API only and not NT! For this reason, only <b>BOOLEAN</b> must be used in the kernel. Here's a quick and summarised graph of the data type syntax structure.
+         </p>
+         <a href = "../images/nt-internals/part2/datatypes.png"><img src = "../images/nt-internals/part2/datatypes.png" alt = "Datatypes"></a>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id="syscall">
+         <!-- Title -->
+         <h1><u>System calls and NTDLL</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            In order for an application to complete an operation at request of a user within userland, applications call the documented API functions that in turn such functions invoke the <b>system calls</b>. System calls are a mechanism where an application code has to complete
+            the said operation by requesting a specific service from the kernel. Once the kernel request has succeeded, the control goes back from kernel to user mode to the application itself. The mechanism of system calls ensure that a linear execution flow is respected and that
+            no violations occur when going from user to kernel mode. Such violations are guarded by user mode probing protection checks and whatnot. In case a violation occurs on one of the checks, ReactOS/Windows notices that and won't go through further in the kernel space, thereby
+            faulting the requested procedure prematurely. The general execution flow can be explained in this graph as follows:
+         </p>
+         <a href = "../images/nt-internals/part2/flow.png"><img src = "../images/nt-internals/part2/flow.png" alt = "Flow"></a>
+         <p>
+            The component that plays an ubiquitous role when it comes to system calls and the general flow of execution of such calls is, without a doubt, the <b>NTDLL</b> itself. NTDLL is the principal system call interface in NT, where every NT system call is exported to that library. NTDLL
+            acts like a sort of an invisible wall between user and kernel mode, where the application literally has no idea of the inner guts or operations that arise in kernel mode. Even if NTDLL itself resides in user mode, this module
+            plays an important role in this regard. Sometimes NTDLL is referred as the <b>Native API</b>. NTDLL exports various routines but the system calls that we're taking into account here are prefixed with <b>Nt</b> and <b>Zw</b>.
+         </p>
+
+         <p>
+            With <b>other libs...</b> I'm talking about other libraries that Windows provides but <b>KERNEL32</b> is what we're focusing on primarily. <b>Kernel32.dll</b> offers synchronisation, thread management, process creation/termination,
+            I/O, mailslots and various routines. KEEP IN MIND that KERNEL32 doesn't refer to the kernel itself but it's a Win32 library with all of the function APIs that eventually depend on system calls in NTDLL which call the kernel to complete their requests. Often people make the confusion
+            that Kernel32.dll refers to the kernel itself which is absolutely wrong.
+         </p>
+
+         <p>
+            <b>Nt</b> and <b>Zw</b> calls are, in essence, doing the same thing. As a matter of fact, Windows and ReactOS have system calls with such prefixes but with literally same names, e.g. <code>ZwCreateKey</code> and <code>NtCreateKey</code>. This might create some confusion and the programmer would think
+            of using either system call, however, the prefixes do actually have a meaning in terms of semantics and it's recommended that you should understand these before writing NT related code.
+         </p>
+
+         <p>
+            Nt prefixed system calls have user mode protection checks from illicit and erroneous data that come from user mode. Userland is always treated as a space that can never be trusted, and the NT kernel must control that
+            everything that from comes user mode has to be probed and validated. The operation request is aborted if such data cannot be validated for whatever reason. The processor execution is mode kept as is and it's not altered by the <b>system service</b>.
+         </p>
+
+         <p>
+            Zw prefixed system calls whereas are mere stubs. Yes, in general these calls don't do much other than calling the Nt equivalent ones to perform the respective operations. BUT, whilst the Nt system calls have user mode protection checks, the system service
+            disables such protection for Zw equivalent stubs, that is, the calls don't go through user mode validation. If the processor mode is user mode, within a Zw call the processor mode is modified to <b>KernelMode</b> later. This distinction is very important to
+            understand, as security can be compromised if the system calls are misused. You should call the Zw equivalent functions <b><u>ONLY</u></b> in kernel mode whereas the Nt ones in user mode <b><u>ONLY</u></b>.
+         </p>
+
+         <p>
+            Interestingly enough, not every system call follows the route to NTDLL. For instance, the system calls that deal with graphics and window management are <b>NtGdi</b> and <b>NtUser</b>. These calls don't go through NTDLL but instead to <b>Win32k.sys</b> which is the kernel backend of the
+            Windows subsystem environment. Win32k comes up with its own system call table, called <b>W32pServiceTable</b>, and that table follows a rule for system calls to be mapped to respective kernel mode routines in Win32k. If we further modify the previous graph a bit,
+            we'll get something like this as follows:
+         </p>
+         <a href = "../images/nt-internals/part2/flow2.png"><img src = "../images/nt-internals/part2/flow2.png" alt = "Flow2"></a>
+         <p>
+            All the system calls are handled by SSDT, which is the <b>System Service Descriptor Table</b>. SSDT is a dispatch table infrastructure that is responsible for handling the system calls and the execution flow to kernel mode from user mode. Although we'll explain thoroughly in details in the future
+            about SSDT and its way of working, I'm going to explain briefly how <code>KiSystemService</code> works.
+         </p>
+
+         <p>
+            <code>KiSystemService</code> is an internal kernel function that is part of SSDT mechanism which deals with system servicing. The function copies the parameter arguments from the user stack, decodes the system call number based on the system service index and performs the selected system call, among
+            other stuff. Each architecture supported in Windows and ReactOS have their own <code>KiSystemService</code> implementation. If the ID service index does not correspond to the one from NT system call table, the calling thread where the system call is about to be invoked is converted to a GUI thread and the service call
+            map is set to the one from Win32k instead. The function delivers an APC (asynchronous procedure call) where the calling thread execution is done in an asynchronous manner. However if APC execution is not linear, that is, the thread whose asynchronous execution has completed and exited from the specific code region but with
+            normal kernel APCs disabled and another thread that was in queue by the scheduler to wait and enter into APC mode, the function issues a bugcheck of <b>APC_INDEX_MISMATCH</b>. This usually happens, for example, when a call of <code>KeEnterCriticalRegion</code> has been invoked which disables normal APCs but the calling thread
+            has forgotten to re-enable the APCs back with <code>KeLeaveCriticalRegion</code>.
+         </p>
+
+         <p>
+            With that being said, here's a summarised graph of what exactly happens when an application wants to do something through system calls.
+         </p>
+         <a href = "../images/nt-internals/part2/flow3.png"><img src = "../images/nt-internals/part2/flow3.png" alt = "Flow3"></a>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "strsht">
+         <!-- Title -->
+         <h1><u>Startup and shutdown procedure of the NT kernel</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            In this section of the article I'm going to explain the procedure of the startup and shutdown of the NT kernel. With that said, let's get started.
+         </p>
+
+         <h3>&nbsp;&#129154; Startup</h3>
+         <p>
+            What is obvious for any operating system is that the startup begins first with the <b>bootloader</b>. When the boot partition sectors are read, the bootloader is loaded into the memory
+            and the boot control goes further by spawning the kernel. In Windows, the name of the bootloader is called <b>Ntldr</b> but with the introduction and continuation of NT 6.x versions of
+            the kernel, NTLDR has been split into <b>Windows Boot Manager</b> and a process executable called <b>winload.exe</b>. The boot process pretty much goes as follows as you can see in the graph:
+         </p>
+         <a href = "../images/nt-internals/part2/bootphase.png"><img src = "../images/nt-internals/part2/bootphase.png" alt = "Boot-Phase"></a>
+         <p>
+            The boot process between ReactOS and Windows NT 5.x editions is roughly the same. In ReactOS, the bootloader that takes care of the initial boot phase is FreeLoader (or sometimes called FreeLdr).
+            When FreeLoader has been invoked and reads the <b>boot.ini</b> file which is a crucial file that stores boot initialisation data, a <b>parameter loader block</b> that was initialised by the bootloader
+            is passed to the kernel after the kernel has been loaded into the memory. The loader block looks as follows:
+         </p>
+
+         <pre id = "prototype">
+typedef struct _LOADER_PARAMETER_BLOCK
+{
+    LIST_ENTRY LoadOrderListHead;
+    LIST_ENTRY MemoryDescriptorListHead;
+    LIST_ENTRY BootDriverListHead;
+    ULONG_PTR KernelStack;
+    ULONG_PTR Prcb;
+    ULONG_PTR Process;
+    ULONG_PTR Thread;
+    ULONG RegistryLength;
+    PVOID RegistryBase;
+    PCONFIGURATION_COMPONENT_DATA ConfigurationRoot;
+    PSTR ArcBootDeviceName;
+    PSTR ArcHalDeviceName;
+    PSTR NtBootPathName;
+    PSTR NtHalPathName;
+    PSTR LoadOptions;
+    PNLS_DATA_BLOCK NlsData;
+    PARC_DISK_INFORMATION ArcDiskInformation;
+    PVOID OemFontFile;
+    struct _SETUP_LOADER_BLOCK *SetupLdrBlock;
+    PLOADER_PARAMETER_EXTENSION Extension;
+    union
+    {
+        I386_LOADER_BLOCK I386;
+        ALPHA_LOADER_BLOCK Alpha;
+        IA64_LOADER_BLOCK IA64;
+        PPC_LOADER_BLOCK PowerPC;
+        ARM_LOADER_BLOCK Arm;
+    } u;
+    FIRMWARE_INFORMATION_LOADER_BLOCK FirmwareInformation;
+} LOADER_PARAMETER_BLOCK, *PLOADER_PARAMETER_BLOCK;
+         </pre>
+
+         <p>
+            This data structure can be found <a href = "https://git.reactos.org/?p=reactos.git;a=blob;f=sdk/include/reactos/arc/arc.h;hb=2636cff09fdb70bfe63c52ea9d2d24dbfc1e337f#l485">here</a>. This structure basically contains important
+            information for the kernel, such as the details of the hardware, firmware information, lists of core drivers, the physical memory information among other stuff. Once the kernel has gathered all the required information, the bootloader
+            finally passes the whole control to the kernel and the operational mode is set to protected mode from 16-bit mode. The protected mode can be either 32-bit mode or 64-bit long mode, depending on the machine.
+         </p>
+
+         <p>
+            When NTOSKRNL gains total control, the kernel is now in charge of loading its Executive components. It does that thorough a linear procedure called <b>phases</b>, where <b><u>Phase 0</u></b> is the early boot phase initialisation in the
+            kernel and <b><u>Phase 1</u></b> is the second phase, the continuation of the early boot phase which deals with the rest of Executive components loading. The Phase 0 mainly deals with basic yet very important data structures initialisation that are
+            needed in the next phase and the whole lifetime of the kernel. The component that deals with the initialisation of the whole Executive is the actual Executive component itself. The kernel main startup point, the <code>KiSystemStartup</code>, calls
+            <code>HalInitializeProcessor</code> and <code>KiInitializeProcessor</code> for each logical processor present. During Phase 0, the interrupts are disabled.
+         </p>
+
+         <p>
+            The function that is responsible for Phase 0 management is <code>ExpInitializeExecutive</code>. Initially HAL is in charge of the initialisation at first by calling <code>HalInitSystem</code>. The HAL initialisation routine ensures that there's consistency
+            between the HAL itself and the kernel, otherwise a bugcheck of <b>MISMATCHED_HAL</b> is issued. Later on, HAL initialises the PIC, the clock and sets the hardware CMOS spinlock. Now <code>ExpInitializeExecutive</code> can execute each Phase 0 initialisation
+            routines of each component of the Executive, in the following order: <b>memory manager</b>, <b>object manager</b>, <b>security reference monitor manager</b>, <b>process manager</b> and <b>PnP manager</b>.
+         </p>
+
+         <p>
+            After the Phase 0 is done, Phase 1 of the phase initialisation procedure begins. The Phase 1 is a relatively complex process as it takes up a major chunk of the whole phase initialisation process. The initialisation goes as follows, in order:
+         </p>
+
+         <p>
+            <b>1. Enable intterupts</b> -- As I've told above that the interrupts are disabled in the Phase 0, now <code>HalInitSystem</code> is invoked to enable and accept interrupts from other devices.
+            <br>
+            <b>2. Splash screen startup</b> -- The boot video driver (Bootvid.dll) is loaded into the memory address space and the splash screen is displayed.
+            <br>
+            <b>3. Power manager initialisation</b> -- The phase 1 of the module is initialised.
+            <br>
+            <b>4. System time initialisation & processor initialisation</b> -- The system time is initialised and used as the time the machine booted up. In addition, the rest of processors are loaded and in execution, if the system is a multiprocessor one.
+            <br>
+            <b>5. Namespace root directory & DOS device name mapping creation</b> -- The namespace directory (<b>\</b>) and DOS device name mapping are being created. On Windows XP/2003 such device mapping is <b>\Global??</b>.
+            <br>
+            <b>6. Executive object types creation & scheduler initialisation</b> -- Executives objects (timers, mutexes, semaphores, et al) are being created and scheduler internal data structures are being initialised.
+            <br>
+            <b>7. Security directory creation</b> -- SRM creates the <b>\Security</b> directory and added to the main namespace of the object manager.
+            <br>
+            <b>8. Sections & system worker threads initialisation</b> -- The memory manager is tasked to initialise the section object and system worker threads.
+            <br>
+            <b>9. NLS & NTDLL initialisation mapping</b> -- NLS and NTDLL are being initialised and further mapped into memory address space.
+            <br>
+            <b>10. Cache controller initialisation & registry directory creation</b> -- The cache manager begins to initialise the internal data structures and its worker threads and the configuration manager creates the <b>\Registry</b> directory and added to the
+            main namespace of the object manager.
+            <br>
+            <b>11. PnP BIOS and LPC initialisation</b> -- PnP BIOS calls are being invoked and the local procedure call module creates the LPC object.
+            <br>
+            <b>12. I/O initialisation</b> -- The I/O manager initialisation begins. The module is tasked to initialise its internal structures, worker threads, the core drivers one by one and whatnot. This procedure is one of the most complex ones in the phase initialisation.
+            <br>
+            <b>13. Power manager data structures initialisation</b> -- The power manager module is tasked again to initialise the rest of the internal data structures.
+         </p>
+
+         <p>
+            After all of these operations have completed successfully, the final part of the phase initialisation is the Session Manager Subsystem process. The phase initialisation procedure makes sure
+            that SMSS is still running and it hasn't been terminated prematurely. If that's the case, the system issues a bugcheck of <b>SESSION5_INITIALIZATION_FAILED</b>. The number 5 in the bugcheck
+            means that the initialisation procedure waits 5 seconds for SMSS to respond. If those 5 seconds have elapsed, it means that SMSS is still alive. Otherwise the procedure thread is alerted and this bugcheck is issued.
+            Now the kernel is fully loaded and operational!
+         </p>
+
+         <h3>&nbsp;&#129154; Shutdown</h3>
+         <p>
+            The shutdown of the kernel usually takes place from the userland when a user wants to shut down the system or a program requesting a system shut down. Although in this section of the article we'll only talk about the shut down procedure of the kernel
+            when the system is signaled that a shut down request has to be done.
+         </p>
+
+         <p>
+            The function that is responsible for power shut down management is <code>NtSetSystemPowerState</code>. The system call issues an important request to the I/O manager to send I/O power packets
+            to all of the device drivers loaded in memory that the system is about to suspend. This gives an opportunity to such device drivers to complete their respective operations before the system shuts down. Furthermore, the configuration manager is notified
+            to flush all unsaved data work in the registry to the disc. Afterwards the memory manager writes the modified pages back to their respective files. And finally, the system shutdown control goes to HAL itself, where interrupts are disabled and the processor
+            is halted. The shut down mechanism implementation at HAL level differs between each architecture.
+         </p>
+      </div> 
+   </body>
+</html>
