@@ -1,6 +1,6 @@
 +++
 title = "ReactOS Tutorials"
-slug = "/ros-tutorials/"
+url = "/ros-tutorials/"
 aliases = [
     "/pages/",
     "/ros-tutorial/",
