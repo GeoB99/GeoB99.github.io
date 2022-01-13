@@ -1,6 +1,8 @@
 +++
 title = "Understanding Blue Screens of Death (Part 1)"
 slug = "blue-screen"
+type = "ros-tutorial"
+date = 2021-11-05
 +++
 
 ## Introduction
@@ -102,3 +104,11 @@ In addition, the software interrupts are not disabled nor masked as in the case 
 
 With all that being said, this explains why the blue screen in the 9x editions of Windows are less serious than in NT however. In 9x the user may willy nilly be able to continue using the system with some issues, it's a hit and miss condition. But a bugcheck in NT indicates a fatal problem which the system cannot be recovered, what is left for the user to do is to restart the system. Here's a screenshot of a few summarised points in regard of NT/9x bugcheck implementation differences.
 
+![](/images/blue-screen/winnt-win9x.png)
+
+### References
+
+[https://www.setthings.com/en/blue-screen-of-death/](https://www.setthings.com/en/blue-screen-of-death/)
+[https://faydoc.tripod.com/structures/12/1293.htm](https://faydoc.tripod.com/structures/12/1293.htm)
+[https://betawiki.net/wiki/Blue_screen_of_death](https://betawiki.net/wiki/Blue_screen_of_death)
+[https://en.wikipedia.org/wiki/VxD](https://en.wikipedia.org/wiki/VxD)
