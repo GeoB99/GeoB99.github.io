@@ -109,6 +109,9 @@ With all that being said, this explains why the blue screen in the 9x editions o
 ### References
 
 [https://www.setthings.com/en/blue-screen-of-death/](https://www.setthings.com/en/blue-screen-of-death/)
+
 [https://faydoc.tripod.com/structures/12/1293.htm](https://faydoc.tripod.com/structures/12/1293.htm)
+
 [https://betawiki.net/wiki/Blue_screen_of_death](https://betawiki.net/wiki/Blue_screen_of_death)
+
 [https://en.wikipedia.org/wiki/VxD](https://en.wikipedia.org/wiki/VxD)

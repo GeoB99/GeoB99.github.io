@@ -40,7 +40,7 @@ The memory manager tried to map corrupt memory data at a different IRQL and the 
 
 Using the `!analyze -v` command gives you the opportunity to get verbose information about the current instance of a bugcheck. The command window should look like this:
 
-[![WinDBG Crash](../images/blue-screen/windbg-crash.png)](../images/blue-screen/windbg-crash.png)
+[![WinDBG Crash](/images/blue-screen/windbg-crash.png)](../images/blue-screen/windbg-crash.png)
 
 Obviously I would not be going to review every detail provided by the command so I will explain only the important notes that are worth noting.
 
@@ -60,6 +60,6 @@ Obviously I would not be going to review every detail provided by the command so
 
 A crash dump is a file containing debug information about the last instance of a bugcheck hit. Their extension is **.dmp** and can be opened by WinDBG or any tool that supports such extension. The crash dumps can range from simple dumps that provide the minimal information of a bugcheck to kernel and complete dumps. Complete dumps are large in size as the name implies, they contain the full details (minimal information + kernel debug information). As usual we'll be using WinDBG to read crash dumps. To do so, go to **File > Open Crash Dump** and locate the path of the said dump. Make sure WinDBG is running as administrator and the right bit architecture set (32-bit or 64-bit) depending on your machine. Usually the crash dumps are residing in **C:\\Windows** directory path. WinDBG should look as follows:
 
-[![WinDBG Dump](../images/blue-screen/windbg-dump.png)](../images/blue-screen/windbg-dump.png)
+[![WinDBG Dump](/images/blue-screen/windbg-dump.png)](../images/blue-screen/windbg-dump.png)
 
 WinDBG prepares the loading of the crash dump by first obtaining the PDB files from the symbols store and caching them to the destination directory. WinDBG may probably hang during this process and become responsive again so in such case DO NOT close the process! Reading a crash dump is the same as doing `!analyze -v`. Refer to the "Getting verbose details" section above to get a general understanding of what to read in a crash dump.
