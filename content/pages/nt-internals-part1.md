@@ -1,6 +1,7 @@
 +++
 title = "Introduction to the NT kernel development (Part 1)"
 slug = "nt-internals-part1"
+type = "ros-tutorial"
 +++
 
 ## Introduction
@@ -110,3 +111,102 @@ The kernel is a minimalistic, simple designed yet robust in charge with interrup
 ### Hardware Abstraction Layer
 
 The scope of HAL is to hide hardware differences by abstracting hardware specific features or specifications onto code so that there won't be any overhead for the kernel, and at the same time providing a consistent infrastructure in the kernel space. Even though the HAL is separate from the kernel and the Executive, this component doesn't operate fully independently on its own. Both the HAL and kernel cooperate together, most of the time. The routines that belong to this module are prefixed with **Hal**.
+
+## Classification of the NT API
+
+
+The NT API can be classified into two main parts: **executive** and **kernel** APIs. That is, the executive APIs are the libraries from the Executive itself that can be used across kernel mode drivers, other than the kernel itself, and that applies the very same thing for the kernel APIs too. The APIs comprehend a variety of functions exported to the public use as well as non-exported ones only used by the kernel. Although the goal of **"Introduction to the NT kernel development"** is to help you dwelling deep onto the kernel and everything that is tied to it, in this section of the article we're going to take a glimpse at the exported functions only, categorised in specific labels.
+
+It is also important to take into consideration that many functions, even if not exported, are private which cannot be called outside of other components in the NT kernel even. Although this is something that I'll be going to explain that thoroughly in the "topology of function prefixes" later.
+
+### Configuration Manager APIs
+
+1. **Callback calls** -- CmRegisterCallback, CmRegisterCallbackEx, CmUnRegisterCallback, CmGetCallbackVersion, CmSetCallbackObjectContext, et al.  
+1. **Transaction calls** -- CmGetBoundTransaction, et al.
+
+### Cache Manager APIs
+
+1. **Copy/Read calls** -- CcCanIWrite, CcFastCopyRead, CcFastCopyWrite, CcCopyRead, CcCopyWrite, CcDeferWrite, et al.  
+1. **Write preparation calls** -- CcMdlWriteComplete, CcPrepareMdlWrite, CcPreparePinWrite, et al.  
+1. **Cache mapping initialisation calls** -- CcUninitializeCacheMap, CcInitializeCacheMap, et al.  
+1. **Pinning calls** -- CcPinMappedData, CcPinRead, CcRepinBcb, CcUnpinData, CcUnpinDataForThread, CcUnpinRepinnedBcb, et al.
+
+### I/O Manager APIs
+
+1. **Events calls** -- IoCreateNotificationEvent, IoCreateSynchronizationEvent, et al.  
+1. **I/O Timers calls** -- IoInitializeTimer, IoStartTimer, IoStopTimer, et al.  
+1. **IRPs manipulation calls** -- IoAllocateIrp, IoCancelThreadIo, IoForwardIrpSynchronously, IoGetPagingIoPriority, IoGetTopLevelIrp, IoInitializeIrp, et al.  
+1. **Volume support calls** -- IoUnregisterFileSystem, IoRegisterFsRegistrationChange, IoVolumeDeviceToDosName, et al.  
+1. **Symbolic links calls** -- IoCreateSymbolicLink, IoCreateUnprotectedSymbolicLink, IoDeleteSymbolicLink, et al.  
+1. **Remove locks (REM) support calls** -- IoInitializeRemoveLockEx, IoAcquireRemoveLockEx, IoReleaseRemoveLockEx, IoReleaseRemoveLockAndWaitEx, et al.  
+1. **Interrupt requests (IRQ) calls** -- IoConnectInterrupt, IoDisconnectInterrupt, et al.
+
+### Process Structure APIs
+
+1. **Query/Set process and threads information calls** -- NtQueryInformationProcess, NtSetInformationThread, NtQueryInformationThread, NtSetInformationProcess, et al.  
+1. **Pool Quota management calls** -- PsChargeProcessPageFileQuota, PsChargePoolQuota, PsChargeProcessNonPagedPoolQuota, PsReturnPoolQuota, et al.  
+1. **Security process calls** -- NtOpenProcessToken, NtOpenProcessTokenEx, PsReferencePrimaryToken, PsOpenTokenOfProcess, PsRevertThreadToSelf, PsImpersonateClient, et al.  
+1. **Thread/Process kill calls** -- PsTerminateSystemThread, NtTerminateProcess, NtTerminateThread, NtRegisterThreadTerminatePort, et al.  
+1. **Process notification calls** -- PsSetCreateProcessNotifyRoutine, PsSetLegoNotifyRoutine, PsRemoveLoadImageNotifyRoutine, et al.
+
+### Security Reference Monitoring APIs
+
+1. **Access tokens calls** -- NtOpenThreadToken, NtCompareTokens, NtFilterToken, NtImpersonateAnonymousToken, SeIsTokenChild, SeSubProcessToken, et al.  
+1. **Access & check calls** -- SeCaptureSubjectContext, SeLockSubjectContext, SeCreateAccessStateEx, SeAccessCheck, SeFastTraverseCheck, et al.  
+1. **Auditing calls** -- SeDetailedAuditingWithToken, SeAuditProcessCreate, SeInitializeProcessAuditName, et al.  
+1. **Privileges handling calls** -- SePrivilegePolicyCheck, SeCheckAuditPrivilege, SeCaptureLuidAndAttributesArray, SeAppendPrivileges, et al.
+
+### Power Manager APIs
+
+1. **Shutdown procedure calls** -- PoRequestShutdownWait, PoQueueShutdownWorkItem, PoRequestShutdownEvent, NtInitiatePowerAction, et al.  
+1. **Power events suppor calls** -- PoNotifySystemTimeSet, et al.  
+1. **Volume handling calls** -- PoRemoveVolumeDevice, PoInitializeDeviceObject, et al.
+
+### Executive APIs
+
+1. **Executive callbacks calls** -- ExInitializeCallBack, ExAllocateCallBack, ExNotifyCallback, ExRegisterCallback, ExCompareExchangeCallBack, et al.  
+1. **Fast mutex calls** -- ExAcquireFastMutexUnsafe, ExReleaseFastMutexUnsafe, ExEnterCriticalRegionAndAcquireFastMutexUnsafe, ExReleaseFastMutexUnsafeAndLeaveCriticalRegion, et al.  
+1. **Mutant calls** -- NtCreateMutant, NtOpenMutant, NtQueryMutant, NtReleaseMutant, et al.  
+1. **Rundown Protection calls** -- ExfAcquireRundownProtection, ExfInitializeRundownProtection, ExfWaitForRundownProtectionRelease, ExfAcquireRundownProtectionCacheAware, et al.  
+1. **Timers calls** -- ExTimerRundown, NtOpenTimer, NtQueryTimer, NtSetTimer, et al.  
+1. **Locale support calls** -- NtSetDefaultLocale, NtQueryDefaultLocale, NtQueryInstallUILanguage, NtQueryDefaultUILanguage, et al.  
+1. **Resource calls** -- ExReleaseResourceLock, ExAcquireResourceLock, ExDeleteResourceLite, ExGetSharedWaiterCount, ExInitializeResourceLite, et al.  
+1. **Pushlock calls** -- ExfAcquirePushLockShared, ExfReleasePushLock, ExfReleasePushLockShared, ExfReleasePushLockExclusive, et al.  
+1. **Look-Aside List calls** -- ExInitializeSystemLookasideList, ExDeletePagedLookasideList, ExInitializeNPagedLookasideList, ExInitializePagedLookasideList, et al.
+
+### Object Manager APIs
+
+1. **Object handle opening/insertion calls** -- ObOpenObjectByName, ObOpenObjectByPointer, ObFindHandleForObject, ObInsertObject, ObSetHandleAttributes, et al.  
+1. **Object life monitoring calls** -- ObQueryTypeInfo, ObCreateObject, ObCreateObjectType, ObDeleteCapturedInsertInfo, NtMakeTemporaryObject, NtSetInformationObject, et al.  
+1. **Referencing/Dereferencing object calls** -- ObReferenceObjectSafe, ObFastReferenceObject, ObFastReplaceObject, ObReferenceFileObjectForWrite, ObfDereferenceObject, et all.  
+1. **Waiting calls** -- NtWaitForMultipleObjects, NtWaitForMultipleObjects32, NtWaitForSingleObject, NtSignalAndWaitForSingleObject, et al.  
+1. **Symbolic link object calls** -- NtCreateSymbolicLinkObject, NtOpenSymbolicLinkObject, NtQuerySymbolicLinkObject, et al.
+
+### Memory Manager APIs
+
+1. **Pool allocation calls** -- ExAllocatePoolWithTag, ExAllocatePool, ExFreePoolWithTag, ExFreePool, ExAllocatePoolWithTagPriority, et al.  
+1. **Dynamic memory manipulation support calls** -- MmAddPhysicalMemory, MmMarkPhysicalMemoryAsBad, MmMarkPhysicalMemoryAsGood, MmRemovePhysicalMemory, MmGetPhysicalMemoryRanges, et al.  
+1. **Driver management calls** -- MmUnlockPageableImageSection, MmLockPageableSectionByHandle, MmTrimAllSystemPageableMemory, MmAddVerifierThunks, MmIsDriverVerifying, MmIsVerifierEnabled, et al.  
+1. **I/O Mapping calls** -- MmMapIoSpace, MmUnmapIoSpace, MmMapVideoDisplay, MmUnmapVideoDisplay, MmIsIoSpaceActive, et al.  
+1. **MDL support calls** -- MmAllocatePagesForMdl, MmAllocatePagesForMdlEx, MmFreePagesFromMdl, MmMapLockedPagesSpecifyCache, MmMapLockedPages, et al.  
+1. **Page faulting calls** -- MmSetExecuteOptions, MmGetExecuteOptions, MmAccessFault, et al.  
+1. **Sections support calls** -- MmMapViewOfSection, MmDisableModifiedWriteOfSection, MmForceSectionClosed, MmMapViewInSessionSpace, MmUnmapViewInSessionSpace, et al.  
+1. **Virtual memory calls** -- MmCopyVirtualMemory, MmFlushVirtualMemory, NtFlushVirtualMemory, NtGetWriteWatch, et al.
+
+### Kernel APIs
+
+1. **APC calls** -- KeEnterCriticalRegion, KeLeaveCriticalRegion, KeInitializeApc, KeInsertQueueApc, et al.  
+1. **Balance Manager** -- KeBalanceSetManager, et al.  
+1. **DPC support calls** -- KeInitializeThreadedDpc, KeInitializeDpc, KeInsertQueueDpc, KeFlushQueuedDpcs, et al.  
+1. **Event Dispatcher calls** -- KeClearEvent, KeInitializeEvent, KePulseEvent, KeReadStateEvent, KeResetEvent, KeSetEventBoostPriority, et al.  
+1. **Exception handling calls** -- NtRaiseException, NtContinue, et al.  
+1. **Gate Dispatcher calls** -- KeInitializeGate, KeWaitForGate, KeSignalGateBoostPriority, et al.  
+1. **Mutant Dispatcher calls** -- KeInitializeMutant, KeInitializeMutex, KeReleaseMutant, KeReadStateMutant, et al.  
+1. **Kernel process management calls** -- KeSetProcess, KeInitializeProcess, KeSetQuantumProcess, KeSetAffinityProcess, KeSetAutoAlignmentProcess, KeSetPriorityAndQuantumProcess, et al.  
+1. **Kernel profiling calls** -- KeInitializeProfile, KeStartProfile, KeStopProfile, KeQueryIntervalProfile, et al.  
+1. **Kernel thread objects calls** -- KeReadyThread, KeAlertThread, KeBoostPriorityThread, KeForceResumeThread, KeFreezeAllThreads, KeRundownThread, et al.  
+1. **Semaphore Dispatcher calls** -- KeInitializeSemaphore, KeReadStateSemaphore, KeReleaseSemaphore, et al.  
+1. **Kernel queue calls** -- KeInitializeQueue, KeInsertHeadQueue, KeReadStateQueue, KeRemoveQueue, KeRundownQueue, et al.  
+1. **Kernel device queue calls** -- KeInitializeDeviceQueue, KeInsertDeviceQueue, KeInsertByKeyDeviceQueue, KeRemoveDeviceQueue, KeRemoveEntryDeviceQueue, et al.  
+1. **Clock support calls** -- KeSetSystemTime, KeQueryTimeIncrement, KeQueryTickCount, KeQuerySystemTime, KeQueryInterruptTime, et al.  
+1. **Bugcheck (Blue Screen of Death) mechanism calls** -- KeGetBugMessageText, KeInitializeCrashDumpHeader, KeDeregisterBugCheckCallback, KeDeregisterBugCheckReasonCallback, KeBugCheckEx, KeBugCheck, KeEnterKernelDebugger, et al.

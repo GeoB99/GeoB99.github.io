@@ -55,9 +55,6 @@ Once everything is set, the Git installer should finish. You now have Git SCM in
 
 [![Git Finish](../images/first-setup-git/git-install-finish.png)](../images/first-setup-git/git-install-finish.png)
 
-* * *
-
-
 ## Git configuration file
 
 Git SCM depends upon a configuration file, **.gitconfig**, to read the user configuration settings as well changing them for instance the real name of the committer, E-mail address, the personal GPG key for committing or editing the default text editor. Git comes with `git config` command line that allows you to edit the said configuration file. Click the right mouse button and you'll see two menu Git context items, **Git GUI** and **Git Bash**. Click on Git Bash. The Bash terminal appears like this.
