@@ -1,6 +1,9 @@
 +++
 title = "Introduction to the NT kernel development (Part 1)"
-slug = "nt-internals-part1"
+slug = "nt-internals-part-1"
+aliases = [
+    "/pages/nt-internals-part1/"
+]
 type = "ros-tutorial"
 +++
 
