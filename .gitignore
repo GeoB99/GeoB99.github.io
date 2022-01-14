@@ -1,0 +1,8 @@
+# ignore the folder public (in case of `hugo build` by default gohugo will create public/ as the output folder).
+public/
+
+# ignore the cache for the server
+resources
+
+# ignore the binary of hugo if you do not want to install it
+hugo

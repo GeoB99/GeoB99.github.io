@@ -2,6 +2,7 @@
 title = "Understanding Blue Screens of Death (Part 2)"
 slug = "blue-screen-2"
 type = "ros-tutorial"
+date = 2020-12-28
 +++
 
 In the part 1 of the article I've discussed what's a blue screen, the contents and their meaning behind a blue screen, how a blue screen works internally and finally what are the differences between Windows 9x and NT blue screen internal implementation. And now, in this article I'll cover the baisc techniques to troubleshoot a bugcheck using WinDBG and how to read a memory crash dump.

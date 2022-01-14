@@ -4,6 +4,7 @@ slug = "nt-internals-part-3"
 aliases = [
     "/pages/nt-internals-part3/"
 ]
+date = 2021-06-01
 +++
 
 ## Introduction

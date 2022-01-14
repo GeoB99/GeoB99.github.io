@@ -4,15 +4,16 @@ slug = "nt-internals-part-4"
 aliases = [
     "/pages/nt-internals-part4/"
 ]
+date = 2021-12-05
 +++
 
-## Introduction
+## Introduction
 
 A user logs into the computer typing their credentials, performs day to day life tasks like surfing the web, play video games, write mails, do work related stuff and whatnot. Sometimes it might have happened that a user has to do certain tasks that only can be done in an elevated process, or that is, a user temporarily acquires privilege elevation to perform such tasks until the job is done. The same scenario applies if a user is doing tasks in a "restricted" way, or that is, the user is doing the said operations in a less elevated way than a normal user with a standard set of privileges would do.
 
 Whatever that is, in the end what the user wants to do is to just perform tasks. The user has no idea or is aware of what's exactly happening on the inside when the tasks are being performed. A very important component of the security manager of Windows (and ReactOS for that matter) is without a doubt, the **access tokens** (or just simply called -- **tokens**). In this chapter of "Introduction to NT kernel development" I'll thoroughly explain the anatomy of an access token, their purpose, the implications of tokens in the security world of Windows/ReactOS and whatnot. This article may be useful for NT enthusiasts and Windows system administrators alike.
 
-## Preamble about the Security Manager
+## Preamble about the Security Manager
 
 The Security Manager whose internal kernel prefix goes by **Se**, is a component of the Executive layer of the NT kernel that serves as the foundation of the security infrastructure of the operating system and the skeleton of the security algorithms that such component implements. The Security Manager acts like a **guardian** or **supervisor**, in the essence and sense of the meaning that the Security Manager isn't just merely and only responsible for managing user accounts, user rights, logon facilities and so forth. It is also responsible for monitoring the resources created and used in the operating system, that they're used properly within the bounds of the security rules.
 
@@ -284,12 +285,7 @@ All these four elements in the enumeration not only govern the actual impersonat
   
 **SecurityDelegation** -- This level is the most permissive. It allows the server to impersonate both local and remote clients and it can also obtain security context details. It's named **security delegation** because the client "delegates" the security context to the server who is impersonating such context on behalf of the client.
 
-* * *
-
-Type of access tokens
-=====================
-
-  
+## Type of access tokens
 
 Access tokens come in various types, whether it's the `TOKEN_TYPE` enumeration that marks a token as primary or impersonation or how a token is manipulated or created. The first two types that I'll be going to explain are related to the `TOKEN_TYPE` enumeration itself.
 
@@ -299,23 +295,23 @@ Access tokens come in various types, whether it's the `TOKEN_TYPE` enumeration t
 
 The first two types are the usual and common way to make a distinction between tokens although the `TokenType` member alone can't take into account other kinds of tokens whose differences can be subtle or not, depending on how the tokens in question are manipulated, modified and so on. The other types of tokens being...
 
-###  🢂 Duplicated Tokens
+### Duplicated Tokens
 
 [![Duplicate](../images/nt-internals/part4-1/Duplicate.png)](../images/nt-internals/part4-1/Duplicate.png)
 
 As the name implies a duplicated token is a token whose security context information are the same of the original token, that is, the token is a "duplicate" or "clone" of the former access token. The exception that slightly makes duplicated tokens a bit distinct is that the requestor can choose a different type of the duplicated token, impersonation or primary. The NT system call that is reponsible for duplicating tokens is `NtDuplicateToken`.
 
-###  🢂 Filtered/Restricted Tokens
+### Filtered/Restricted Tokens
 
 [![Filter](../images/nt-internals/part4-1/Filter.png)](../images/nt-internals/part4-1/Filter.png)
 
 Filtered, or also called restricted tokens, is an access token that's in a "restricted" form of the original token. With that being said, this token is basically like a duplicated token of another token but with certain security context properties removed, disabled, or further restricted or both. For example, in a restricted token there can be certain privileges removed, groups disabled or restricted SIDs added into the token that make it restricted. Restricted tokens serve an important purpose in ReactOS/Windows: with a restricted token a calling thread or process can access a certain securable subsystem without having to touch delicate parts that would require privilege elevation otherwise. Furthermore, a restricted token is deprived from privileges and particular groups like Administrators, all of that at the discretion of the requestor who wants to restrict a token.
 
-###  🢂 Inert tokens
+### Inert tokens
 
 An inert token is a token where checks like AppLocker rules or Software Restriction Policies (SRP) aren't being made against this token. Inert tokens are generally present with the introduction of AppLocker in Vista+ versions of Windows as Windows Server 2003 (and ReactOS by definition) doesn't support AppLocker per se.
 
-###  🢂 Effective Tokens
+### Effective Tokens
 
 [![Effective Only](../images/nt-internals/part4-1/EffectiveOnly.png)](../images/nt-internals/part4-1/EffectiveOnly.png)
 
@@ -397,10 +393,7 @@ As for attributes, a few of them are smilar in comparison with the privilege att
   
 **SE\_GROUP\_LOGON\_ID** -- A group that has this attribute indicates that the SID of the group is a logon SID associated with the logon session.
 
-Geometrical memory of an access token
-=====================================
-
-  
+## Geometrical memory of an access token
 
 What, do I have to do maths lessons now? Geometry classes?? Am I going to get Fs again?!! No you silly boy (or girl or whatever you are), this topic is about tokens! Or well, more so specifically about the memory aspect of an access token. Previously I did talk some niches about `VariableLength`, `DynamicCharged`, and `DynamicAvailable` members although as it currently stands, someone of you might still get confused about them and what exactly are their purpose. I'll explain detail by detail in regard of this.
 
@@ -434,12 +427,7 @@ What's left to explain in this topic is how the calculation of restricted SIDs i
 
 If the caller provides a list of restricted SIDs to be added in the token, the logic basically calculates the length by multiplying the total count of restricted SIDs with the size, in bytes, of `SID_AND_ATTRIBUTES`. Afterwards, the logic does an addition of the calculated length with the length of each restricted SID. The calculated length gets aligned and the variable part is added with the additional calculated length in question. Finally the total size is addition of the variable length, calculated length and the base offset of the variable part thus making the whole size space needed given for the Object Manager to create a token object. The code logic in question is implemented in `SepPerformTokenFiltering`, a private function in ReactOS that makes up the whole implementation infrastructure of restricted tokens. In Windows however, there's `SepFilterToken`.
 
-* * *
-
-Relationship between logon sessions and access tokens
-=====================================================
-
-  
+## Relationship between logon sessions and access tokens
 
 Access tokens and logon sessions don't share common things as both are different entities in the Security Manager but one thing is for sure -- access tokens do depend on logon sessions in one way or another. Primarily it's the `AuthenticationId` member of the token structure which is basically the ID of the logon session of an authenticated user. Another member that I haven't talked about much is `LogonSession`. Wait what, what are the differences between the two? Let me explain.
 
@@ -528,7 +516,6 @@ In this topic I'm going to talk about the flags of access tokens. The flags serv
 **TOKEN\_NOT\_LOW** -- A token is granted this flag if the access token in question is not a low box token. This flag is used for token sandboxing purposes for application containers.
 
 ## Using the user mode API of token manipulation
-
 
 In this topic I'm going to provide a few examples of how to interact with access tokens using the userland API. This section may receive future updates with future examples in this regard.
 

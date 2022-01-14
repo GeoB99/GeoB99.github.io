@@ -1,6 +1,7 @@
 +++
 title = "How to compile ReactOS using RosBE (Windows)"
 slug = "reactos-build-gcc"
+date = 2020-06-15
 +++
 
 ## Getting the ReactOS Build Environment

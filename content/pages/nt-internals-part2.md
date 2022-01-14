@@ -4,6 +4,7 @@ slug = "nt-internals-part-2"
 aliases = [
     "/pages/nt-internals-part2/"
 ]
+date = 2021-05-08
 +++
 
 In this chapter we'll cover some further topics about the NT kernel, namely the system calls interface in NT, the basic data types used, function conventions and syntax topology of the prefix routines and the startup and shutdown mechanism procedure of the kernel.

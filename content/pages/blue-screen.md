@@ -2,7 +2,7 @@
 title = "Understanding Blue Screens of Death (Part 1)"
 slug = "blue-screen"
 type = "ros-tutorial"
-date = 2021-11-05
+date = 2020-12-26
 +++
 
 ## Introduction

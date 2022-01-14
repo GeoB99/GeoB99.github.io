@@ -3,7 +3,7 @@ title = "Contribute to ReactOS with your first patch"
 slug = "reactos-contributing"
 +++
 
-## Git Workflow
+## Git Workflow
 
 ### Understanding the Git workflow
 

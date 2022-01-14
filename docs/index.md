@@ -1,3 +1,2 @@
 # Documentation for gohugo
 
-... to be written ...
