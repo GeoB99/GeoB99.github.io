@@ -10,7 +10,7 @@ note = "For further information about translating please consult the [ReactOS Wi
 
 Windows and ReactOS can be localized through forms of resources files, with `.rc` as file extension. Resource files are implemented through MUI technology which makes it possible for the operating system to be localized in various languages across the globe. A resource file is like a file script that composes the general graphical infrastructure of a program in Windows/ReactOS, that is, menus, dialog templates, windows, icons, bitmaps and static control texts for instance.
 
-[![Resource File](../images/reactos-translate/rc.png)](../images/reactos-translate/rc.png)
+[![Resource File](/images/reactos-translate/rc.png)](/images/reactos-translate/rc.png)
 
 A resource file is based on three main parts called resource-definition statements: controls, resources and statements. Each one of these categories represent their own purpose and functionality behind a resource file. Let's take for example this [resource file](https://git.reactos.org/?p=reactos.git;a=blob;f=base/applications/utilman/umandlg/lang/en-US.rc;h=d44bc44cd3a8c212cd2568a6f629556298a28ff4;hb=HEAD). In ReactOS every resource file has their specific language specifier, en-US.rc for example, which is a English (United States) resource file. The basic rule on understanding this is...
 
@@ -26,11 +26,11 @@ Every resource file must come up with a language declaration statement to inform
 
 As we were pointing in a resource file of ReactOS Utility Manager, let's use it as a general reference and explanation of a basic RC translation file structure. Next to examine is the dialog template.
 
-[![Dialog](../images/reactos-translate/dialogex.png)](../images/reactos-translate/dialogex.png)
+[![Dialog](/images/reactos-translate/dialogex.png)](/images/reactos-translate/dialogex.png)
 
 This is the initial definition of a dialog box template. A dialog box is merely a modal (or modeless) dialog window that comes up with a window frame, the non client area, and the client area which is the inside of the dialog. Styles and extended styles can be applied, a caption as well as a specific font and size for it. Window styles can be found [here](https://docs.microsoft.com/en-us/windows/win32/winmsg/window-styles).
 
-[![Child Controls](../images/reactos-translate/child-ctrls.png)](../images/reactos-translate/child-ctrls.png)
+[![Child Controls](/images/reactos-translate/child-ctrls.png)](/images/reactos-translate/child-ctrls.png)
 
 Every dialog comes with child controls. A child control is a child window that belongs to the parent dialog window which allows user interaction with the GUI interface of an application. In fact, in Windows and ReactOS everything is a window, that is, buttons, combo boxes, static texts and a whole lot more. Let's examine a child control.
 
@@ -58,7 +58,7 @@ The following parameter is control styles. Styles are used to alter or modify th
 
 Finally here comes the coordinate and width/height parameters of a child control. The parameters represent **X**, **Y**, **width** and **height** of the control. As a general rule for translators you must always test your changes to translations before you submit a pull request such as checking that the translated strings fit to specific areas like for example the string in a push-button or a checkbox. Translators are recommended to edit these values accordingly to what they translate. For a general description of common parameters of controls please consult this [page](https://docs.microsoft.com/en-us/windows/win32/menurc/common-control-parameters).
 
-[![Strings Table](../images/reactos-translate/stringtable.png)](../images/reactos-translate/stringtable.png)
+[![Strings Table](/images/reactos-translate/stringtable.png)](/images/reactos-translate/stringtable.png)
 
 This section of the resource file is the string tables. A string table, created with `STRINGTABLE`, consists of one or more null-terminated strings which are Unicode or ASCII depending on the application encoding environment. As usual the strings wrapped in double quotes can be translated. Keep in mind stuff like `%s` are format specifiers and these must be left alone!
 

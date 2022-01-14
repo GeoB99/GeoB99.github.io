@@ -19,7 +19,7 @@ I'll explain briefly the syntax and semantics behind this. `SRV*` informs WinDBG
 
 In this process I'll be simulating a `IRQL\_NOT\_LESS\_OR\_EQUAL` bugcheck. The command window of WinDBG should look like this:
 
-[![WinDBG](../images/blue-screen/windbg.png)](../images/blue-screen/windbg.png)
+[![WinDBG](/images/blue-screen/windbg.png)](/images/blue-screen/windbg.png)
 
 What I exactly did to get `IRQL\_NOT\_LESS\_OR\_EQUAL`? I added an offender call, `PsChargePoolQuota`, with an invalid POOL\_TYPE value within a kernel mode driver. The function will write beyond the paged and non paged memory areas thus writing garbage data into the kernel memory space. Windows is not yet aware of this as it hasn't yet accessed such garbage data in the memory. This later happens when trying to overwrite the files of the kernel mode driver (whilst not in execution!) from a shared folder.
 
@@ -27,13 +27,13 @@ What I exactly did to get `IRQL\_NOT\_LESS\_OR\_EQUAL`? I added an offender call
 
 A **call stack** is a stack which stores the routines and subroutines recently executed by the processor. Prior the system gets into a fatal crash the system captures the last called functions and puts them into the aforementioned stack. To get the information of the call stack backtrace, type `kp` in the command line within the "Command" window or just open the Call Stack window. WinDBG should look like this either way:
 
-[![WinDBG Call Stack](../images/blue-screen/windbg-call.png)](../images/blue-screen/windbg-call.png)
+[![WinDBG Call Stack](/images/blue-screen/windbg-call.png)](/images/blue-screen/windbg-call.png)
 
 As you can see, Windows has caught a page fault and the operating system is instructed to take special care of this situation and it does that by calling `KiTrap0E`. That function is responsible for handling page faults with the hope of recovering the system but as it turns out, the exception trap handler couldn't be able to proceed further. The interrupt request level (IRQL) wasn't at PASSIVE\_LEVEL at the time of execution which means the interrupts with ranking level not above or the same to DISPATCH\_LEVEL were masked, therefore, the system was determined to bugcheck itself. But why's that?
 
 As I stated above, the bugcheck occurred when I tried to overwrite the files of the kernel mode driver from a shared folder. The problem goes way deep down to the VirtualBox service process and because of that the system wanted to read some corrupt data from a certain address pointed by the first parameter in the bugcheck. Such operation led to the phenomena of a page fault and within this condition the IRQL wasn't changed. If we are trying to narrow the actual fault by using `ln` which points the nearest symbol pointed by the 4 parameter of the bugcheck which is, as usual, the function call triggered at the time of the fault.
 
-[![WinDBG ln](../images/blue-screen/windbg-ln.PNG)](../images/blue-screen/windbg-ln.PNG)
+[![WinDBG ln](/images/blue-screen/windbg-ln.PNG)](/images/blue-screen/windbg-ln.PNG)
 
 The memory manager tried to map corrupt memory data at a different IRQL and the exception handler was invoked to handle such page fault.
 
@@ -41,7 +41,7 @@ The memory manager tried to map corrupt memory data at a different IRQL and the 
 
 Using the `!analyze -v` command gives you the opportunity to get verbose information about the current instance of a bugcheck. The command window should look like this:
 
-[![WinDBG Crash](/images/blue-screen/windbg-crash.png)](../images/blue-screen/windbg-crash.png)
+[![WinDBG Crash](/images/blue-screen/windbg-crash.png)](/images/blue-screen/windbg-crash.png)
 
 Obviously I would not be going to review every detail provided by the command so I will explain only the important notes that are worth noting.
 
@@ -61,6 +61,6 @@ Obviously I would not be going to review every detail provided by the command so
 
 A crash dump is a file containing debug information about the last instance of a bugcheck hit. Their extension is **.dmp** and can be opened by WinDBG or any tool that supports such extension. The crash dumps can range from simple dumps that provide the minimal information of a bugcheck to kernel and complete dumps. Complete dumps are large in size as the name implies, they contain the full details (minimal information + kernel debug information). As usual we'll be using WinDBG to read crash dumps. To do so, go to **File > Open Crash Dump** and locate the path of the said dump. Make sure WinDBG is running as administrator and the right bit architecture set (32-bit or 64-bit) depending on your machine. Usually the crash dumps are residing in **C:\\Windows** directory path. WinDBG should look as follows:
 
-[![WinDBG Dump](/images/blue-screen/windbg-dump.png)](../images/blue-screen/windbg-dump.png)
+[![WinDBG Dump](/images/blue-screen/windbg-dump.png)](/images/blue-screen/windbg-dump.png)
 
 WinDBG prepares the loading of the crash dump by first obtaining the PDB files from the symbols store and caching them to the destination directory. WinDBG may probably hang during this process and become responsive again so in such case DO NOT close the process! Reading a crash dump is the same as doing `!analyze -v`. Refer to the "Getting verbose details" section above to get a general understanding of what to read in a crash dump.

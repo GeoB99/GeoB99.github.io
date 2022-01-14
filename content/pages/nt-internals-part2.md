@@ -13,11 +13,11 @@ In this chapter we'll cover some further topics about the NT kernel, namely the 
 
 The more you explore around the kernel you may find a plethora of functions across different components of the kernel that adhere to a set of rules regarding function prefixing. Consider this as an example:
 
-[![Function](../images/nt-internals/part2/func.png)](../images/nt-internals/part2/func.png)
+[![Function](/images/nt-internals/part2/func.png)](/images/nt-internals/part2/func.png)
 
 It can be quite alien at first as you may were probably getting used to POSIX call interface syntax like `write()` or `read()`, but in reality it makes things easier to understand. Concerning the kernel's layered nature, Microsoft had to organise a set of syntax conventions for the kernel to meet the design principles of the kernel, which such syntax rules regarding function prefixes got adopted in ReactOS as our aim is to have a compatible and interoperable operating system both at API and ABI levels. This syntax interface that both Windows and ReactOS follow can be explained in this screenshot.
 
-[![Syntax](../images/nt-internals/part2/syntax.png)](../images/nt-internals/part2/syntax.png)
+[![Syntax](/images/nt-internals/part2/syntax.png)](/images/nt-internals/part2/syntax.png)
 
 In case it's still confusing to you, I'll further explain detail by detail each case that are seen in the screenshot.  
   
@@ -37,7 +37,7 @@ In case it's still confusing to you, I'll further explain detail by detail each 
 
 This prefix naming scheme doesn't apply only to the NT kernel but to the whole infrastructure space in the NT world, including the base kernel services and without a doubt, the NTDLL. Here are some other examples of prefixes notably known in Windows.
 
-[![Prefixes](../images/nt-internals/part2/prefixes.png)](../images/nt-internals/part2/prefixes.png)
+[![Prefixes](/images/nt-internals/part2/prefixes.png)](/images/nt-internals/part2/prefixes.png)
 
 ## Function conventions in the NT kernel  
 
@@ -64,13 +64,13 @@ Enough said, here are some of the data types widely used in the kernel:
 
 What is known about is that data structures are widely used across the kernel to abstract the kernel data. A notable structure is [LIST\_ENTRY](https://docs.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-list_entry) for doubly linked lists. Keep in mind that not every data type is used in the kernel, **BOOL** being an example. Even though **BOOL** is also a boolean value, this is strictly used in Windows API only and not NT! For this reason, only **BOOLEAN** must be used in the kernel. Here's a quick and summarised graph of the data type syntax structure.
 
-[![Datatypes](../images/nt-internals/part2/datatypes.png)](../images/nt-internals/part2/datatypes.png)
+[![Datatypes](/images/nt-internals/part2/datatypes.png)](/images/nt-internals/part2/datatypes.png)
 
 ## System calls and NTDLL
 
 In order for an application to complete an operation at request of a user within userland, applications call the documented API functions that in turn such functions invoke the **system calls**. System calls are a mechanism where an application code has to complete the said operation by requesting a specific service from the kernel. Once the kernel request has succeeded, the control goes back from kernel to user mode to the application itself. The mechanism of system calls ensure that a linear execution flow is respected and that no violations occur when going from user to kernel mode. Such violations are guarded by user mode probing protection checks and whatnot. In case a violation occurs on one of the checks, ReactOS/Windows notices that and won't go through further in the kernel space, thereby faulting the requested procedure prematurely. The general execution flow can be explained in this graph as follows:
 
-[![Flow](../images/nt-internals/part2/flow.png)](../images/nt-internals/part2/flow.png)
+[![Flow](/images/nt-internals/part2/flow.png)](/images/nt-internals/part2/flow.png)
 
 The component that plays an ubiquitous role when it comes to system calls and the general flow of execution of such calls is, without a doubt, the **NTDLL** itself. NTDLL is the principal system call interface in NT, where every NT system call is exported to that library. NTDLL acts like a sort of an invisible wall between user and kernel mode, where the application literally has no idea of the inner guts or operations that arise in kernel mode. Even if NTDLL itself resides in user mode, this module plays an important role in this regard. Sometimes NTDLL is referred as the **Native API**. NTDLL exports various routines but the system calls that we're taking into account here are prefixed with **Nt** and **Zw**.
 
@@ -84,7 +84,7 @@ Zw prefixed system calls whereas are mere stubs. Yes, in general these calls don
 
 Interestingly enough, not every system call follows the route to NTDLL. For instance, the system calls that deal with graphics and window management are **NtGdi** and **NtUser**. These calls don't go through NTDLL but instead to **Win32k.sys** which is the kernel backend of the Windows subsystem environment. Win32k comes up with its own system call table, called **W32pServiceTable**, and that table follows a rule for system calls to be mapped to respective kernel mode routines in Win32k. If we further modify the previous graph a bit, we'll get something like this as follows:
 
-[![Flow2](../images/nt-internals/part2/flow2.png)](../images/nt-internals/part2/flow2.png)
+[![Flow2](/images/nt-internals/part2/flow2.png)](/images/nt-internals/part2/flow2.png)
 
 All the system calls are handled by SSDT, which is the **System Service Descriptor Table**. SSDT is a dispatch table infrastructure that is responsible for handling the system calls and the execution flow to kernel mode from user mode. Although we'll explain thoroughly in details in the future about SSDT and its way of working, I'm going to explain briefly how `KiSystemService` works.
 
@@ -92,7 +92,7 @@ All the system calls are handled by SSDT, which is the **System Service Descript
 
 With that being said, here's a summarised graph of what exactly happens when an application wants to do something through system calls.
 
-[![Flow3](../images/nt-internals/part2/flow3.png)](../images/nt-internals/part2/flow3.png)
+[![Flow3](/images/nt-internals/part2/flow3.png)](/images/nt-internals/part2/flow3.png)
 
 ## Startup and shutdown procedure of the NT kernel
 
@@ -102,7 +102,7 @@ In this section of the article I'm going to explain the procedure of the startup
 
 What is obvious for any operating system is that the startup begins first with the **bootloader**. When the boot partition sectors are read, the bootloader is loaded into the memory and the boot control goes further by spawning the kernel. In Windows, the name of the bootloader is called **Ntldr** but with the introduction and continuation of NT 6.x versions of the kernel, NTLDR has been split into **Windows Boot Manager** and a process executable called **winload.exe**. The boot process pretty much goes as follows as you can see in the graph:
 
-[![Boot-Phase](../images/nt-internals/part2/bootphase.png)](../images/nt-internals/part2/bootphase.png)
+[![Boot-Phase](/images/nt-internals/part2/bootphase.png)](/images/nt-internals/part2/bootphase.png)
 
 The boot process between ReactOS and Windows NT 5.x editions is roughly the same. In ReactOS, the bootloader that takes care of the initial boot phase is FreeLoader (or sometimes called FreeLdr). When FreeLoader has been invoked and reads the **boot.ini** file which is a crucial file that stores boot initialisation data, a **parameter loader block** that was initialised by the bootloader is passed to the kernel after the kernel has been loaded into the memory. The loader block looks as follows:
 

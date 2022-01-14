@@ -19,7 +19,7 @@ The Security Manager whose internal kernel prefix goes by **Se**, is a component
 
 If someone of you is already familiar or at least aware of the **Object Manager** (kernel prefix which goes as **Ob**), you may probably know what's the purpose of it. Objects are a focal point of Windows and ReactOS as the hardware resources created, distributed and used by the software are abstracted in form of an object. The desktop, files, directories, processes, threads... They're all objects. With that being said one would tell that the Object Manager is about objects (resources) creation and the Security Manager about objects (resources) monitoring. And that's right.
 
-[![Graph](../images/nt-internals/part4-1/SecurityGraph.png)](../images/nt-internals/part4-1/SecurityGraph.png)
+[![Graph](/images/nt-internals/part4-1/SecurityGraph.png)](/images/nt-internals/part4-1/SecurityGraph.png)
 
 The Security Manager can be divided in two main subsystems: 1) the **Manager** and 2) the **Reference Monitor**. The Reference Monitor is a subsystem with the scope of monitoring the referencing flow of certain security objects and entities on a security standpoint of view. That is, the "Reference Monitor" is called as such due to this fact, ensuring the legal and proper flow of referencing and de-referencing of the said security objects and their further monitoring. A notable example is the logon session. In the language of common every day life words, a logon session would imply a situation where a person has logged into the computer with their user credentials. This is what many people are in general fond of this definition. In the context of the NT kernel however, a logon session is a lot more than that. A logon session is a security entity structure important to the kernel that is **reference-based** in nature. Or in other words, to make it enough understandable for you, whenever you login to the computer the kernel increments a counter of an internal security data structure which is associated with the logon in question. That moment when such logon is referenced by incrementing the counter by 1, it's where the **session** is about to begin. In the session objects like processes can indirectly reference the logon by the access token whose process holds it. In a security context, the Reference Monitor understands what are the objects like processes associated with the logon within a session, or in other words, logon session.
 
@@ -43,7 +43,7 @@ Now one may ponder some questions. How much of a influence does an access token 
 
 A process' or thread's operation execution can be determined by several factors, one of which is the list of privilege rights whose thread/process token holds it. This list of privileges is used to determine what the process/thread can do and what can't do. Let's consider this scenario:
 
-[![Privilege](../images/nt-internals/part4-1/Privilege.png)](../images/nt-internals/part4-1/Privilege.png)
+[![Privilege](/images/nt-internals/part4-1/Privilege.png)](/images/nt-internals/part4-1/Privilege.png)
 
 Suppose that a process has an access token with the following privileges -- `SeShutdownPrivilege` and `SeImpersonatePrivilege`. `SeShutdownPrivilege` is a privilege granted by the Security Manager upon token creation. This allows a process to perform a shutdown procedure of the system in a controlled manner. That is, a process or calling thread can invoke a `ExitWindowsEx` API call to request a shutdown of the system. As it's a delicate privilege, by default all regular processes have this privilege disabled with only a very few processes that are granted it as enabled. A notable example is Windows LogOn (WINLOGON), a process which is trusted by the NT kernel.
 
@@ -55,7 +55,7 @@ The Security Manager provides several API call routines that control the privile
 
 As I've talked about how can the Security Manager deny or allows an instance to do certain things and what can't do based on the privileges enlisted in a token, another important aspect is to prevent unauthorized or illegal access to or usage of securable objects. In order to achieve that an object that holds a token contains an array of groups where the authenticated user is associated to such groups. Consider this scenario:
 
-[![Group](../images/nt-internals/part4-1/Group.png)](../images/nt-internals/part4-1/Group.png)
+[![Group](/images/nt-internals/part4-1/Group.png)](/images/nt-internals/part4-1/Group.png)
 
 An object (taking a process again as an example, whatever that is) with a token has authentication information as Delilah. Delilah is a user who isn't just logged in to the computer, she's also the main user in the security context. An entry that demonstrates this is `UserAndGroups` which I'll explain more about it later. In rough words, it's a member that holds the main user and groups where the user belongs to them. In the internals of the NT kernel, `SeAliasAdminsSid` is a security identifier that denotes an alias of a group about administrators. Suppose that Delilah is part of this group, if an object whose security properties state that the object can be accessed by requestors such as administrators, then an instance can access the securable object. Otherwise if that's not the case, the Security Manager refutes consent to the requestor as Delilah is not part of administrators group.
 
@@ -65,7 +65,7 @@ This kind of mechanism is just one among other techniques and algorithms that ar
 
 As stated above, when an object is born a set of rules can be set up to enforce limitations upon requestors who access the said object. This gives the opportunity to the creator who created the object preventing unwanted actions done to the object even if that means some requestors belong to certain groups and whatnot.
 
-[![Limit](../images/nt-internals/part4-1/Limit.png)](../images/nt-internals/part4-1/Limit.png)
+[![Limit](/images/nt-internals/part4-1/Limit.png)](/images/nt-internals/part4-1/Limit.png)
 
 Suppose that an object whose rules table states anyone who belongs to administrators group can read or write into the object but cannot execute the object in question. The rules that I'm talking about here are in form of **Access Control Entries** bound within a **Discretionary Access Control List** (DACL). An ACE is more or less an entry which upholds information about groups and what action they can compute. A DACL is called _discretionary_ in the sense that it's at the discretion of the creator who set up the object who can access it and what the requestor can do with the object and such. As you can see in the screenshot, Delilah belongs to administrators group and as such she can either read or write into the target object. However if she wants to execute the object she's not allowed to do so as the DACL of the object from the security descriptor declares that execution is not permissible for users who belong to administrators group nor to those who don't belong to such group.
 
@@ -73,7 +73,7 @@ Suppose that an object whose rules table states anyone who belongs to administra
 
 Impersonation, in the security definition, is an act of an instance like a process behaving under a different security context, that is, the instance adopts a different token with different security details of a client that's being impersonated. Consider this screenshot:
 
-[![Impersonation](../images/nt-internals/part4-1/Impersonation.png)](../images/nt-internals/part4-1/Impersonation.png)
+[![Impersonation](/images/nt-internals/part4-1/Impersonation.png)](/images/nt-internals/part4-1/Impersonation.png)
 
 Impersonation comes in two types -- **local** and **remote**. When an impersonation occurs remotely, a user of its own system adopts a different security context from another user of different system. In this scenario, the user (in the case of Joann) is using Delilah's access token. When an impersonation is done locally, an instance is only adopting the security context in its own system of the client. The reasons why impersonation is a crucial aspect in Windows/ReactOS are many. First, a thread can impersonate a client whose security context is less privileged. In this way a thread can execute within a securable subsystem in a safely way. Second, a thread can impersonate a client to gain a temporary boost of privilege to perform very specific tasks and then quickly go back to the original context.
 
@@ -83,7 +83,7 @@ Not only impersonation can be local or remote, the "stage level" can also impact
 
 An instance that holds an access token basically holds the identification details associated with the authenticated user of the system. When a user logs in, the Security Manager assigns an initial token to the process called `Userinit.exe`.
 
-[![Identification](../images/nt-internals/part4-1/Identification.png)](../images/nt-internals/part4-1/Identification.png)
+[![Identification](/images/nt-internals/part4-1/Identification.png)](/images/nt-internals/part4-1/Identification.png)
 
 Whenever a process inherits the token that's been created at the moment when a user has logged in, this token is used to identify the authenticated user so that every process executed within the memory space acts in according to the logon session where the user is in.
 
@@ -132,7 +132,7 @@ typedef struct TOKEN
 
 Lots of members here, with each of them having a plethora of differences, meaning and a lot of stuff to talk about. This can certainly be a bit intimidating at first but in reality taking the gist of this is pretty straightforward. To simplify this whole structure we can divide in several chunk of categories that fit their purpose: **1) token statistics**, **2) groups**, **3) privileges**, **4) miscellaneous stuff**, **5) authentication & session details** and **6) auditing information**. So basically...
 
-[![Token](../images/nt-internals/part4-1/Token.png)](../images/nt-internals/part4-1/Token.png)
+[![Token](/images/nt-internals/part4-1/Token.png)](/images/nt-internals/part4-1/Token.png)
 
 What's worth noting the actual layout of this structure that ReactOS uses is based on the layout of Windows Server 2003. The token structure has seen various additions of members in Windows Vista and later editions of Windows. Although in this chapter we'll solely focus on the Windows Server 2003 SP2 layout of this structure and what every member is supposed to mean and whatnot. So let's get started.
 
@@ -275,7 +275,7 @@ typedef enum _SECURITY_IMPERSONATION_LEVEL {
 
 All these four elements in the enumeration not only govern the actual impersonation, they also explicitly determine if impersonation is allowed or not, like follows in this screenshot graph. Further I'll also explain detail by detail what each element does in this enumeration type.
 
-[![Implevel](../images/nt-internals/part4-1/Implevel.png)](../images/nt-internals/part4-1/Implevel.png)
+[![Implevel](/images/nt-internals/part4-1/Implevel.png)](/images/nt-internals/part4-1/Implevel.png)
 
 **SecurityAnonymous** -- This level is the most restrictive in the whole levels as it forbids anyone to impersonate the token that has such level. Furthermore, the requestor (being a server in this context) cannot obtain any kind of security context information in relation to the client that holds the token.  
   
@@ -297,13 +297,13 @@ The first two types are the usual and common way to make a distinction between t
 
 ### Duplicated Tokens
 
-[![Duplicate](../images/nt-internals/part4-1/Duplicate.png)](../images/nt-internals/part4-1/Duplicate.png)
+[![Duplicate](/images/nt-internals/part4-1/Duplicate.png)](/images/nt-internals/part4-1/Duplicate.png)
 
 As the name implies a duplicated token is a token whose security context information are the same of the original token, that is, the token is a "duplicate" or "clone" of the former access token. The exception that slightly makes duplicated tokens a bit distinct is that the requestor can choose a different type of the duplicated token, impersonation or primary. The NT system call that is reponsible for duplicating tokens is `NtDuplicateToken`.
 
 ### Filtered/Restricted Tokens
 
-[![Filter](../images/nt-internals/part4-1/Filter.png)](../images/nt-internals/part4-1/Filter.png)
+[![Filter](/images/nt-internals/part4-1/Filter.png)](/images/nt-internals/part4-1/Filter.png)
 
 Filtered, or also called restricted tokens, is an access token that's in a "restricted" form of the original token. With that being said, this token is basically like a duplicated token of another token but with certain security context properties removed, disabled, or further restricted or both. For example, in a restricted token there can be certain privileges removed, groups disabled or restricted SIDs added into the token that make it restricted. Restricted tokens serve an important purpose in ReactOS/Windows: with a restricted token a calling thread or process can access a certain securable subsystem without having to touch delicate parts that would require privilege elevation otherwise. Furthermore, a restricted token is deprived from privileges and particular groups like Administrators, all of that at the discretion of the requestor who wants to restrict a token.
 
@@ -313,7 +313,7 @@ An inert token is a token where checks like AppLocker rules or Software Restrict
 
 ### Effective Tokens
 
-[![Effective Only](../images/nt-internals/part4-1/EffectiveOnly.png)](../images/nt-internals/part4-1/EffectiveOnly.png)
+[![Effective Only](/images/nt-internals/part4-1/EffectiveOnly.png)](/images/nt-internals/part4-1/EffectiveOnly.png)
 
 Effective tokens are tokens where only enabled privileges and groups in a token are currently enforced, thus leaving the disabled parts of the token to be eventually removed. This operation makes a token "effective only" because of this, the token can work only with the effective parts enforced. Effective tokens are by general rule duplicated tokens as it's the `NtDuplicateToken` NT syscall that gives the opportunity to the caller if they want an effective token or not.
 
@@ -332,17 +332,17 @@ typedef struct \_LUID\_AND\_ATTRIBUTES {
          
 On a technical point of view, privileges are implemented in the NT kernel as in form of LUIDs with each of them having separate attributes. These LUIDs have each privilege identifier, uniquely associated to them, initialized from privilege constants. To make it more understandable for you, the privilege LUIDs are initialized in ReactOS as the following:
 
-[![Priv](../images/nt-internals/part4-1/Priv.png)](../images/nt-internals/part4-1/Priv.png)
+[![Priv](/images/nt-internals/part4-1/Priv.png)](/images/nt-internals/part4-1/Priv.png)
 
 Basically, `SE_CREATE_TOKEN_PRIVILEGE` is a privilege constant and `SeCreateTokenPrivilege` is a privilege LUID. In a LUID structure, there's two members called `LowPart` and `HighPart` with the former member used as main identifier for the privilege in question. The latter member has a value of 0, always. With that being said if a token has, let's say, three privileges in the array then that means `Privileges` has three `LUID_AND_ATTRIBUTES` elements. However, these kind of elements only have the privilege LUID and its attributes, how can the NT kernel understand how many privileges are in a token? `PrivilegeCount` is where it comes into action.
 
-[![Priv Count](../images/nt-internals/part4-1/PrivCount.png)](../images/nt-internals/part4-1/PrivCount.png)
+[![Priv Count](/images/nt-internals/part4-1/PrivCount.png)](/images/nt-internals/part4-1/PrivCount.png)
 
 The NT kernel updates `PrivilegeCount` accordingly by iterating over the privilege array searching for each LUID privilege element inside it. What the caller has to do is to just submit a list of privileges if one wants to create a token with `NtCreateToken` and the kernel does the rest. It does that by calling an internal function `SeCaptureLuidAndAttributesArray` which basically captures an array buffer provided and returns to the kernel newly allocated buffer array as `LUID_AND_ATTRIBUTES`.
 
 What's left to talk about are the attributes of a privilege. Attributes, generally speaking, provide extra information of how a privilege currently acts. A privilege can be enabled, disabled, removed and so on and attributes are used for this purpose.
 
-[![Priv Attributes](../images/nt-internals/part4-1/PrivAttrs.png)](../images/nt-internals/part4-1/PrivAttrs.png)
+[![Priv Attributes](/images/nt-internals/part4-1/PrivAttrs.png)](/images/nt-internals/part4-1/PrivAttrs.png)
 
 **SE\_PRIVILEGE\_ENABLED\_BY\_DEFAULT** -- It's an informational attribute indicating that the privilege has been enabled by default. The Security Manager and other security components such as LSASS use this attribute when setting up privileges and enabling them firsthand.  
   
@@ -373,7 +373,7 @@ Similar fashion as with privileges that I talked about above. However in this ca
 
 As for attributes, a few of them are smilar in comparison with the privilege attributes but some of them are unique on their own.
 
-[![Group Attributes](../images/nt-internals/part4-1/GroupAttrs.png)](../images/nt-internals/part4-1/GroupAttrs.png)
+[![Group Attributes](/images/nt-internals/part4-1/GroupAttrs.png)](/images/nt-internals/part4-1/GroupAttrs.png)
 
 **SE\_GROUP\_MANDATORY** -- A mandatory group is a group that's strictly tied to the user and uniquely describes (or identifies) such user. A user can have various mandatory groups in a token. Mandatory groups cannot be disabled unless one explicitly filters the token by using `NtFilterToken`.  
   
@@ -397,11 +397,11 @@ As for attributes, a few of them are smilar in comparison with the privilege att
 
 What, do I have to do maths lessons now? Geometry classes?? Am I going to get Fs again?!! No you silly boy (or girl or whatever you are), this topic is about tokens! Or well, more so specifically about the memory aspect of an access token. Previously I did talk some niches about `VariableLength`, `DynamicCharged`, and `DynamicAvailable` members although as it currently stands, someone of you might still get confused about them and what exactly are their purpose. I'll explain detail by detail in regard of this.
 
-[![Geometry](../images/nt-internals/part4-1/Geometry.png)](../images/nt-internals/part4-1/Geometry.png)
+[![Geometry](/images/nt-internals/part4-1/Geometry.png)](/images/nt-internals/part4-1/Geometry.png)
 
 Imagine that a token has a defined set of privileges, some groups but at the same it has some restricted SIDs added (in a scenario where a requestor wanted to restrict the token by adding such SIDs). In addition to that, the said token has a DACL (which is by default in the general rule of how tokens work in NT) and some space available. The "Variable Length" as you can see in the graph represents an indicator that defines the actual space needed to hold the basic requirements of a token like groups, privileges and in addition with the restricted SIDs (if a token has one). Otherwise the variable length only includes the privileges and groups, alongside with the main user. The variable length is calculated following this logic implementation:
 
-[![Calculus](../images/nt-internals/part4-1/Calculus.png)](../images/nt-internals/part4-1/Calculus.png)
+[![Calculus](/images/nt-internals/part4-1/Calculus.png)](/images/nt-internals/part4-1/Calculus.png)
 
 This code logic is implemented in the `SepCreateToken` function in ReactOS which is a private kernel function not exposed outside for public use, this private function is merely a **helper function** that provides the large bulk of token creation which is the heart and brains of how tokens are created in the NT kernel. The formula calculus of variable length is like so: first, calculate the total length of privileges by multiplying the privileges count with the size of `LUID_AND_ATTRIBUTES` structure, with said size represented in bytes. Afterwards, the calculated length gets aligned based on the size of **PVOID** which is an arbitrary pointer that points to any type. This is an important step because arithmetics differ in 32-bit and 64-bit systems and a PVOID can have a different size on the said systems.
 
@@ -415,7 +415,7 @@ A main distinction between the two members that have Dynamic\* in the name and V
 
 `DynamicAvailable` on the other hand represents the actual free space available for the token for future use to hold other security data, whatever that is. This free space is expressed as a size in bytes, this member is not taken into account with the variable length. Now with the combination of the two members, the variable length and other stuff, all of this makes up the whole token in its true shape and form within the **Memory Space**, as you can see in the graph. However, imagine that a requestor wants to restrict (filter) a token by removing all the privileges, disable some groups and insert a few of SIDs to restrict into a token. This is how the graph would look like based on this scenario.
 
-[![Geometry 2](../images/nt-internals/part4-1/Geometry2.png)](../images/nt-internals/part4-1/Geometry2.png)
+[![Geometry 2](/images/nt-internals/part4-1/Geometry2.png)](/images/nt-internals/part4-1/Geometry2.png)
 
 Empty space, what? But it looks like the token still holds the whole memory space? Yes my young padawan, you now won a free cookie for being attendive! Unbeknownst to people a peculiar aspect of tokens in Windows/ReactOS, restricted tokens respectively, is that they still retain the whole memory space even when restricted tokens have a reduced size. Like in this case, the token has no privilege and with very few groups. The token should be "slim" in that regard yet it still takes the whole memory space? The reason is that lies to the original size given to `ObCreateObject`. When the Object Manager is tasked to create a token, the aforementioned function asks for a given size for the object to be created. This size is used to set a definite space area in memory for that object.
 
@@ -423,7 +423,7 @@ When a token is about to be a restricted (filtered) version of the original toke
 
 What's left to explain in this topic is how the calculation of restricted SIDs is done since as I said before, the variable length can take the amount of restricted SIDs added if the requestor explicitly wants that. The core logic of this is slightly similar as one would calculate the length of user and groups above, although with a few distinctions.
 
-[![Calculus 2](../images/nt-internals/part4-1/Calculus2.png)](../images/nt-internals/part4-1/Calculus2.png)
+[![Calculus 2](/images/nt-internals/part4-1/Calculus2.png)](/images/nt-internals/part4-1/Calculus2.png)
 
 If the caller provides a list of restricted SIDs to be added in the token, the logic basically calculates the length by multiplying the total count of restricted SIDs with the size, in bytes, of `SID_AND_ATTRIBUTES`. Afterwards, the logic does an addition of the calculated length with the length of each restricted SID. The calculated length gets aligned and the variable part is added with the additional calculated length in question. Finally the total size is addition of the variable length, calculated length and the base offset of the variable part thus making the whole size space needed given for the Object Manager to create a token object. The code logic in question is implemented in `SepPerformTokenFiltering`, a private function in ReactOS that makes up the whole implementation infrastructure of restricted tokens. In Windows however, there's `SepFilterToken`.
 
@@ -483,7 +483,7 @@ The approach is pretty much straightforward. As the cleanup deleting method of t
 
 In this topic I'm going to talk about the flags of access tokens. The flags server a main goal of providing extra details of how a token is like, how it acts, how is used, etc. The flags vary on different editions of Windows, with some certain new additions and some of them not being used prior Windows Vista, although I'm going to give a thorough detail of the flags currently present in Windows Server 2003. As you can see in the screenshot.
 
-[![Flags](../images/nt-internals/part4-1/Flags.png)](../images/nt-internals/part4-1/Flags.png)
+[![Flags](/images/nt-internals/part4-1/Flags.png)](/images/nt-internals/part4-1/Flags.png)
 
 **TOKEN\_HAS\_TRAVERSE\_PRIVILEGE** -- A token is assigned this flag if it has `SeChangeNotifyPrivilege` privilege, that is, a process or thread is notified of any changes occuring on a file or directory. By this general rule, the system skips traversal access checks.  
   
@@ -523,13 +523,13 @@ In this topic I'm going to provide a few examples of how to interact with access
 
 Opening (gathering) an access token of a process is pretty straightforward and simple. As an example:
 
-[![Example User 1](../images/nt-internals/part4-1/ExampleUser1.png)](../images/nt-internals/part4-1/ExampleUser1.png)
+[![Example User 1](/images/nt-internals/part4-1/ExampleUser1.png)](/images/nt-internals/part4-1/ExampleUser1.png)
 
 `GetTokenFromCurrentProcess` here is a simply dummy function with standard Windows API convention that actually calls `OpenProcessToken` in order to retrieve a token of a process. `OpenProcessToken` expects three parameters -- a handle to a process, the desired access right of the opened token and the returned handle itself of a token. As `OpenProcessToken` returns a type value of BOOL hence TRUE (nonzero or 1) means the function has suceeded otherwise if the returned status is FALSE (or 0) then the function failed. When the function suceeds, a handle to an opened access token is returned to the dummy function. At this point, the caller can do whatever it wants to do with that handle, until it no longer wants the handle the caller must call `CloseHandle` in order free tha handle.
 
 ### Duplicate a token
 
-[![Example User 2](../images/nt-internals/part4-1/ExampleUser2.png)](../images/nt-internals/part4-1/ExampleUser2.png)
+[![Example User 2](/images/nt-internals/part4-1/ExampleUser2.png)](/images/nt-internals/part4-1/ExampleUser2.png)
 
 Similar as with one that wants to open an access token of a process, here we'd want to duplicate an access token of an existing one. The `DuplicateToken` function expects three kind of parameters: an existing valid handle of a token, the security impersonation level and the returned handle. As with `OpenProcessToken`, the function returns TRUE if token duplication has succeeded, FALSE otherwise.
 
@@ -537,7 +537,7 @@ Similar as with one that wants to open an access token of a process, here we'd w
 
 Opening an access token of a thread is very similar as one would open a token of a process. Like in this following case:
 
-[![Example User 3](../images/nt-internals/part4-1/ExampleUser3.png)](../images/nt-internals/part4-1/ExampleUser3.png)
+[![Example User 3](/images/nt-internals/part4-1/ExampleUser3.png)](/images/nt-internals/part4-1/ExampleUser3.png)
 
 `OpenThreadToken` is quite different compared to `DuplicateToken` and `OpenProcessToken` for the following reason. With this function you're given the option if you want to open the thread's token as self or not. This influences the fact that if a caller would choose this option, the system performs access checks against the process level (self) security context, otherwise access checks are performed against the calling thread who executes this function.
 
@@ -545,7 +545,7 @@ Opening an access token of a thread is very similar as one would open a token of
 
 With the ability of adjusting one token's privileges, you can either disable or enable a certain privilege of an access token. Here's an example of this:
 
-[![Example User 4](../images/nt-internals/part4-1/ExampleUser4.png)](../images/nt-internals/part4-1/ExampleUser4.png)
+[![Example User 4](/images/nt-internals/part4-1/ExampleUser4.png)](/images/nt-internals/part4-1/ExampleUser4.png)
 
 Here it starts to get a little quirky. In order to adjust a privilege of an access token, first one has to get a LUID of a defined and given privilege constant. `LookupPrivilegeValueW` function helps for this purpose. After we got the exact LUID privilege as we wanted, we can now adjust the token's privilege of the current process as we want, in this context, enabling it. This dummy function is written in such a way that a caller could simply submit a privilege constant as you can see in the function's parameter argument and `LookupPrivilegeValueW` deals with the lookup of the privilege. So for example if one has to give a constant of `SE_BACKUP_PRIVILEGE` the lookup function will return a privilege LUID of `SeBackupPrivilege` and `AdjustTokenPrivileges` will enable that privilege of the token of the current calling process.
 
@@ -555,7 +555,7 @@ Here it starts to get a little quirky. In order to adjust a privilege of an acce
 
 The kernel mode API comes with a function that checks if a user that holds a token belongs to administrators or not. Here's the example:
 
-[![Example Kernel 1](../images/nt-internals/part4-1/ExampleKernel1.png)](../images/nt-internals/part4-1/ExampleKernel1.png)
+[![Example Kernel 1](/images/nt-internals/part4-1/ExampleKernel1.png)](/images/nt-internals/part4-1/ExampleKernel1.png)
 
 The routine in question is called `SeTokenIsAdmin`. It basically checks if a token has the `TOKEN_HAS_ADMIN_GROUP` flag assigned, which indicates the token has the `SeAliasAdminsSid` SID group. On later versions of Windows, such as Windows 7, it instead iterates over the `UserAndGroups` member and checks if there's an entry of `SeAliasAdminsSid`.
 
@@ -563,7 +563,7 @@ The routine in question is called `SeTokenIsAdmin`. It basically checks if a tok
 
 Querying the authentication ID of an access token is done by using the exported `SeQueryAuthenticationIdToken` routine, as done in this example:
 
-[![Example Kernel 2](../images/nt-internals/part4-1/ExampleKernel2.png)](../images/nt-internals/part4-1/ExampleKernel2.png)
+[![Example Kernel 2](/images/nt-internals/part4-1/ExampleKernel2.png)](/images/nt-internals/part4-1/ExampleKernel2.png)
 
 Here I've written a simple dummy function, as usual, that returns the authentication identifier as in form of a LUID. The function returns a NT status value code (or NTSTATUS) so if the function wouldn't have returned STATUS\_SUCCESS but instead an another status code, the function would've failed. When the function suceeds, the dummy function receives the authentication ID which represents the logon session of an authenticated user.
 
@@ -571,7 +571,7 @@ Here I've written a simple dummy function, as usual, that returns the authentica
 
 Filtering a token, as I've explained above in different sections, makes a token a restricted version of the original one. A token can be restricted depending on the request of the caller. To restrict a token in kernel mode, you use `SeFilterToken` as follows:
 
-[![Example Kernel 3](../images/nt-internals/part4-1/ExampleKernel3.png)](../images/nt-internals/part4-1/ExampleKernel3.png)
+[![Example Kernel 3](/images/nt-internals/part4-1/ExampleKernel3.png)](/images/nt-internals/part4-1/ExampleKernel3.png)
 
 In this example we'd want to disable a group SID and delete a privilege from the access token. For that we'd need to fill in information for both `TOKEN_PRIVILEGES` and `TOKEN_GROUPS` structures so that we can pass them to the function. `SeExports` is a structure of exported security information properties such as privilege constants and SIDs for kernel mode use. What's worth noting to take into account is that `SeFilterToken` is not deterministic, that is, the function ignores any missing privilege or SID passed by the caller without informing the said caller of any missing stuff within the token.
 
@@ -579,7 +579,7 @@ In this example we'd want to disable a group SID and delete a privilege from the
 
 Querying token information in kernel mode is pretty straightforward as no data probing is needed. To query certain information of a token you shall use the `SeQueryInformationToken` function. Whatever information you want to gather is at your own discretion. For a list of token information classes, [check this](https://docs.microsoft.com/en-us/windows-hardware/drivers/ddi/ntifs/ne-ntifs-_token_information_class).
 
-[![Example Kernel 4](../images/nt-internals/part4-1/ExampleKernel4.png)](../images/nt-internals/part4-1/ExampleKernel4.png)
+[![Example Kernel 4](/images/nt-internals/part4-1/ExampleKernel4.png)](/images/nt-internals/part4-1/ExampleKernel4.png)
 
 In this example we're trying to query the token owner of the target access token we'd be giving to the dummy function. If the function suceeds then a pointer to a `TOKEN_OWNER` structure is given to the caller, otherwise NULL. The last parameter in the function is arbitrary upon the chosen information class.
 

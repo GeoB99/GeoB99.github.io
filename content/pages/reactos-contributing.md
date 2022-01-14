@@ -9,7 +9,7 @@ slug = "reactos-contributing"
 
 The Git workflow is the fundamental principle and the inner design of how Git operates with control verioning in a project development. In essence, with Git it goes by **committing** changes, creating or **pushing** Pull Requests (with PR as abbreviation) and among other stuff like tagging and setting up releases. Although to contribute to ReactOS we only care about how to create a PR for our patches. Now, consider this image.
 
-[![Git Workflow](../images/reactos-contributing/git-workflow.png)](../images/reactos-contributing/git-workflow.png)
+[![Git Workflow](/images/reactos-contributing/git-workflow.png)](/images/reactos-contributing/git-workflow.png)
 
 Too intimidating for you? No worries, all these namings will be explained later. Think of Git workflow as a particular procedure that is highly structured that Git allows you to see the state of things you are working on. With Git being a powerful control versioning software you can do multiple of things and working on stuff in parallel. When you contribute to a project you must take into account the principle of **working directory**. A working directory is the space area of a project you work in. In this case the area could be the remote repository that you own it or the forked repository from upstream. You understand by that within the Bash terminal where the branch name is highlighted in light blue which means you're not only in that branch but also in the working directory of your branch (and the repository in general).
 
@@ -17,7 +17,7 @@ The working directory area that doesn't have any unstaged commits or untracked f
 
 In other words, when the working directory is dirty Git is aware of the presence of unstaged changes or untracked files but they're not part of the general history of the repository. A clean working directory whereas the changes are committed and are properly visible in the logging history of a repository. The recent committed changes can be seen with `git log`. Now, consider this image.
 
-[![Git Workflow Track](../images/reactos-contributing/git-workflow-track.png)](../images/reactos-contributing/git-workflow-track.png)
+[![Git Workflow Track](/images/reactos-contributing/git-workflow-track.png)](/images/reactos-contributing/git-workflow-track.png)
 
 It's the same like above but instead of unstaged or staged changes you have tracked (or untracked) files. As the general principle of Git, manipulating the source tree of a repository by deleting or adding files is grounds for altering the state of the working directory.
 
@@ -65,11 +65,11 @@ It's the same like above but instead of unstaged or staged changes you have trac
 
 In order to fork the repository you must have an account in GitHub, if you haven't done it so please register [here](https://github.com/join?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home). When done [click here](https://github.com/reactos/reactos) to redirect to ReactOS repository page. You will see a "Fork" button at the top right. This lets you forking the repository.
 
-[![Forking](../images/reactos-contributing/reactos-fork.png)](../images/reactos-contributing/reactos-fork.png)
+[![Forking](/images/reactos-contributing/reactos-fork.png)](/images/reactos-contributing/reactos-fork.png)
 
 Forking should take a couple of seconds to complete. Afterwards you'll be greeted with this page.
 
-[![Forking Finished](../images/reactos-contributing/fork-done.png)](../images/reactos-contributing/fork-done.png)
+[![Forking Finished](/images/reactos-contributing/fork-done.png)](/images/reactos-contributing/fork-done.png)
 
 ### Cloning the repository
 
@@ -79,7 +79,7 @@ Cloning is the act of downloading the repository to your computer. It may take u
 
 With **URL\_HERE** being the URL link of your fork. You can find such link in your fork page by clicking on "Clone or download".
 
-[![Clone](../images/reactos-contributing/clone.png)](../images/reactos-contributing/clone.png)
+[![Clone](/images/reactos-contributing/clone.png)](/images/reactos-contributing/clone.png)
 
 ## Creating a Pull Request
 
@@ -92,13 +92,13 @@ Setting up a branch can be done in two ways.
 
 Very self-explanatory. Git will prepare a branch on top of the other branch you were previously in. Let's create a branch with name "MyBranch" for example.
 
-[![Branching](../images/reactos-contributing/branch.png)](../images/reactos-contributing/branch.png)
+[![Branching](/images/reactos-contributing/branch.png)](/images/reactos-contributing/branch.png)
 
 ### Staging your work
 
 Now you can proceed on doing your work. For instance, let's edit the `main.c` file of On-Screen Keyboard. When you perform changes to files the working directory becomes dirty. You can understand that by typing `git status` in the terminal prompt.
 
-[![Not Staged](../images/reactos-contributing/not-staged.png)](../images/reactos-contributing/not-staged.png)
+[![Not Staged](/images/reactos-contributing/not-staged.png)](/images/reactos-contributing/not-staged.png)
 
 As you can see Git is aware of specific changes you have done but they're not up in the staging area. Git cannot stack the changes up for commit unless you stage them. `git status` is a very useful command to monitor the activity and overall status of your branch. In order to stage the changes you've to type the following command.
 
@@ -110,7 +110,7 @@ With `PATH_TO_FILE` being file path which you made the changes to. For multiple 
 
 As you mark specific changes as staged they can be now prepared for committing. Normally you'd see something like this.
 
-[![Staged](../images/reactos-contributing/staged.png)](../images/reactos-contributing/staged.png)
+[![Staged](/images/reactos-contributing/staged.png)](/images/reactos-contributing/staged.png)
 
 Changes that you don't want to be committed can be discarded. By design, Git doesn't take into consideration unstaged or untracked data as Git looks into the staging/tracking area of your working directory space. You can begin to commit by typing...
 
@@ -118,7 +118,7 @@ Changes that you don't want to be committed can be discarded. By design, Git doe
 
 Executing this command will invoke the default text editor that Git uses. `git commit` accepts option flags and further parameters, the `-m` flag which takes a commit title parameter (that must be wrapped in double quotes). This is the faster way to commit if you wish only to provide a commit title although for a better descriptive commit with a proper description template we'll only be using `git commit`.
 
-[![Text Editor](../images/reactos-contributing/text-editor.png)](../images/reactos-contributing/text-editor.png)
+[![Text Editor](/images/reactos-contributing/text-editor.png)](/images/reactos-contributing/text-editor.png)
 
 As per the message pointed in the screen of the editor, an empty commit message is prone to aborting your committing. This can be done by exiting the text editor if you wish to abort preparing the commit. The commit title (+ the commit description) can be written either at the top or beneath the message wrapped in hash symbol. In ReactOS the commit title should respect the following rule...
 
@@ -136,11 +136,11 @@ We're almost here, you have created your first commit! When making commits the s
 
 The GitHub page should show up like this when you log in.
 
-[![Pushed](../images/reactos-contributing/pushed.png)](../images/reactos-contributing/pushed.png)
+[![Pushed](/images/reactos-contributing/pushed.png)](/images/reactos-contributing/pushed.png)
 
 To get through pull request submission click on "Compare & pull request" as shown in the light yellow background. You'll be greeted with this page.
 
-[![Pull Request](../images/reactos-contributing/pr.png)](../images/reactos-contributing/pr.png)
+[![Pull Request](/images/reactos-contributing/pr.png)](/images/reactos-contributing/pr.png)
 
 It is recommended to read the contribution rules and pull request template guideline to get a better overview when contributing to ReactOS. In the edit box you can fill out information about your PR, its purpose and what changes does it bring. The pull request can be marked as "Draft" by cliking on the arrow button near "Create pull request". Draft pull requests mean that your work is still in progress. Congratulations, you have made your first PR for the ReactOS project for the first time!
 
@@ -148,7 +148,7 @@ It is recommended to read the contribution rules and pull request template guide
 
 Branches can clutter up the branch list when dealing with many PRs. It is a good practice to remove old branches that you don't work on them anymore or your work has been merged. In the fork page click on "X branches" to access your branch list as well as the upstream remote branches.
 
-[![Branches](../images/reactos-contributing/branch-list.png)](../images/reactos-contributing/branch-list.png)
+[![Branches](/images/reactos-contributing/branch-list.png)](/images/reactos-contributing/branch-list.png)
 
 Keep in mind you've to fetch and rebase your forked repository because your branch is still present in the local origin repository. Alternatively a branch can be deleted through terminal by `git branch -D BRANCH_NAME` with `-D` flag indicating a force delete in case the branch is pushed to origin. Otherwise `-d` can be used to normally delete a branch if it wasn't pushed.
 
@@ -230,11 +230,11 @@ Squashing is the process of fusing two or more commits together. This feature is
 
 Where `N` is the number of commits to be listed in the interactive rebase as interactive rebasing opens the default text editor. Alternatively you can use `git rebase -i COMMIT_HASH^` with `^` which takes the commit based on the hash.
 
-[![Squashing](../images/reactos-contributing/squash.png)](../images/reactos-contributing/squash.png)
+[![Squashing](/images/reactos-contributing/squash.png)](/images/reactos-contributing/squash.png)
 
 As you can see in the image, I have made 3 commits for my branch hence I typed `HEAD~3`. The word before the commit hash represents a verb. The verb indicates a specific action to be taken with the commits within interactive rebase. As we want to squash commits the verb must be _squash_ (or _s_ the shorter way).
 
-[![Squashing](../images/reactos-contributing/squash-all.png)](../images/reactos-contributing/squash-all.png)
+[![Squashing](/images/reactos-contributing/squash-all.png)](/images/reactos-contributing/squash-all.png)
 
 A general rule to be respected when squashing is to have at least one commit preserved otherwise Git may not squash properly. As you close the editor Git will open it again to specify a commit title and message. You can freely keep the commit title of the first commit and remove the other commit descriptions of commits you want them squashed. As soon as you close the editor the changes will take effect.
 

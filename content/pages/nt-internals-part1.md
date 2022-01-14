@@ -28,7 +28,7 @@ Unbeknownst to most people the OS wouldn't work in any way without the help of a
 
 The NT kernel, which Windows is based upon, is used on the desktop computer sector, industrial appliances and other fields. In the collection of **Introduction to the NT kernel development** articles, we'll focus solely on the NT kernel. Here's a screenshot graph of the interaction between the user, OS, and the hardware.
 
-[![OS](../images/nt-internals/part1/OS.png)](../images/nt-internals/part1/OS.png)
+[![OS](/images/nt-internals/part1/OS.png)](/images/nt-internals/part1/OS.png)
 
 ## Brief history & core keys of the NT kernel
 
@@ -60,11 +60,11 @@ Enough with history, here I showcase some important key notes about the NT kerne
 
 In this section of the article we'll focus primarily on the architecture and overall infrastructure of the NT kernel so that you can familiarise yourself with the general development of the kernel and how things are done. In essence, an operating system like Windows functions in two distinct worlds, or entities if you want to call them like that. Such entities are called **user** and **kernel** modes. As said earlier, the kernel is divided amongst layered parts that all reside in kernel mode and these parts belong to a larger chunk called the **Executive**, as shown in the graph below:
 
-[![Kernel](../images/nt-internals/part1/kernel.png)](../images/nt-internals/part1/kernel.png)
+[![Kernel](/images/nt-internals/part1/kernel.png)](/images/nt-internals/part1/kernel.png)
 
 And if we further bisect the Executive layer, we'll see a bunch of subsystem components as shown:
 
-[![Executive](../images/nt-internals/part1/executive.png)](../images/nt-internals/part1/executive.png)  
+[![Executive](/images/nt-internals/part1/executive.png)](/images/nt-internals/part1/executive.png)  
 
 ### The Executive
 

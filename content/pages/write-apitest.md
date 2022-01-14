@@ -18,7 +18,7 @@ A **testcase** is a small software, typically a static program ran in a command 
 
 The results of a test depend at the discretion of what kind of data is passed to the function, in which circumstances, conditions and so forth. What must be known is that tests can't be fully consistent (or at all) across different versions of Windows due to internal API differences, that is, the internal APIs that aren't documented to the public. Therefore as a general requirement the testcases should be executed on Windows Server 2003 SP2. Here's a screenshot of summarised points about testcases.
 
-[![Testcases](../images/write-apitest/testcases.png)](../images/write-apitest/testcases.png)
+[![Testcases](/images/write-apitest/testcases.png)](/images/write-apitest/testcases.png)
 
 ## Types of API testcases
 
@@ -36,7 +36,7 @@ In this example I'll write a very simple testcase of a function of the Native AP
 
 Now it's time to write the source code of the testcase. It should look like as in the screenshot below.
 
-[![Testcode](../images/write-apitest/testcode.png)](../images/write-apitest/testcode.png)
+[![Testcode](/images/write-apitest/testcode.png)](/images/write-apitest/testcode.png)
 
 Confused? Don't worry, I'll explain piece by piece what is the code supposed to do. First of all we should include the precompiled header that comes within the NTDLL testcases directory itself in order to use whatever stuff we need for our testcase. Next here's `START_TEST`, the main entry point of the testcase of the target function to be tested. It's mandatory that the name of the function must be explicitly defined in the argument of the said entry point as you can see in the screenshot. `START_TEST` is equivalent to a `main` C entry point more or less.
 
@@ -50,13 +50,13 @@ In this case we're testing that the returned status value, pointed by the `Statu
 
 The testcase inclusion is done by following the two steps. First, the file must be appended to the source in `CMakeLists.txt` file so that CMake can be aware of the new testcase file in question. The inclusion must respect the lexicographic order so you'll end up as in this screenshot below.
 
-[![CMakeLists](../images/write-apitest/cmakelists.png)](../images/write-apitest/cmakelists.png)
+[![CMakeLists](/images/write-apitest/cmakelists.png)](/images/write-apitest/cmakelists.png)
 
 Afterwards, the test entry point of the function must be included in the list in the `testlist.c` file. Opening that file you'll see a bunch of function entry point prototypes and entry point test definition in a structure called `winetest_testlist`. As usual the lexicographic order must be respected. With that being said, you should end up as follows.
 
-[![Include](../images/write-apitest/include.png)](../images/write-apitest/include.png)  
+[![Include](/images/write-apitest/include.png)](/images/write-apitest/include.png)  
   
-[![Include 2](../images/write-apitest/include2.png)](../images/write-apitest/include2.png)
+[![Include 2](/images/write-apitest/include2.png)](/images/write-apitest/include2.png)
 
 ## Compiling your testcase and examine the results
 ===============================================
@@ -77,11 +77,11 @@ As I've explained above, testcases are static programs that are executed within 
 
 With `test_case_name` being the name of the specific function that we want to perform tests on in order to trigger the tests for it. Since we've wrote a small NTDLL testcase against `NtQuerySystemEnvironmentValueEx` function the command line in this case should be `ntdll_apitest.exe NtQuerySystemEnvironmentValueEx`. As explained above, it is recommended that the tests should be performed in Windows Server 2003 SP2. The testcase executable can be either launched from the directory path itself or extracting the testcase to the desired location you want.
 
-[![Test](../images/write-apitest/test.png)](../images/write-apitest/test.png)
+[![Test](/images/write-apitest/test.png)](/images/write-apitest/test.png)
 
 As you can see, the successful executed test means that indeed the function is not implemented in Server 2003 SP2 and thus that is the condition we should expect as per the testcase. Otherwise if it would may happen that a certain test fails then it means the expected condition is not met and it doesn't conform to the function's behaviour of the system, in other words, the testcase has to be corrected in order to match with the observed behaviour. As an example let's simulate a test failure by expecting a status code value of STATUS\_SUCCESS rather than STATUS\_NOT\_IMPLEMENTED.
 
-[![Test 2](../images/write-apitest/test2.png)](../images/write-apitest/test2.png)
+[![Test 2](/images/write-apitest/test2.png)](/images/write-apitest/test2.png)
 
 A test failure should look like this. Here we are expecting a value of STATUS\_SUCCESS (0x00000000) but instead STATUS\_NOT\_IMPLEMENTED (0xC0000002) is returned by the call. To conduct a proper research on the behaviour of the function and how it interacts with the input data all the tests must pass accordingly in a Windows system.
 
@@ -97,7 +97,7 @@ The standard way of probing the data retrieved in the output is by using the gen
 
 In additon of probing the expected condition, it can also print to the console prompt some information or stuff. The `...` at the end represents the optional argument, where the caller can use it as a string format to print the data of certain variables probed within the condition check. Here's an example of how is this macro used.
 
-[![OK](../images/write-apitest/ok.png)](../images/write-apitest/ok.png)
+[![OK](/images/write-apitest/ok.png)](/images/write-apitest/ok.png)
 
 ### Skipping a test
 
@@ -107,13 +107,13 @@ As a testcase code can grow more and more, advanced operations that can't be com
 
 With `skip()` you've the opportunity to inform the user that the specific operation has failed to suceed before bailing out the testcase. As such of a failed operation can be seen like in this screenshot.
 
-[![Skip](../images/write-apitest/skip.png)](../images/write-apitest/skip.png)
+[![Skip](/images/write-apitest/skip.png)](/images/write-apitest/skip.png)
 
 ### Skipping a flaky test
 
 A test is considered flaky if the test sporadically fails within no apparent reasons or in odd ways. When that happens it usually means the test may have triggered a particular behaviour of the tested environment that can't be expected during specific conditions or scenarios. Even then, the testcase code is at the blame for not being completely accurate of what kind of test should be done and in which conditions but in some cases such tests may warrant the `ros_skip_flaky` macro.
 
-[![Flaky](../images/write-apitest/flaky.png)](../images/write-apitest/flaky.png)
+[![Flaky](/images/write-apitest/flaky.png)](/images/write-apitest/flaky.png)
 
 The macro requires no parameters to be filled in, it's used as is. The test before the defined macro is the one that won't be taken into account, that is, if the test in the screenshot fails it won't be taken as an actual _failed test_.
 
@@ -121,13 +121,13 @@ The macro requires no parameters to be filled in, it's used as is. The test befo
 
 Nearly almost of the macro tests print some sort of data to the command prompt during the execution of the testcase but some macros can be used solely to print additional stuff without performing any kind of tests. The macro that's used for it is `trace()` and the syntax for it is as similar as to `printf()`.
 
-[![Trace](../images/write-apitest/trace.png)](../images/write-apitest/trace.png)
+[![Trace](/images/write-apitest/trace.png)](/images/write-apitest/trace.png)
 
 ### Using Structured Exception Handling on tests
 
 Dealing with dangling pointers or erratic parameters of a function may cause the testcase (as as well as the command prompt) to exit prematurely without further premonition. This symptom is a cause of a thrown exception by the exception handler which has caught a certain condition in which the application can't continue with its normal operation because of the faulty usage of the function. When that happens, the test code must be wrapped within the Structured Exception Handling (or SEH as acronym) block and the ReactOS Tests infrastructure provides SEH macros for that.
 
-[![SEH](../images/write-apitest/seh.png)](../images/write-apitest/seh.png)
+[![SEH](/images/write-apitest/seh.png)](/images/write-apitest/seh.png)
 
 `StartSeh()` is the prologue of the SEH block whereas `EndSeh()` is the epilogue of the said structured block. `EndSeh()` expects an exception status code, mainly a NTSTATUS, which is checked against the returned code value by the exception handler. If both the values match then the test is deemed as successful otherwise the returned exception code is returned to the command prompt with further notice the test has failed. In this example I expect that the exception handler should return `STATUS_ACCESS_VIOLATION` as I pass NULL pointers all over the function's arguments. SEH is not warranted for functions that don't throw exceptions to the caller.
 

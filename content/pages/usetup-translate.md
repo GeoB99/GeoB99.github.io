@@ -72,7 +72,7 @@ Finally the last data structure represents the instance of a language locale, or
 
 All in all, this is the basic and overall functionality of MUI in USETUP. Here's a screenshot which demonstrates "Welcome to ReactOS Setup" page, with entries explicitly pointed.
 
-[![USETUP](../images/usetup-translate/usetup.png)](../images/usetup-translate/usetup.png)
+[![USETUP](/images/usetup-translate/usetup.png)](/images/usetup-translate/usetup.png)
 
 ## Translating USETUP
 
@@ -82,17 +82,17 @@ The translation files of USETUP are located in [lang](https://github.com/reactos
 
 As the initial step is to prepare your language translation file by copying the contents from the **en-US.h** file if the translation file doesn't exist in the directory sources. You'll stumble upon several lines as follows.
 
-[![Entry](../images/usetup-translate/entry.png)](../images/usetup-translate/entry.png)
+[![Entry](/images/usetup-translate/entry.png)](/images/usetup-translate/entry.png)
 
 The variables such as `enUSSetupInitPageEntries` denotes the description about setup initialisation entries. The variables must have the corresponding country ISO language code so for example if I have to make a translation file for, let's say Italian, then the variable should be named as `itITSetupInitPageEntries`. For a list of country locale codes please check [this](https://www.fincher.org/Utilities/CountryLanguageList.shtml) page. If you understood the basic concepts of **pages** and **entries** of USETUP then translating should come easier for you.
 
 As you can see in the screenshot, what you can translate are the strings wrapped in double quotes. Bear in mind however there are certain constants such as `KERNEL_VERSION_STR` which should kept alone! The first two parameters are the X/Y coordinate points as you may have looked at the definition declaration of `MUI_ENTRY` data structure. You can of course change such coordinate values accordingly. In all cases the text style flags and text IDs should be kept as they are. The next strings to translate are the error strings as shown in the screenshot below:
 
-[![Error strings](../images/usetup-translate/errors.png)](../images/usetup-translate/errors.png)
+[![Error strings](/images/usetup-translate/errors.png)](/images/usetup-translate/errors.png)
 
 This is self-explanatory, you simply translate whatever string wrapped in double quotes. The escape sequence however (`\n`) and special UTF-8 characters like `\x07` which represents a central dot should be kept as they are! The final pieces to translate are the dynamic strings.
 
-[![Dynamic strings](../images/usetup-translate/strings.png)](../images/usetup-translate/strings.png)
+[![Dynamic strings](/images/usetup-translate/strings.png)](/images/usetup-translate/strings.png)
 
 The dynamic strings are used on specific locations of a page where they're displayed accordingly on specific factors such as when an operation requires the user to wait then USETUP displays the `Please wait...` string and it gets removed from the screen once the operation has completed successfully. As the general rule, DO NOT translate the ID number constants!
 
@@ -100,11 +100,11 @@ The dynamic strings are used on specific locations of a page where they're displ
 
 The inclusion is done in the similar way as you'd include a resource file in a header, as shown in this screenshot below:
 
-[![Include](../images/usetup-translate/define.png)](../images/usetup-translate/define.png)
+[![Include](/images/usetup-translate/define.png)](/images/usetup-translate/define.png)
 
 And the final step of the inclusion is to define the language MUI resource.
 
-[![Define resource](../images/usetup-translate/define2.png)](../images/usetup-translate/define2.png)
+[![Define resource](/images/usetup-translate/define2.png)](/images/usetup-translate/define2.png)
 
 For a list of keyboard language layout identifiers, please check [this](https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-language-pack-default-values) page. The MUI pages, error and dynamic strings must correspond to their respective locale specific variables from the translation file.
 

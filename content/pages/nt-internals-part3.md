@@ -15,7 +15,7 @@ In the previous chapters I have shown and explained some of the theoretical aspe
 
 Before we're going to dwell into kernel coding development, from this point I'm assuming you already know how is the NT kernel structured like, the foundation behind the "Executive" layer of the kernel and such. Now as the first step I am going to explain thoroughly how are the headers and their prototypes declared and organized.
 
-[![Headers](../images/nt-internals/part3/headers.png)](../images/nt-internals/part3/headers.png)
+[![Headers](/images/nt-internals/part3/headers.png)](/images/nt-internals/part3/headers.png)
 
 The ReactOS' NT kernel bases upon a software development kit (SDK) and the internal directory. The internal directory serves as a place where all the underlying parts of the kernel shall be put there, with such parts not exposed to the outside world (or in other words, exported) other than the kernel itself. This includes internal data structures, functions, certain datatypes and whatnot. The SDK on the other hand serves as primary development kit where the kernel routines and data structures used outside of the kernel are so called _public kernel APIs_ or _exported APIs_. The respective location of the SDK is [here](https://github.com/reactos/reactos/tree/master/sdk/include), the include directory specifically, whereas the internal directory of the kernel is [here](https://github.com/reactos/reactos/tree/master/ntoskrnl/include).
 
@@ -27,7 +27,7 @@ Now you may ask a question, if I want to implement a new function with some stuf
 
 In this example I'll be going to declare a very simplistic internal function for the kernel itself, Ke. With that said, we'll be thoroughly jumping to the internal directory structure. The header that we're interested in is **ke.h**.
 
-[![Prototype](../images/nt-internals/part3/prototype.png)](../images/nt-internals/part3/prototype.png)
+[![Prototype](/images/nt-internals/part3/prototype.png)](/images/nt-internals/part3/prototype.png)
 
 Since we won't be using it for serious development means, we'll just choose a silly name for the function `KiDoesRosRock`.
 
@@ -35,23 +35,23 @@ Since we won't be using it for serious development means, we'll just choose a si
 
 Now that we have our own prototype declared, the next step is to write the function. We'll take the **krnlinit.c** file as an example.
 
-[![Function](../images/nt-internals/part3/function.png)](../images/nt-internals/part3/function.png)
+[![Function](/images/nt-internals/part3/function.png)](/images/nt-internals/part3/function.png)
 
 Assuming that you already know the NT datatypes and their purposes, I'll continue explaining some new parts of the code as you can see. Otherwise check my previous articles. `CODE_SEG` is a pragma macro where functions are stored in specific object files based upon the text section segment code. Since we're dealing with kernel initialization code, `INIT` is the appropriate code text segment for that. You can check the [documentation here](https://docs.microsoft.com/en-us/cpp/preprocessor/code-seg?view=msvc-160) regarding CODE\_SEG. `DPRINT1` is a specific ReactOS debug print macro that outputs debug information to the debugger console terminal (e.g. from WinDBG) depending on the said information passed to the actual macro in question. You may have noticed another debug print macro but without the number, `DPRINT`. The difference between the two is that DPRINT only prints debug information if `NDEBUG` definition is omitted (that is, commented out). NDEBUG stands for NO DEBUG and usually it's at the top of the code file. DPRINT1 on the other hand always prints debug output regardless of NDEBUG. Usually the DPRINT1 variant is used in particular cases like failure paths where some information has to be printed to the debugger.
 
 Now it's time for another example, a little more nuanced. Let's consider `MmAllocatePool`. As usuall we'll introduce a prototype for the function and write its body code.
 
-[![Pool](../images/nt-internals/part3/pool.png)](../images/nt-internals/part3/pool.png)
+[![Pool](/images/nt-internals/part3/pool.png)](/images/nt-internals/part3/pool.png)
 
 And the function.
 
-[![Pool 2](../images/nt-internals/part3/pool2.png)](../images/nt-internals/part3/pool2.png)
+[![Pool 2](/images/nt-internals/part3/pool2.png)](/images/nt-internals/part3/pool2.png)
 
 Still nothing spectacular here but you might notice some new stuff in the code. `_Must_inspect_result_` is a function SAL annotation attribute that tells the compiler the caller must always inspect the result of the returned function, the said result being the returned value that is. If the result of the call is not checked, the compiler raises a warning. For a list of function annotations, [consult this article](https://docs.microsoft.com/en-us/cpp/code-quality/annotating-function-behavior?view=msvc-160). `_IRQL_requires_max_` on the other hand is a SAL IRQL annotation that tells the compiler at which maximum IRQL the function can work. So for example, if we annotate the function as APC\_LEVEL then that means this interrupt level is the maximum one and the routine can also take PASSIVE\_LEVEL as well which is behind APC\_LEVEL. In our `MmAllocatePool` we only want that PASSIVE\_LEVEL should be the maximum interrupt request level to be allowed during the runtime execution of the function as there's nothing else before PASSIVE\_LEVEL.
 
 For a list of IRQL annotations, [check this article](https://docs.microsoft.com/en-us/windows-hardware/drivers/devtest/irql-annotations-for-drivers). And finally, `PAGED_CODE` is nothing more other than a simple macro that checks if the current IRQL of the function of the calling thread is at PASSIVE\_LEVEL. Since paging is not allowed above the IRQL threshold, an assertion failure is raised if IRQL is above PASSIVE\_LEVEL. Most of the kernel code is usually paged so usually you'd rather use this macro at the top of the function code after the variables declaration, unless you are implementing special or exceptional operations that require an interrupt request level above PASSIVE\_LEVEL.
 
-[![Pool 3](../images/nt-internals/part3/pool3.png)](../images/nt-internals/part3/pool3.png)
+[![Pool 3](/images/nt-internals/part3/pool3.png)](/images/nt-internals/part3/pool3.png)
 
 As I've said before, with the `_Must_inspect_result_` annotation attribute defined to the function prototype, the caller is expected that the returned value must be checked. `NT_SUCCESS` is a macro that tests the expression wrapped in the parenthesis if the status code is a failure code. In this case, the condition tests if the status code is not STATUS\_SUCCESS and if the condition is deemed as TRUE the conditional body code is followed by clearing the bitmap and returning the status code to the caller.
 
@@ -63,7 +63,7 @@ Compiling the kernel is the same as compiling ReactOS using either RosBE or MSVC
 
 Once the compilation process has finished with success, you should see a screen as follows, albeit the output may slightly differ.
 
-[![Compile](../images/nt-internals/part3/compile.png)](../images/nt-internals/part3/compile.png)
+[![Compile](/images/nt-internals/part3/compile.png)](/images/nt-internals/part3/compile.png)
 
 ## Debugging your code
 
@@ -73,13 +73,13 @@ Debugging the ReactOS NT kernel compiled by MSVC, undoubtedly one would need two
 
 By default you get a compiled ReactOS 32-bit build therefore you have to use the 32-bit version of WinDBG. It's also possible to compile a 64-bit version of ReactOS and use the 64-bit WinDBG for debugging but we're going to focus solely on 32-bit since it doesn't make much of a big difference in debugging steps. Assuming that you've got WinDBG installed by now, launch WinDBG and you should be greeted with this screen.
 
-[![WinDBG](../images/nt-internals/part3/windbg.png)](../images/nt-internals/part3/windbg.png)
+[![WinDBG](/images/nt-internals/part3/windbg.png)](/images/nt-internals/part3/windbg.png)
 
 ### Setting up symbols path
 
 Now the first step to start debugging is to actually set up our symbols path as WinDBG must understand where are the PDBs located. Without the PDBs debugging with WinDBG is literally useless. In order to set up the path, go to **File > Symbol Search Path**. For more information regarding path symbols, please check [this article](https://reactos.org/wiki/WinDBG). An example of such path looks as follows, like mine:
 
-[![WinDBG 2](../images/nt-internals/part3/windbg2.png)](../images/nt-internals/part3/windbg2.png)
+[![WinDBG 2](/images/nt-internals/part3/windbg2.png)](/images/nt-internals/part3/windbg2.png)
 
 ### Firing up the debugger
 
@@ -89,7 +89,7 @@ The final step on starting debugging is to actually typing the defined pipe name
 
 With `pipe_name` being the actual named pipe that you defined in the VM settings. To start debugging, go to **File > Kernel Debug...** and you should see a screen as follows:
 
-[![WinDBG 3](../images/nt-internals/part3/windbg3.png)](../images/nt-internals/part3/windbg3.png)
+[![WinDBG 3](/images/nt-internals/part3/windbg3.png)](/images/nt-internals/part3/windbg3.png)
 
 Instead of connecting the debugger to a COM port, here we'll connect the debugger to a named pipe instead thus the **Port** field must be your named pipe path. **Baud rate** and **Resets** fields should be left as is. **Pipe** and **Reconnect** boxes must be ticked and finally debugging can be started with the OK button. Fire up your VM and choose **ReactOS (Debug)** in the FreeLoader boot options. The virtual machine will soon start to communicate with the debugger.
 
@@ -97,11 +97,11 @@ Instead of connecting the debugger to a COM port, here we'll connect the debugge
 
 As both the debugger and VM communicate with each other, the Command terminal window will start to get populated with debug stuff from the machine itself. The screen should look as follows:
 
-[![WinDBG 4](../images/nt-internals/part3/windbg4.png)](../images/nt-internals/part3/windbg4.png)
+[![WinDBG 4](/images/nt-internals/part3/windbg4.png)](/images/nt-internals/part3/windbg4.png)
 
 Now the virtual machine can be debugged! To break the machine into the debugger you have to click **Debug > Break**. This will freeze the machine and the Command window should look as follows:
 
-[![WinDBG 5](../images/nt-internals/part3/windbg5.png)](../images/nt-internals/part3/windbg5.png)
+[![WinDBG 5](/images/nt-internals/part3/windbg5.png)](/images/nt-internals/part3/windbg5.png)
 
 Now you have total control of the machine. From that point you can set up breakpoints, execute instructions manually, alter the memory and whatnot. As part of "debugging your code" we'll be going to set up a breakpoint on a function.
 
@@ -109,7 +109,7 @@ Now you have total control of the machine. From that point you can set up breakp
 
 Setting up a breakpoint means we're going to insert a hit point on a function. Once that point is hit that means we're currently calling that function and the debugger immediately stops the execution of the system on that function. Setting up a breakpoint is done by using the `bm` command. As follows:
 
-[![WinDBG 6](../images/nt-internals/part3/windbg6.png)](../images/nt-internals/part3/windbg6.png)
+[![WinDBG 6](/images/nt-internals/part3/windbg6.png)](/images/nt-internals/part3/windbg6.png)
 
 The syntax of this command is pretty straightforward. In order to set up a breakpoint we have to specify the name of the module where the function resides. As we are debugging the kernel definitely the name of it is `nt`. The name after the exclamation point is the function. Basically, the syntax is like this:
 
@@ -117,7 +117,7 @@ The syntax of this command is pretty straightforward. In order to set up a break
 
 Once you set up the breakpoint we have to continue with the execution of the system, to do that type the command `g`. This not only lets the system continue its operation but also you'll lose the control of the system until the system breaks onto that breakpoint. Once the system hits it, you should see a screen as follows:
 
-[![WinDBG 7](../images/nt-internals/part3/windbg7.png)](../images/nt-internals/part3/windbg7.png)
+[![WinDBG 7](/images/nt-internals/part3/windbg7.png)](/images/nt-internals/part3/windbg7.png)
 
 At that right moment the system breaks into the debugger again and this time WinDBG will also spawn a new window automatically, the **Source** window. The window is used as such to display the source code of the specific part where the breakpoint was set based on the symbols from the PDBs.
 
@@ -125,7 +125,7 @@ At that right moment the system breaks into the debugger again and this time Win
 
 A very nice and powerful feature of WinDBG is to interactively check the contents (actual values) behind the local variables of a function. To view the local variables you have to click **View > Locals**. A new window should appear like so:
 
-[![WinDBG 8](../images/nt-internals/part3/windbg8.png)](../images/nt-internals/part3/windbg8.png)
+[![WinDBG 8](/images/nt-internals/part3/windbg8.png)](/images/nt-internals/part3/windbg8.png)
 
 The **Locals** windows gets populated once the system is into the debugger. From there you can view the values of the variables as well as the members' values of structures.
 
@@ -133,17 +133,17 @@ The **Locals** windows gets populated once the system is into the debugger. From
 
 Alternatively from setting breakpoints with the command line, you can also set breakpoints visually in the Source window. What you have to do is to just click on whatever line you want to set up a breakpoint and then press F9. What will exactly happen is shown like in this screen:
 
-[![WinDBG 10](../images/nt-internals/part3/windbg10.png)](../images/nt-internals/part3/windbg10.png)
+[![WinDBG 10](/images/nt-internals/part3/windbg10.png)](/images/nt-internals/part3/windbg10.png)
 
 Some colors here, huh? The blue color as seen in Source window is where the current position of the instruction code line you are currently executing and red color is the breakpoint that's been set which it'll be triggered once you reach that line. Once we continue the execution again with the `g` command line, the system will break into the debugger again on the new breakpoint as you can see. The pink color indicates the current breakpoint that's been hit just now.
 
-[![WinDBG 11](../images/nt-internals/part3/windbg11.png)](../images/nt-internals/part3/windbg11.png)
+[![WinDBG 11](/images/nt-internals/part3/windbg11.png)](/images/nt-internals/part3/windbg11.png)
 
 ### Clearing breakpoints
 
 When you're done with whatever investigations you had and you no longer need the breakpoints, you can clear them so that they won't be triggered anymore. To do so type the `bl` command and the screen should show up as follows:
 
-[![WinDBG 12](../images/nt-internals/part3/windbg12.png)](../images/nt-internals/part3/windbg12.png)
+[![WinDBG 12](/images/nt-internals/part3/windbg12.png)](/images/nt-internals/part3/windbg12.png)
 
 The breakpoints can either be disabled or fully cleared by clicking on one of the current breakpoints in the list.
 
@@ -171,6 +171,6 @@ The kernel offers various types of locking mechanisms, from spin locks, push loc
 
 Using `ASSERT` and similar ensures that you are evaluating the code from defects and that the predicate tested in question is always true. Consider this piece of code as follows:
 
-[![Assert](../images/nt-internals/part3/assert.png)](../images/nt-internals/part3/assert.png)
+[![Assert](/images/nt-internals/part3/assert.png)](/images/nt-internals/part3/assert.png)
 
 What we're testing here is that `Token` should ALWAYS be a valid pointer to a token object in the memory address space of the kernel and that is properly initialized. This condition that is being tested here is like doing `Token != NULL` with such condition in question must TRUE. If it ever happens that the condition in the assert is not met, hence the predicate is FALSE, then something's wrong with the caller who has called the function or the cause is even way deep down before the caller actually called the said routine. Using asserts in the kernel is highly recommended for such cases.
