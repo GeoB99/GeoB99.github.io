@@ -77,7 +77,7 @@ Cloning is the act of downloading the repository to your computer. It may take u
 
 `git clone URL_HERE`
 
-With **URL\_HERE** being the URL link of your fork. You can find such link in your fork page by clicking on "Clone or download".
+With **URL_HERE** being the URL link of your fork. You can find such link in your fork page by clicking on "Clone or download".
 
 [![Clone](/images/reactos-contributing/clone.png)](/images/reactos-contributing/clone.png)
 

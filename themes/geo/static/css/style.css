@@ -8,7 +8,6 @@
 
 html, body {
     margin: 0;
-    margin-bottom: 13%;
     padding: 0;
     background-color: #36393f;
     color: #ffffff;
@@ -17,7 +16,6 @@ html, body {
 
 h1, h2, h3, h4 {
     margin-bottom: 0px;
-    margin-top: 6px;
 }
 
 img {
@@ -46,7 +44,7 @@ footer {
 }
 
 code {
-    font-family: Consolas, "Courier New";
+    font-family: "Courier New", 'Courier New', Courier, monospace;
     color: #a20e2a;
     background-color: #f1f1f1;
     padding: 2px;
@@ -101,7 +99,6 @@ a:hover {
 
 table {
     border-collapse: collapse;
-    width: 65%;
     margin-left: 14px;
     font-family: Tahoma, Helvetica, sans-serif;
 }
@@ -149,4 +146,35 @@ ul.tree li:before {
 
 ul.tree li:last-child:before {
     border-left: 1px solid rgb(255, 255, 255);
+}
+
+
+/* Media query */
+
+/* mobile */
+@media only screen and (max-width:320px){
+
+}
+
+/* Tablet */
+@media only screen and (min-width:321px) and (max-width:768px){
+
+}
+
+/* Desktop */
+@media screen and (min-width:769px) {
+
+    h1, h2, h3, h4{
+        margin-top: 6px;
+    }
+
+    .container{
+        width: 80%;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    table{
+        width: 65%;
+    }
 }

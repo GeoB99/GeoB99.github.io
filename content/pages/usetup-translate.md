@@ -24,17 +24,17 @@ typedef struct
     PCSTR Buffer;
     DWORD Flags;
     INT TextID;
-} MUI\_ENTRY, \*PMUI\_ENTRY;
+} MUI_ENTRY, \*PMUI_ENTRY;
 ```         
 
-`X` and `Y` are the coordinate points of the text, `Buffer` is the actual buffer string that represents the actual text, `Flags` denotes the MUI text style flags that change the appearance of the said text itself of an entry (such as **TEXT\_STYLE\_NORMAL** flag which denotes a normal text and so on) and `TextID` is the unique ID that represents the entry.
+`X` and `Y` are the coordinate points of the text, `Buffer` is the actual buffer string that represents the actual text, `Flags` denotes the MUI text style flags that change the appearance of the said text itself of an entry (such as **TEXT_STYLE_NORMAL** flag which denotes a normal text and so on) and `TextID` is the unique ID that represents the entry.
 
 ```
 typedef struct
 {
     LONG Number;
-    MUI\_ENTRY \* MuiEntry;
-} MUI\_PAGE;
+    MUI_ENTRY \* MuiEntry;
+} MUI_PAGE;
 ```         
 
 As for pages, a page is identified by a number ID, `Number`, and `MuiEntry` is the entry in the page. It's worth noting that a page can have multiple entries.
@@ -44,7 +44,7 @@ typedef struct
 {
     PCSTR ErrorText;
     PCSTR ErrorStatus;
-} MUI\_ERROR;
+} MUI_ERROR;
 ```         
 
 ```
@@ -52,7 +52,7 @@ typedef struct
 {
     LONG Number;
     PCSTR String;
-} MUI\_STRING;
+} MUI_STRING;
 ```         
 
 As I've told above, strings and error strings are the subset of an entry that operate independently and are declared by their respective data structures on their own. `ErrorText` is the error string in question and `ErrorStatus` is the status error code that points the nature of the status error. Regarding `MUI_STRING` is a data structure used to denote dynamic strings, which `Number` represents the unique number instance of the string and `String` is the buffer that points to the actual string text.
@@ -62,10 +62,10 @@ typedef struct
 {
     PCWSTR LanguageID;
     PCWSTR LanguageDescriptor;
-    const MUI\_PAGE \* MuiPages;
-    const MUI\_ERROR \* MuiErrors;
-    const MUI\_STRING \* MuiStrings;
-} MUI\_LANGUAGE\_RESOURCE;
+    const MUI_PAGE \* MuiPages;
+    const MUI_ERROR \* MuiErrors;
+    const MUI_STRING \* MuiStrings;
+} MUI_LANGUAGE_RESOURCE;
 ```         
 
 Finally the last data structure represents the instance of a language locale, or in other words, the details that actually define the language resource as a whole. `LanguageID` is the locale identifier (e.g.**00000809** is the ID locale for British English), `LanguageDescriptor` is the descriptor of a language (e.g. **English (United Kingdom)**) and the last three members of the data structure are the MUI contents of a language resource being the pages with respective entries, error and dynamic strings.

@@ -79,11 +79,11 @@ With `test_case_name` being the name of the specific function that we want to pe
 
 [![Test](/images/write-apitest/test.png)](/images/write-apitest/test.png)
 
-As you can see, the successful executed test means that indeed the function is not implemented in Server 2003 SP2 and thus that is the condition we should expect as per the testcase. Otherwise if it would may happen that a certain test fails then it means the expected condition is not met and it doesn't conform to the function's behaviour of the system, in other words, the testcase has to be corrected in order to match with the observed behaviour. As an example let's simulate a test failure by expecting a status code value of STATUS\_SUCCESS rather than STATUS\_NOT\_IMPLEMENTED.
+As you can see, the successful executed test means that indeed the function is not implemented in Server 2003 SP2 and thus that is the condition we should expect as per the testcase. Otherwise if it would may happen that a certain test fails then it means the expected condition is not met and it doesn't conform to the function's behaviour of the system, in other words, the testcase has to be corrected in order to match with the observed behaviour. As an example let's simulate a test failure by expecting a status code value of STATUS_SUCCESS rather than STATUS_NOT_IMPLEMENTED.
 
 [![Test 2](/images/write-apitest/test2.png)](/images/write-apitest/test2.png)
 
-A test failure should look like this. Here we are expecting a value of STATUS\_SUCCESS (0x00000000) but instead STATUS\_NOT\_IMPLEMENTED (0xC0000002) is returned by the call. To conduct a proper research on the behaviour of the function and how it interacts with the input data all the tests must pass accordingly in a Windows system.
+A test failure should look like this. Here we are expecting a value of STATUS_SUCCESS (0x00000000) but instead STATUS_NOT_IMPLEMENTED (0xC0000002) is returned by the call. To conduct a proper research on the behaviour of the function and how it interacts with the input data all the tests must pass accordingly in a Windows system.
 
 ## Types of macro tests
 

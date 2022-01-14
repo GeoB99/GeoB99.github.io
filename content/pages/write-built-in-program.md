@@ -17,7 +17,7 @@ I'll be using On-Screen Keyboard as an example to describe the overall skeleton 
 
 Leaving other stuff aside that's only related with the program in question, by standard every built-in software must come with a **CMakeLists** file, **lang** and **res** directories, a main resource file for including translation files and a precompiled and resource headers. **lang** is the directory that contains the translation files, **res** contains resource based files such as icons, sound WAV files and whatnot. **CMakeLists** is a text document file containing CMake command directives that instruct CMake to automate the building procedure of files. I'll stumble upon later how to set up a CMakeLists file.
 
-**osk.rc** is the main resource file that I was talking about above, which is used to define the rest of translation files from **lang** directory. Each application has this file with its own name, otherwise it's named as **rsrc.rc**. Finally, here they come the resource and precompiled headers. The resource header (**osk\_res.h**) is used to store the IDs necessary for the resource controls such as text, buttons, menu items, combo boxes an so forth. The precompiled header, as the name implies, is the primary header of an application that can be processed faster by the compiler. As a general rule it's advised to create a precompiled header for your own program in case you have other several application specific headers in your source code. The default name goes by **precomp.h**.
+**osk.rc** is the main resource file that I was talking about above, which is used to define the rest of translation files from **lang** directory. Each application has this file with its own name, otherwise it's named as **rsrc.rc**. Finally, here they come the resource and precompiled headers. The resource header (**osk_res.h**) is used to store the IDs necessary for the resource controls such as text, buttons, menu items, combo boxes an so forth. The precompiled header, as the name implies, is the primary header of an application that can be processed faster by the compiler. As a general rule it's advised to create a precompiled header for your own program in case you have other several application specific headers in your source code. The default name goes by **precomp.h**.
 
 ## Write your program
 
@@ -73,12 +73,12 @@ It can be confusing at first but I'll explain part by part what these commands m
   
 **list** -- What it simply does is to list the source files by appending them into a variable, named SOURCE. This helps CMake understand the structure of our program;  
 **file** -- Generates a list of files based upon the specified path pointed in the third parameter, `res/*.*`;  
-**add\_rc\_deps** -- Adds the resource dependencies. The first parameter points to the main resource file whereas the second one points to a variable that's being created previously with the `file` command;  
-**add\_executable** -- Creates the executable target. The second and third parameters point to the source paths needed to for the executable. The first parameter is the name of our executable target to be created;  
-**set\_module\_type** -- Defines the module type of the program. `win32gui` indicates the executable is a Win32 GUI subsystem program and `UNICODE` instructs CMake that the program is Unicode aware;  
-**add\_importlibs** -- Imports the entry points from the user mode libraries for the program;  
-**add\_pch** -- Adds the precompiled header into the target;  
-**add\_cd\_file** -- This command instructs CMake how the executable target should be shared to the build. `TARGET` is the executable target point which CMake takes, with `DESTINATION` telling CMake that the destination path for the executable to be compiled should be at `reactos/system32`. `FOR all` means that CMake will automate the build process on preparing the executable program for both builds, LiveCD and BootCD.
+**add_rc_deps** -- Adds the resource dependencies. The first parameter points to the main resource file whereas the second one points to a variable that's being created previously with the `file` command;  
+**add_executable** -- Creates the executable target. The second and third parameters point to the source paths needed to for the executable. The first parameter is the name of our executable target to be created;  
+**set_module_type** -- Defines the module type of the program. `win32gui` indicates the executable is a Win32 GUI subsystem program and `UNICODE` instructs CMake that the program is Unicode aware;  
+**add_importlibs** -- Imports the entry points from the user mode libraries for the program;  
+**add_pch** -- Adds the precompiled header into the target;  
+**add_cd_file** -- This command instructs CMake how the executable target should be shared to the build. `TARGET` is the executable target point which CMake takes, with `DESTINATION` telling CMake that the destination path for the executable to be compiled should be at `reactos/system32`. `FOR all` means that CMake will automate the build process on preparing the executable program for both builds, LiveCD and BootCD.
 
 ### Prepare the precompiled header
 

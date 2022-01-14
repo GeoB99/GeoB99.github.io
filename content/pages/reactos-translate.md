@@ -22,7 +22,7 @@ Every resource file must come up with a language declaration statement to inform
 
 `LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US`
 
-`LANG_ENGLISH` is the language identifier whereas `SUBLANG_ENGLISH_US` is the sublanguage identifier. The sublanguage identifier specifies a specific country or region in a language locale realm so **SUBLANG\_ENGLISH\_US** represents English (United States of America). For a list of complete language and sublanguage identifiers can be found in this [page](https://web.archive.org/web/20170908090148/https://msdn.microsoft.com/en-us/library/ms776294.aspx). Every language comes with its own language identifiers for `LANGUAGE` statement.
+`LANG_ENGLISH` is the language identifier whereas `SUBLANG_ENGLISH_US` is the sublanguage identifier. The sublanguage identifier specifies a specific country or region in a language locale realm so **SUBLANG_ENGLISH_US** represents English (United States of America). For a list of complete language and sublanguage identifiers can be found in this [page](https://web.archive.org/web/20170908090148/https://msdn.microsoft.com/en-us/library/ms776294.aspx). Every language comes with its own language identifiers for `LANGUAGE` statement.
 
 As we were pointing in a resource file of ReactOS Utility Manager, let's use it as a general reference and explanation of a basic RC translation file structure. Next to examine is the dialog template.
 

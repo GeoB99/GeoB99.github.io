@@ -21,11 +21,11 @@ It can be quite alien at first as you may were probably getting used to POSIX ca
 
 In case it's still confusing to you, I'll further explain detail by detail each case that are seen in the screenshot.  
   
-**function\_attribute** -- Not every function in the kernel comes with it, but some do. The function attribute is a compiler specific that instructs the compiler that the function behaves in a certain pattern or way. **DECLSPEC\_NORETURN** in this example means that the function never returns and thus the code calling the said function is unreachable, that is, it has no end. Some examples of attributes can be found in [this header](https://git.reactos.org/?p=reactos.git;a=blob;f=sdk/include/xdk/ntbasedef.h;hb=249f2388bd7ce086578119b50c988ba752169fc1#l164) within ReactOS source code.  
+**function_attribute** -- Not every function in the kernel comes with it, but some do. The function attribute is a compiler specific that instructs the compiler that the function behaves in a certain pattern or way. **DECLSPEC_NORETURN** in this example means that the function never returns and thus the code calling the said function is unreachable, that is, it has no end. Some examples of attributes can be found in [this header](https://git.reactos.org/?p=reactos.git;a=blob;f=sdk/include/xdk/ntbasedef.h;hb=249f2388bd7ce086578119b50c988ba752169fc1#l164) within ReactOS source code.  
   
-**function\_data\_type** -- This is the obvious one, as each function must have a data type that represents the function itself. The NT API (and consequently the Windows API as well) come with a collection of data types.  
+**function_data_type** -- This is the obvious one, as each function must have a data type that represents the function itself. The NT API (and consequently the Windows API as well) come with a collection of data types.  
   
-**function\_call\_convention** -- Similar to the function attribute, the calling convention is a mechanism scheme that judges how a function returns the value, how are the parameters treated and where do they come from and what's the relationship between this function and the others. For instance, **NTAPI** is a Microsoft specific standard declaration calling convention which means the routine in question belongs to the NT API (in the Windows world however, the convention is **WINAPI**).  
+**function_call_convention** -- Similar to the function attribute, the calling convention is a mechanism scheme that judges how a function returns the value, how are the parameters treated and where do they come from and what's the relationship between this function and the others. For instance, **NTAPI** is a Microsoft specific standard declaration calling convention which means the routine in question belongs to the NT API (in the Windows world however, the convention is **WINAPI**).  
   
 **Prefix & Action & Suffix** -- The basic rule when writing a name of the function is that every routine must come up with a prefix that is tied to the respective module, the purpose of the function (hence the **action** which is the combination of a verb and subject such as `NtQueryInformationToken` or vice-versa) and a suffix. The suffix usually consists of **Ex** which means that the routine is an extension of the original one that adds more functionality in code. This is for the sake of preserving backwards compatibility with the older API calls, so that early versions of software that use such APIs can still benefit of the older function calls whereas the new software can benefit of using the newer/extended ones.  
   
@@ -62,7 +62,7 @@ Enough said, here are some of the data types widely used in the kernel:
 **PSTR/PWSTR** -- Pointer to a string (and the Unicode variant).  
 **NTSTATUS** -- A NT status code value. Both the kernel and kernel mode drivers return a NT status code to indicate the condition of an operation by a function. For a list of complete NTSTATUS codes, [check here](https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-erref/596a1078-e883-4972-9bbc-49e60bebca55).
 
-What is known about is that data structures are widely used across the kernel to abstract the kernel data. A notable structure is [LIST\_ENTRY](https://docs.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-list_entry) for doubly linked lists. Keep in mind that not every data type is used in the kernel, **BOOL** being an example. Even though **BOOL** is also a boolean value, this is strictly used in Windows API only and not NT! For this reason, only **BOOLEAN** must be used in the kernel. Here's a quick and summarised graph of the data type syntax structure.
+What is known about is that data structures are widely used across the kernel to abstract the kernel data. A notable structure is [LIST_ENTRY](https://docs.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-list_entry) for doubly linked lists. Keep in mind that not every data type is used in the kernel, **BOOL** being an example. Even though **BOOL** is also a boolean value, this is strictly used in Windows API only and not NT! For this reason, only **BOOLEAN** must be used in the kernel. Here's a quick and summarised graph of the data type syntax structure.
 
 [![Datatypes](/images/nt-internals/part2/datatypes.png)](/images/nt-internals/part2/datatypes.png)
 
@@ -88,7 +88,7 @@ Interestingly enough, not every system call follows the route to NTDLL. For inst
 
 All the system calls are handled by SSDT, which is the **System Service Descriptor Table**. SSDT is a dispatch table infrastructure that is responsible for handling the system calls and the execution flow to kernel mode from user mode. Although we'll explain thoroughly in details in the future about SSDT and its way of working, I'm going to explain briefly how `KiSystemService` works.
 
-`KiSystemService` is an internal kernel function that is part of SSDT mechanism which deals with system servicing. The function copies the parameter arguments from the user stack, decodes the system call number based on the system service index and performs the selected system call, among other stuff. Each architecture supported in Windows and ReactOS have their own `KiSystemService` implementation. If the ID service index does not correspond to the one from NT system call table, the calling thread where the system call is about to be invoked is converted to a GUI thread and the service call map is set to the one from Win32k instead. The function delivers an APC (asynchronous procedure call) where the calling thread execution is done in an asynchronous manner. However if APC execution is not linear, that is, the thread whose asynchronous execution has completed and exited from the specific code region but with normal kernel APCs disabled and another thread that was in queue by the scheduler to wait and enter into APC mode, the function issues a bugcheck of **APC\_INDEX\_MISMATCH**. This usually happens, for example, when a call of `KeEnterCriticalRegion` has been invoked which disables normal APCs but the calling thread has forgotten to re-enable the APCs back with `KeLeaveCriticalRegion`.
+`KiSystemService` is an internal kernel function that is part of SSDT mechanism which deals with system servicing. The function copies the parameter arguments from the user stack, decodes the system call number based on the system service index and performs the selected system call, among other stuff. Each architecture supported in Windows and ReactOS have their own `KiSystemService` implementation. If the ID service index does not correspond to the one from NT system call table, the calling thread where the system call is about to be invoked is converted to a GUI thread and the service call map is set to the one from Win32k instead. The function delivers an APC (asynchronous procedure call) where the calling thread execution is done in an asynchronous manner. However if APC execution is not linear, that is, the thread whose asynchronous execution has completed and exited from the specific code region but with normal kernel APCs disabled and another thread that was in queue by the scheduler to wait and enter into APC mode, the function issues a bugcheck of **APC_INDEX_MISMATCH**. This usually happens, for example, when a call of `KeEnterCriticalRegion` has been invoked which disables normal APCs but the calling thread has forgotten to re-enable the APCs back with `KeLeaveCriticalRegion`.
 
 With that being said, here's a summarised graph of what exactly happens when an application wants to do something through system calls.
 
@@ -107,45 +107,45 @@ What is obvious for any operating system is that the startup begins first with t
 The boot process between ReactOS and Windows NT 5.x editions is roughly the same. In ReactOS, the bootloader that takes care of the initial boot phase is FreeLoader (or sometimes called FreeLdr). When FreeLoader has been invoked and reads the **boot.ini** file which is a crucial file that stores boot initialisation data, a **parameter loader block** that was initialised by the bootloader is passed to the kernel after the kernel has been loaded into the memory. The loader block looks as follows:
 
 ```
-typedef struct \_LOADER\_PARAMETER\_BLOCK
+typedef struct _LOADER_PARAMETER_BLOCK
 {
-    LIST\_ENTRY LoadOrderListHead;
-    LIST\_ENTRY MemoryDescriptorListHead;
-    LIST\_ENTRY BootDriverListHead;
-    ULONG\_PTR KernelStack;
-    ULONG\_PTR Prcb;
-    ULONG\_PTR Process;
-    ULONG\_PTR Thread;
+    LIST_ENTRY LoadOrderListHead;
+    LIST_ENTRY MemoryDescriptorListHead;
+    LIST_ENTRY BootDriverListHead;
+    ULONG_PTR KernelStack;
+    ULONG_PTR Prcb;
+    ULONG_PTR Process;
+    ULONG_PTR Thread;
     ULONG RegistryLength;
     PVOID RegistryBase;
-    PCONFIGURATION\_COMPONENT\_DATA ConfigurationRoot;
+    PCONFIGURATION_COMPONENT_DATA ConfigurationRoot;
     PSTR ArcBootDeviceName;
     PSTR ArcHalDeviceName;
     PSTR NtBootPathName;
     PSTR NtHalPathName;
     PSTR LoadOptions;
-    PNLS\_DATA\_BLOCK NlsData;
-    PARC\_DISK\_INFORMATION ArcDiskInformation;
+    PNLS_DATA_BLOCK NlsData;
+    PARC_DISK_INFORMATION ArcDiskInformation;
     PVOID OemFontFile;
-    struct \_SETUP\_LOADER\_BLOCK \*SetupLdrBlock;
-    PLOADER\_PARAMETER\_EXTENSION Extension;
+    struct _SETUP_LOADER_BLOCK \*SetupLdrBlock;
+    PLOADER_PARAMETER_EXTENSION Extension;
     union
     {
-        I386\_LOADER\_BLOCK I386;
-        ALPHA\_LOADER\_BLOCK Alpha;
-        IA64\_LOADER\_BLOCK IA64;
-        PPC\_LOADER\_BLOCK PowerPC;
-        ARM\_LOADER\_BLOCK Arm;
+        I386_LOADER_BLOCK I386;
+        ALPHA_LOADER_BLOCK Alpha;
+        IA64_LOADER_BLOCK IA64;
+        PPC_LOADER_BLOCK PowerPC;
+        ARM_LOADER_BLOCK Arm;
     } u;
-    FIRMWARE\_INFORMATION\_LOADER\_BLOCK FirmwareInformation;
-} LOADER\_PARAMETER\_BLOCK, \*PLOADER\_PARAMETER\_BLOCK;
+    FIRMWARE_INFORMATION_LOADER_BLOCK FirmwareInformation;
+} LOADER_PARAMETER_BLOCK, \*PLOADER_PARAMETER_BLOCK;
 ```         
 
 This data structure can be found [here](https://git.reactos.org/?p=reactos.git;a=blob;f=sdk/include/reactos/arc/arc.h;hb=2636cff09fdb70bfe63c52ea9d2d24dbfc1e337f#l485). This structure basically contains important information for the kernel, such as the details of the hardware, firmware information, lists of core drivers, the physical memory information among other stuff. Once the kernel has gathered all the required information, the bootloader finally passes the whole control to the kernel and the operational mode is set to protected mode from 16-bit mode. The protected mode can be either 32-bit mode or 64-bit long mode, depending on the machine.
 
 When NTOSKRNL gains total control, the kernel is now in charge of loading its Executive components. It does that thorough a linear procedure called **phases**, where **Phase 0** is the early boot phase initialisation in the kernel and **Phase 1** is the second phase, the continuation of the early boot phase which deals with the rest of Executive components loading. The Phase 0 mainly deals with basic yet very important data structures initialisation that are needed in the next phase and the whole lifetime of the kernel. The component that deals with the initialisation of the whole Executive is the actual Executive component itself. The kernel main startup point, the `KiSystemStartup`, calls `HalInitializeProcessor` and `KiInitializeProcessor` for each logical processor present. During Phase 0, the interrupts are disabled.
 
-The function that is responsible for Phase 0 management is `ExpInitializeExecutive`. Initially HAL is in charge of the initialisation at first by calling `HalInitSystem`. The HAL initialisation routine ensures that there's consistency between the HAL itself and the kernel, otherwise a bugcheck of **MISMATCHED\_HAL** is issued. Later on, HAL initialises the PIC, the clock and sets the hardware CMOS spinlock. Now `ExpInitializeExecutive` can execute each Phase 0 initialisation routines of each component of the Executive, in the following order: **memory manager**, **object manager**, **security reference monitor manager**, **process manager** and **PnP manager**.
+The function that is responsible for Phase 0 management is `ExpInitializeExecutive`. Initially HAL is in charge of the initialisation at first by calling `HalInitSystem`. The HAL initialisation routine ensures that there's consistency between the HAL itself and the kernel, otherwise a bugcheck of **MISMATCHED_HAL** is issued. Later on, HAL initialises the PIC, the clock and sets the hardware CMOS spinlock. Now `ExpInitializeExecutive` can execute each Phase 0 initialisation routines of each component of the Executive, in the following order: **memory manager**, **object manager**, **security reference monitor manager**, **process manager** and **PnP manager**.
 
 After the Phase 0 is done, Phase 1 of the phase initialisation procedure begins. The Phase 1 is a relatively complex process as it takes up a major chunk of the whole phase initialisation process. The initialisation goes as follows, in order:
 
@@ -163,7 +163,7 @@ After the Phase 0 is done, Phase 1 of the phase initialisation procedure begins.
 1. **I/O initialisation** -- The I/O manager initialisation begins. The module is tasked to initialise its internal structures, worker threads, the core drivers one by one and whatnot. This procedure is one of the most complex ones in the phase initialisation.  
 1. ** Power manager data structures initialisation** -- The power manager module is tasked again to initialise the rest of the internal data structures.
 
-After all of these operations have completed successfully, the final part of the phase initialisation is the Session Manager Subsystem process. The phase initialisation procedure makes sure that SMSS is still running and it hasn't been terminated prematurely. If that's the case, the system issues a bugcheck of **SESSION5\_INITIALIZATION\_FAILED**. The number 5 in the bugcheck means that the initialisation procedure waits 5 seconds for SMSS to respond. If those 5 seconds have elapsed, it means that SMSS is still alive. Otherwise the procedure thread is alerted and this bugcheck is issued. Now the kernel is fully loaded and operational!
+After all of these operations have completed successfully, the final part of the phase initialisation is the Session Manager Subsystem process. The phase initialisation procedure makes sure that SMSS is still running and it hasn't been terminated prematurely. If that's the case, the system issues a bugcheck of **SESSION5_INITIALIZATION_FAILED**. The number 5 in the bugcheck means that the initialisation procedure waits 5 seconds for SMSS to respond. If those 5 seconds have elapsed, it means that SMSS is still alive. Otherwise the procedure thread is alerted and this bugcheck is issued. Now the kernel is fully loaded and operational!
 
 ### Shutdown
 
