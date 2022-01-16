@@ -1,0 +1,9 @@
+{{ partial "header.html" . }}
+{{ partial "ros-header.html" . }}
+<hr>
+{{.Content}}
+<h2>{{.Params.list_name}}</h2>
+{{range .Pages}}
+    <li><a href="{{.Permalink}}">{{.Title}}</a></li>
+{{end}}
+{{ partial "footer.html" . }}

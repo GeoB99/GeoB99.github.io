@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="author" content="GeoB99">
+        
+        <title>{{.Title}}</title>
+
+        <link rel="stylesheet" href="{{$.Site.BaseURL}}/css/style.css">
+        <link rel="icon" href="{{$.Site.BaseURL}}/images/Homepage-pic.png">
+        <link rel="alternate" type="application/rss+xml" href="{{$.Site.BaseURL}}/index.xml"  title="GeoB99 Website">
+
+        {{ template "_internal/opengraph.html" . }}
+        {{ template "_internal/twitter_cards.html" . }}
+        
+    </head>
+    <body>
+        <div class="container">
