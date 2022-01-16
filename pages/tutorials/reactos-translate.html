@@ -8,16 +8,16 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>How to translate ReactOS</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "120" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "120" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;How to translate ReactOS</h2>
       <h4>&nbsp;For further information about translating please consult the <a href="https://reactos.org/wiki/Translation_Introduction">ReactOS Wiki article</a>.</h4>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "ros-tutorials.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -59,7 +59,7 @@
             which makes it possible for the operating system to be localized in various languages across the globe. A resource file is like a file script that composes
             the general graphical infrastructure of a program in Windows/ReactOS, that is, menus, dialog templates, windows, icons, bitmaps and static control texts for instance.
          </p>
-         <a href = "../images/reactos-translate/rc.png" ><img src = "../images/reactos-translate/rc.png" alt = "Resource File" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-translate/rc.png" ><img src = "../../images/tutorials/reactos-translate/rc.png" alt = "Resource File" height = "350" width = "590" hspace = "25"></a>
          <p>
             A resource file is based on three main parts called resource-definition statements: controls, resources and statements. Each one of these categories represent their own
             purpose and functionality behind a resource file. Let's take for example this <a href = "https://git.reactos.org/?p=reactos.git;a=blob;f=base/applications/utilman/umandlg/lang/en-US.rc;h=d44bc44cd3a8c212cd2568a6f629556298a28ff4;hb=HEAD">resource file</a>.
@@ -89,13 +89,13 @@
             As we were pointing in a resource file of ReactOS Utility Manager, let's use it as a general reference and explanation of a basic RC translation file structure.
             Next to examine is the dialog template.
          </p>
-         <a href = "../images/reactos-translate/dialogex.png" ><img src = "../images/reactos-translate/dialogex.png" alt = "Dialog"></a>
+         <a href = "../../images/tutorials/reactos-translate/dialogex.png" ><img src = "../../images/tutorials/reactos-translate/dialogex.png" alt = "Dialog"></a>
          <p>
             This is the initial definition of a dialog box template. A dialog box is merely a modal (or modeless) dialog window that comes up with a window frame, the non client area,
             and the client area which is the inside of the dialog. Styles and extended styles can be applied, a caption as well as a specific font and size for it. Window
             styles can be found <a href = "https://docs.microsoft.com/en-us/windows/win32/winmsg/window-styles">here</a>.
          </p>
-         <a href = "../images/reactos-translate/child-ctrls.png" ><img src = "../images/reactos-translate/child-ctrls.png" alt = "Child Controls"></a>
+         <a href = "../../images/tutorials/reactos-translate/child-ctrls.png" ><img src = "../../images/tutorials/reactos-translate/child-ctrls.png" alt = "Child Controls"></a>
          <p>
             Every dialog comes with child controls. A child control is a child window that belongs to the parent dialog window which allows user interaction with the GUI interface
             of an application. In fact, in Windows and ReactOS everything is a window, that is, buttons, combo boxes, static texts and a whole lot more. Let's examine a child control.
@@ -151,7 +151,7 @@
             specific areas like for example the string in a push-button or a checkbox. Translators are recommended to edit these values accordingly to what they translate. For a
             general description of common parameters of controls please consult this <a href = "https://docs.microsoft.com/en-us/windows/win32/menurc/common-control-parameters">page</a>.
          </p>
-         <a href = "../images/reactos-translate/stringtable.png" ><img src = "../images/reactos-translate/stringtable.png" alt = "Strings Table"></a>
+         <a href = "../../images/tutorials/reactos-translate/stringtable.png" ><img src = "../../images/tutorials/reactos-translate/stringtable.png" alt = "Strings Table"></a>
          <p>
             This section of the resource file is the string tables. A string table, created with <code>STRINGTABLE</code>, consists of one or more null-terminated strings which are Unicode
             or ASCII depending on the application encoding environment. As usual the strings wrapped in double quotes can be translated. Keep in mind stuff like <code>%s</code> are format
@@ -219,7 +219,7 @@
          </code>
 
          <p>
-            Where <code>ModuleName</code> points to a name of a module in the ReactOS source tree. 
+            Where <code>ModuleName</code> points to a name of a module in the ReactOS source tree.
          </p>
       </div>
    </body>

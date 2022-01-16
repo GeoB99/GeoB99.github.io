@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>Understanding Blue Screens of Death (Part 2)</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;Understanding Blue Screens of Death (Part 2)</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "ros-tutorials.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -90,7 +90,7 @@
          <p>
             In this process I'll be simulating a IRQL_NOT_LESS_OR_EQUAL bugcheck. The command window of WinDBG should look like this:
          </p>
-         <a href = "../images/blue-screen/windbg.png" ><img src = "../images/blue-screen/windbg.png" alt = "WinDBG"></a>
+         <a href = "../../images/tutorials/blue-screen/windbg.png" ><img src = "../../images/tutorials/blue-screen/windbg.png" alt = "WinDBG"></a>
          <p>
             What I exactly did to get IRQL_NOT_LESS_OR_EQUAL? I added an offender call, <code>PsChargePoolQuota</code>, with an invalid POOL_TYPE value within a kernel mode driver. The function
             will write beyond the paged and non paged memory areas thus writing garbage data into the kernel memory space. Windows is not yet aware of this as it hasn't yet accessed such
@@ -103,7 +103,7 @@
             called functions and puts them into the aforementioned stack. To get the information of the call stack backtrace, type <code>kp</code> in the command line within the "Command" window or just
             open the Call Stack window. WinDBG should look like this either way:
          </p>
-         <a href = "../images/blue-screen/windbg-call.png" ><img src = "../images/blue-screen/windbg-call.png" alt = "WinDBG Call Stack"></a>
+         <a href = "../../images/tutorials/blue-screen/windbg-call.png" ><img src = "../../images/tutorials/blue-screen/windbg-call.png" alt = "WinDBG Call Stack"></a>
          <p>
             As you can see, Windows has caught a page fault and the operating system is instructed to take special care of this situation and it does that by calling <code>KiTrap0E</code>. That
             function is responsible for handling page faults with the hope of recovering the system but as it turns out, the exception trap handler couldn't be able to proceed further. The interrupt
@@ -117,7 +117,7 @@
             within this condition the IRQL wasn't changed. If we are trying to narrow the actual fault by using <code>ln</code> which points the nearest symbol pointed by the 4 parameter of the bugcheck
             which is, as usual, the function call triggered at the time of the fault.
          </p>
-         <a href = "../images/blue-screen/windbg-ln.PNG" ><img src = "../images/blue-screen/windbg-ln.PNG" alt = "WinDBG ln"></a>
+         <a href = "../../images/tutorials/blue-screen/windbg-ln.PNG" ><img src = "../../images/tutorials/blue-screen/windbg-ln.PNG" alt = "WinDBG ln"></a>
          <p>
             The memory manager tried to map corrupt memory data at a different IRQL and the exception handler was invoked to handle such page fault.
          </p>
@@ -126,7 +126,7 @@
          <p>
             Using the <code>!analyze -v</code> command gives you the opportunity to get verbose information about the current instance of a bugcheck. The command window should look like this:
          </p>
-         <a href = "../images/blue-screen/windbg-crash.png" ><img src = "../images/blue-screen/windbg-crash.png" alt = "WinDBG Crash"></a>
+         <a href = "../../images/tutorials/blue-screen/windbg-crash.png" ><img src = "../../images/tutorials/blue-screen/windbg-crash.png" alt = "WinDBG Crash"></a>
          <p>
             Obviously I would not be going to review every detail provided by the command so I will explain only the important notes that are worth noting.
          </p>
@@ -174,7 +174,7 @@
             To do so, go to <b>File > Open Crash Dump</b> and locate the path of the said dump. Make sure WinDBG is running as administrator and the right bit architecture set (32-bit or 64-bit)
             depending on your machine. Usually the crash dumps are residing in <b>C:\Windows</b> directory path. WinDBG should look as follows:
          </p>
-         <a href = "../images/blue-screen/windbg-dump.png" ><img src = "../images/blue-screen/windbg-dump.png" alt = "WinDBG Dump"></a>
+         <a href = "../../images/tutorials/images/blue-screen/windbg-dump.png" ><img src = "../../images/tutorials/images/blue-screen/windbg-dump.png" alt = "WinDBG Dump"></a>
          <p>
             WinDBG prepares the loading of the crash dump by first obtaining the PDB files from the symbols store and caching them to the destination directory.
             WinDBG may probably hang during this process and become responsive again so in such case DO NOT close the process!

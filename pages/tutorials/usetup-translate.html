@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>How to translate the 1st stage setup component</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;How to translate the 1st stage setup component</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "ros-tutorials.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -161,7 +161,7 @@ typedef struct
          <p>
             All in all, this is the basic and overall functionality of MUI in USETUP. Here's a screenshot which demonstrates "Welcome to ReactOS Setup" page, with entries explicitly pointed.
          </p>
-         <a href = "../images/usetup-translate/usetup.png" ><img src = "../images/usetup-translate/usetup.png" alt = "USETUP"></a>
+         <a href = "../../images/tutorials/usetup-translate/usetup.png" ><img src = "../../images/tutorials/usetup-translate/usetup.png" alt = "USETUP"></a>
       </div>
 
       <!-- Add a separator -->
@@ -185,7 +185,7 @@ typedef struct
             As the initial step is to prepare your language translation file by copying the contents from the <b>en-US.h</b> file if the translation file doesn't exist in the directory sources.
             You'll stumble upon several lines as follows.
          </p>
-         <a href = "../images/usetup-translate/entry.png" ><img src = "../images/usetup-translate/entry.png" alt = "Entry"></a>
+         <a href = "../../images/tutorials/usetup-translate/entry.png" ><img src = "../../images/tutorials/usetup-translate/entry.png" alt = "Entry"></a>
          <p>
             The variables such as <code>enUSSetupInitPageEntries</code> denotes the description about setup initialisation entries. The variables must have the corresponding country ISO language code
             so for example if I have to make a translation file for, let's say Italian, then the variable should be named as <code>itITSetupInitPageEntries</code>. For a list of country locale
@@ -198,12 +198,12 @@ typedef struct
             kept alone! The first two parameters are the X/Y coordinate points as you may have looked at the definition declaration of <code>MUI_ENTRY</code> data structure. You can of course
             change such coordinate values accordingly. In all cases the text style flags and text IDs should be kept as they are. The next strings to translate are the error strings as shown in the screenshot below:
          </p>
-         <a href = "../images/usetup-translate/errors.png" ><img src = "../images/usetup-translate/errors.png" alt = "Error strings"></a>
+         <a href = "../../images/tutorials/usetup-translate/errors.png" ><img src = "../../images/tutorials/usetup-translate/errors.png" alt = "Error strings"></a>
          <p>
             This is self-explanatory, you simply translate whatever string wrapped in double quotes. The escape sequence however (<code>\n</code>) and special UTF-8 characters like <code>\x07</code> which
             represents a central dot should be kept as they are! The final pieces to translate are the dynamic strings.
          </p>
-         <a href = "../images/usetup-translate/strings.png" ><img src = "../images/usetup-translate/strings.png" alt = "Dynamic strings"></a>
+         <a href = "../../images/tutorials/usetup-translate/strings.png" ><img src = "../../images/tutorials/usetup-translate/strings.png" alt = "Dynamic strings"></a>
          <p>
             The dynamic strings are used on specific locations of a page where they're displayed accordingly on specific factors such as when an operation requires the user to wait
             then USETUP displays the <code>Please wait...</code> string and it gets removed from the screen once the operation has completed successfully. As the general rule, DO NOT
@@ -214,11 +214,11 @@ typedef struct
          <p>
             The inclusion is done in the similar way as you'd include a resource file in a header, as shown in this screenshot below:
          </p>
-         <a href = "../images/usetup-translate/define.png" ><img src = "../images/usetup-translate/define.png" alt = "Include"></a>
+         <a href = "../../images/tutorials/usetup-translate/define.png" ><img src = "../../images/tutorials/usetup-translate/define.png" alt = "Include"></a>
          <p>
             And the final step of the inclusion is to define the language MUI resource.
          </p>
-         <a href = "../images/usetup-translate/define2.png" ><img src = "../images/usetup-translate/define2.png" alt = "Define resource"></a>
+         <a href = "../../images/tutorials/usetup-translate/define2.png" ><img src = "../../images/tutorials/usetup-translate/define2.png" alt = "Define resource"></a>
          <p>
             For a list of keyboard language layout identifiers, please check <a href = "https://docs.microsoft.com/en-us/windows-hardware/manufacture/desktop/windows-language-pack-default-values">this</a> page.
             The MUI pages, error and dynamic strings must correspond to their respective locale specific variables from the translation file.

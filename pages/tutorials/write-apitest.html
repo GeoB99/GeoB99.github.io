@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>Writing your first APITEST testcase</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;Writing your first APITEST testcase</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "ros-tutorials.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -110,7 +110,7 @@
             tests can't be fully consistent (or at all) across different versions of Windows due to internal API differences, that is, the internal APIs that aren't documented to the public.
             Therefore as a general requirement the testcases should be executed on Windows Server 2003 SP2. Here's a screenshot of summarised points about testcases.
          </p>
-         <a href = "../images/write-apitest/testcases.png" ><img src = "../images/write-apitest/testcases.png" alt = "Testcases"></a>
+         <a href = "../../images/tutorialss/write-apitest/testcases.png" ><img src = "../../images/tutorials/write-apitest/testcases.png" alt = "Testcases"></a>
       </div>
 
       <!-- Add a separator -->
@@ -158,7 +158,7 @@
          <p>
             Now it's time to write the source code of the testcase. It should look like as in the screenshot below.
          </p>
-         <a href = "../images/write-apitest/testcode.png" ><img src = "../images/write-apitest/testcode.png" alt = "Testcode"></a>
+         <a href = "../../images/tutorials/write-apitest/testcode.png" ><img src = "../../images/tutorials/write-apitest/testcode.png" alt = "Testcode"></a>
          <p>
             Confused? Don't worry, I'll explain piece by piece what is the code supposed to do. First of all we should include the precompiled header that comes within the NTDLL
             testcases directory itself in order to use whatever stuff we need for our testcase. Next here's <code>START_TEST</code>, the main entry point of the testcase of the target
@@ -184,16 +184,16 @@
             The testcase inclusion is done by following the two steps. First, the file must be appended to the source in <code>CMakeLists.txt</code> file so that CMake can be aware of the
             new testcase file in question. The inclusion must respect the lexicographic order so you'll end up as in this screenshot below.
          </p>
-         <a href = "../images/write-apitest/cmakelists.png" ><img src = "../images/write-apitest/cmakelists.png" alt = "CMakeLists"></a>
+         <a href = "../../images/tutorials/write-apitest/cmakelists.png" ><img src = "../../images/tutorials/write-apitest/cmakelists.png" alt = "CMakeLists"></a>
          <p>
             Afterwards, the test entry point of the function must be included in the list in the <code>testlist.c</code> file. Opening that file you'll see a bunch of function entry point
             prototypes and entry point test definition in a structure called <code>winetest_testlist</code>. As usual the lexicographic order must be respected. With that being said, you should
             end up as follows.
          </p>
-         <a href = "../images/write-apitest/include.png" ><img src = "../images/write-apitest/include.png" alt = "Include"></a>
+         <a href = "../../images/tutorials/write-apitest/include.png" ><img src = "../../images/tutorials/write-apitest/include.png" alt = "Include"></a>
          <br>
          <br>
-         <a href = "../images/write-apitest/include2.png" ><img src = "../images/write-apitest/include2.png" alt = "Include 2"></a>
+         <a href = "../../images/tutorials/write-apitest/include2.png" ><img src = "../../images/tutorials/write-apitest/include2.png" alt = "Include 2"></a>
       </div>
 
       <!-- Add a separator -->
@@ -233,14 +233,14 @@
             As explained above, it is recommended that the tests should be performed in Windows Server 2003 SP2. The testcase executable can be either launched from the directory path itself
             or extracting the testcase to the desired location you want.
          </p>
-         <a href = "../images/write-apitest/test.png" ><img src = "../images/write-apitest/test.png" alt = "Test"></a>
+         <a href = "../../images/tutorials/write-apitest/test.png" ><img src = "../../images/tutorials/write-apitest/test.png" alt = "Test"></a>
          <p>
             As you can see, the successful executed test means that indeed the function is not implemented in Server 2003 SP2 and thus that is the condition we should expect as per the testcase.
             Otherwise if it would may happen that a certain test fails then it means the expected condition is not met and it doesn't conform to the function's behaviour of the system, in other words,
             the testcase has to be corrected in order to match with the observed behaviour. As an example let's simulate a test failure by expecting a status code value of STATUS_SUCCESS rather than
             STATUS_NOT_IMPLEMENTED.
          </p>
-         <a href = "../images/write-apitest/test2.png" ><img src = "../images/write-apitest/test2.png" alt = "Test 2"></a>
+         <a href = "../../images/tutorials/write-apitest/test2.png" ><img src = "../../images/tutorials/write-apitest/test2.png" alt = "Test 2"></a>
          <p>
             A test failure should look like this. Here we are expecting a value of STATUS_SUCCESS (0x00000000) but instead STATUS_NOT_IMPLEMENTED (0xC0000002) is returned by the call.
             To conduct a proper research on the behaviour of the function and how it interacts with the input data all the tests must pass accordingly in a Windows system.
@@ -275,7 +275,7 @@
             In additon of probing the expected condition, it can also print to the console prompt some information or stuff. The <code>...</code> at the end represents the optional argument,
             where the caller can use it as a string format to print the data of certain variables probed within the condition check. Here's an example of how is this macro used.
          </p>
-         <a href = "../images/write-apitest/ok.png" ><img src = "../images/write-apitest/ok.png" alt = "OK"></a>
+         <a href = "../../images/tutorials/write-apitest/ok.png" ><img src = "../../images/tutorials/write-apitest/ok.png" alt = "OK"></a>
 
          <h3>&nbsp;&#129154; Skipping a test</h3>
          <p>
@@ -289,7 +289,7 @@
             With <code>skip()</code> you've the opportunity to inform the user that the specific operation has failed to suceed before bailing out the testcase. As such of a failed operation
             can be seen like in this screenshot.
          </p>
-         <a href = "../images/write-apitest/skip.png" ><img src = "../images/write-apitest/skip.png" alt = "Skip"></a>
+         <a href = "../../images/tutorials/write-apitest/skip.png" ><img src = "../../images/tutorials/write-apitest/skip.png" alt = "Skip"></a>
 
          <h3>&nbsp;&#129154; Skipping a flaky test</h3>
          <p>
@@ -297,7 +297,7 @@
             of the tested environment that can't be expected during specific conditions or scenarios. Even then, the testcase code is at the blame for not being completely accurate of what kind
             of test should be done and in which conditions but in some cases such tests may warrant the <code>ros_skip_flaky</code> macro.
          </p>
-         <a href = "../images/write-apitest/flaky.png" ><img src = "../images/write-apitest/flaky.png" alt = "Flaky"></a>
+         <a href = "../../images/tutorials/write-apitest/flaky.png" ><img src = "../../images/tutorials/write-apitest/flaky.png" alt = "Flaky"></a>
          <p>
             The macro requires no parameters to be filled in, it's used as is. The test before the defined macro is the one that won't be taken into account, that is, if the test
             in the screenshot fails it won't be taken as an actual <i>failed test</i>.
@@ -308,7 +308,7 @@
             Nearly almost of the macro tests print some sort of data to the command prompt during the execution of the testcase but some macros can be used solely to print additional
             stuff without performing any kind of tests. The macro that's used for it is <code>trace()</code> and the syntax for it is as similar as to <code>printf()</code>.
          </p>
-         <a href = "../images/write-apitest/trace.png" ><img src = "../images/write-apitest/trace.png" alt = "Trace"></a>
+         <a href = "../../images/tutorials/write-apitest/trace.png" ><img src = "../../images/tutorials/write-apitest/trace.png" alt = "Trace"></a>
       </div>
 
       <!-- Add a separator -->
@@ -327,7 +327,7 @@
             can't continue with its normal operation because of the faulty usage of the function. When that happens, the test code must be wrapped within the Structured Exception
             Handling (or SEH as acronym) block and the ReactOS Tests infrastructure provides SEH macros for that.
          </p>
-         <a href = "../images/write-apitest/seh.png" ><img src = "../images/write-apitest/seh.png" alt = "SEH"></a>
+         <a href = "../../images/tutorials/write-apitest/seh.png" ><img src = "../../images/tutorials/write-apitest/seh.png" alt = "SEH"></a>
          <p>
             <code>StartSeh()</code> is the prologue of the SEH block whereas <code>EndSeh()</code> is the epilogue of the said structured block. <code>EndSeh()</code> expects
             an exception status code, mainly a NTSTATUS, which is checked against the returned code value by the exception handler. If both the values match then the test is deemed

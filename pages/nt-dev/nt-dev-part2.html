@@ -1,4 +1,4 @@
-﻿<!-- Filename: nt-internals-part2.html -->
+﻿<!-- Filename: nt-dev-part2.html -->
 <!-- Purpose: "Introduction to the NT kernel development (Part 2)" HTML page -->
 <!-- Created by George Bișoc (GeoB99) -->
 
@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>Introduction to the NT kernel development (Part 2)</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;Introduction to the NT kernel development (Part 2)</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "nt-dev-intro.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -79,13 +79,13 @@
          <p>
             The more you explore around the kernel you may find a plethora of functions across different components of the kernel that adhere to a set of rules regarding function prefixing. Consider this as an example:
          </p>
-         <a href = "../images/nt-internals/part2/func.png"><img src = "../images/nt-internals/part2/func.png" alt = "Function"></a>
+         <a href = "../../images/nt-dev/part2/func.png"><img src = "../../images/nt-dev/part2/func.png" alt = "Function"></a>
          <p>
             It can be quite alien at first as you may were probably getting used to POSIX call interface syntax like <code>write()</code> or <code>read()</code>, but in reality it makes things easier to understand. Concerning the kernel's layered nature, Microsoft had to organise a set of syntax
             conventions for the kernel to meet the design principles of the kernel, which such syntax rules regarding function prefixes got adopted in ReactOS as our aim is to have a compatible and interoperable operating system both
             at API and ABI levels. This syntax interface that both Windows and ReactOS follow can be explained in this screenshot.
          </p>
-         <a href = "../images/nt-internals/part2/syntax.png"><img src = "../images/nt-internals/part2/syntax.png" alt = "Syntax"></a>
+         <a href = "../../images/nt-dev/part2/syntax.png"><img src = "../../images/nt-dev/part2/syntax.png" alt = "Syntax"></a>
          <p>
             In case it's still confusing to you, I'll further explain detail by detail each case that are seen in the screenshot.
             <br>
@@ -123,9 +123,9 @@
 
          <p>
             This prefix naming scheme doesn't apply only to the NT kernel but to the whole infrastructure space in the NT world, including the base kernel services and without a doubt, the NTDLL. Here are some other examples
-            of prefixes notably known in Windows. 
+            of prefixes notably known in Windows.
          </p>
-         <a href = "../images/nt-internals/part2/prefixes.png"><img src = "../images/nt-internals/part2/prefixes.png" alt = "Prefixes"></a>
+         <a href = "../../images/nt-dev/part2/prefixes.png"><img src = "../../images/nt-dev/part2/prefixes.png" alt = "Prefixes"></a>
       </div>
 
       <!-- Add a separator -->
@@ -192,7 +192,7 @@
             What is known about is that data structures are widely used across the kernel to abstract the kernel data. A notable structure is <a href = "https://docs.microsoft.com/en-us/windows/win32/api/ntdef/ns-ntdef-list_entry">LIST_ENTRY</a> for doubly linked lists. Keep in mind that not every data type is used in the kernel, <b>BOOL</b>
             being an example. Even though <b>BOOL</b> is also a boolean value, this is strictly used in Windows API only and not NT! For this reason, only <b>BOOLEAN</b> must be used in the kernel. Here's a quick and summarised graph of the data type syntax structure.
          </p>
-         <a href = "../images/nt-internals/part2/datatypes.png"><img src = "../images/nt-internals/part2/datatypes.png" alt = "Datatypes"></a>
+         <a href = "../../images/nt-dev/part2/datatypes.png"><img src = "../../images/nt-dev/part2/datatypes.png" alt = "Datatypes"></a>
       </div>
 
       <!-- Add a separator -->
@@ -211,7 +211,7 @@
             no violations occur when going from user to kernel mode. Such violations are guarded by user mode probing protection checks and whatnot. In case a violation occurs on one of the checks, ReactOS/Windows notices that and won't go through further in the kernel space, thereby
             faulting the requested procedure prematurely. The general execution flow can be explained in this graph as follows:
          </p>
-         <a href = "../images/nt-internals/part2/flow.png"><img src = "../images/nt-internals/part2/flow.png" alt = "Flow"></a>
+         <a href = "../../images/nt-dev/part2/flow.png"><img src = "../../images/nt-dev/part2/flow.png" alt = "Flow"></a>
          <p>
             The component that plays an ubiquitous role when it comes to system calls and the general flow of execution of such calls is, without a doubt, the <b>NTDLL</b> itself. NTDLL is the principal system call interface in NT, where every NT system call is exported to that library. NTDLL
             acts like a sort of an invisible wall between user and kernel mode, where the application literally has no idea of the inner guts or operations that arise in kernel mode. Even if NTDLL itself resides in user mode, this module
@@ -245,7 +245,7 @@
             Windows subsystem environment. Win32k comes up with its own system call table, called <b>W32pServiceTable</b>, and that table follows a rule for system calls to be mapped to respective kernel mode routines in Win32k. If we further modify the previous graph a bit,
             we'll get something like this as follows:
          </p>
-         <a href = "../images/nt-internals/part2/flow2.png"><img src = "../images/nt-internals/part2/flow2.png" alt = "Flow2"></a>
+         <a href = "../../images/nt-dev/part2/flow2.png"><img src = "../../images/nt-dev/part2/flow2.png" alt = "Flow2"></a>
          <p>
             All the system calls are handled by SSDT, which is the <b>System Service Descriptor Table</b>. SSDT is a dispatch table infrastructure that is responsible for handling the system calls and the execution flow to kernel mode from user mode. Although we'll explain thoroughly in details in the future
             about SSDT and its way of working, I'm going to explain briefly how <code>KiSystemService</code> works.
@@ -262,7 +262,7 @@
          <p>
             With that being said, here's a summarised graph of what exactly happens when an application wants to do something through system calls.
          </p>
-         <a href = "../images/nt-internals/part2/flow3.png"><img src = "../images/nt-internals/part2/flow3.png" alt = "Flow3"></a>
+         <a href = "../../images/nt-dev/part2/flow3.png"><img src = "../../images/nt-dev/part2/flow3.png" alt = "Flow3"></a>
       </div>
 
       <!-- Add a separator -->
@@ -285,7 +285,7 @@
             and the boot control goes further by spawning the kernel. In Windows, the name of the bootloader is called <b>Ntldr</b> but with the introduction and continuation of NT 6.x versions of
             the kernel, NTLDR has been split into <b>Windows Boot Manager</b> and a process executable called <b>winload.exe</b>. The boot process pretty much goes as follows as you can see in the graph:
          </p>
-         <a href = "../images/nt-internals/part2/bootphase.png"><img src = "../images/nt-internals/part2/bootphase.png" alt = "Boot-Phase"></a>
+         <a href = "../../images/nt-dev/part2/bootphase.png"><img src = "../../images/nt-dev/part2/bootphase.png" alt = "Boot-Phase"></a>
          <p>
             The boot process between ReactOS and Windows NT 5.x editions is roughly the same. In ReactOS, the bootloader that takes care of the initial boot phase is FreeLoader (or sometimes called FreeLdr).
             When FreeLoader has been invoked and reads the <b>boot.ini</b> file which is a crucial file that stores boot initialisation data, a <b>parameter loader block</b> that was initialised by the bootloader
@@ -398,6 +398,6 @@ typedef struct _LOADER_PARAMETER_BLOCK
             to flush all unsaved data work in the registry to the disc. Afterwards the memory manager writes the modified pages back to their respective files. And finally, the system shutdown control goes to HAL itself, where interrupts are disabled and the processor
             is halted. The shut down mechanism implementation at HAL level differs between each architecture.
          </p>
-      </div> 
+      </div>
    </body>
 </html>

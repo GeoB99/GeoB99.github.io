@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>Contribute to ReactOS with your first patch</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;Contribute to ReactOS with your first patch</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "ros-tutorials.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -62,7 +62,7 @@
             with Git it goes by <b>committing</b> changes, creating or <b>pushing</b> Pull Requests (with PR as abbreviation) and among other stuff like tagging
             and setting up releases. Although to contribute to ReactOS we only care about how to create a PR for our patches. Now, consider this image.
          </p>
-         <a href = "../images/reactos-contributing/git-workflow.png" ><img src = "../images/reactos-contributing/git-workflow.png" alt = "Git Workflow" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/git-workflow.png" ><img src = "../../images/tutorials/reactos-contributing/git-workflow.png" alt = "Git Workflow" height = "350" width = "590" hspace = "25"></a>
          <p>
             Too intimidating for you? No worries, all these namings will be explained later. Think of Git workflow as a particular procedure that is highly structured that Git allows you to
             see the state of things you are working on. With Git being a powerful control versioning software you can do multiple of things and working on stuff in parallel. When
@@ -79,13 +79,13 @@
             the user must do some action such as staging or tracking, committing the changes or just discarding them outright. If the user happens to sync its forked repository
             by fetching and rebasing the latest references from the upstream repository the changes not listed for tracking or staging might be eventually lost.
          </p>
-         
+
          <p>
             In other words, when the working directory is dirty Git is aware of the presence of unstaged changes or untracked files but they're not part of the general
             history of the repository. A clean working directory whereas the changes are committed and are properly visible in the logging history of a repository.
             The recent committed changes can be seen with <code>git log</code>. Now, consider this image.
          </p>
-         <a href = "../images/reactos-contributing/git-workflow-track.png" ><img src = "../images/reactos-contributing/git-workflow-track.png" alt = "Git Workflow Track" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/git-workflow-track.png" ><img src = "../../images/tutorials/reactos-contributing/git-workflow-track.png" alt = "Git Workflow Track" height = "350" width = "590" hspace = "25"></a>
          <p>
             It's the same like above but instead of unstaged or staged changes you have tracked (or untracked) files. As the general principle of Git, manipulating the source tree
             of a repository by deleting or adding files is grounds for altering the state of the working directory.
@@ -201,11 +201,11 @@
             In order to fork the repository you must have an account in GitHub, if you haven't done it so please register <a href = "https://github.com/join?ref_cta=Sign+up&ref_loc=header+logged+out&ref_page=%2F&source=header-home">here</a>.
             When done <a href = "https://github.com/reactos/reactos">click here</a> to redirect to ReactOS repository page. You will see a "Fork" button at the top right. This lets you forking the repository.
          </p>
-         <a href = "../images/reactos-contributing/reactos-fork.png" ><img src = "../images/reactos-contributing/reactos-fork.png" alt = "Forking" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/reactos-fork.png" ><img src = "../../images/tutorials/reactos-contributing/reactos-fork.png" alt = "Forking" height = "350" width = "590" hspace = "25"></a>
          <p>
             Forking should take a couple of seconds to complete. Afterwards you'll be greeted with this page.
          </p>
-         <a href = "../images/reactos-contributing/fork-done.png" ><img src = "../images/reactos-contributing/fork-done.png" alt = "Forking Finished" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/fork-done.png" ><img src = "../../images/tutorials/reactos-contributing/fork-done.png" alt = "Forking Finished" height = "350" width = "590" hspace = "25"></a>
 
          <h3>&nbsp;&#129154; Cloning the repository</h3>
          <p>
@@ -220,7 +220,7 @@
          <p>
             With <b>URL_HERE</b> being the URL link of your fork. You can find such link in your fork page by clicking on "Clone or download".
          </p>
-         <a href = "../images/reactos-contributing/clone.png" ><img src = "../images/reactos-contributing/clone.png" alt = "Clone" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/clone.png" ><img src = "../../images/tutorials/reactos-contributing/clone.png" alt = "Clone" height = "350" width = "590" hspace = "25"></a>
       </div>
 
       <!-- Add a separator -->
@@ -249,14 +249,14 @@
          <p>
             Very self-explanatory. Git will prepare a branch on top of the other branch you were previously in. Let's create a branch with name "MyBranch" for example.
          </p>
-         <a href = "../images/reactos-contributing/branch.png" ><img src = "../images/reactos-contributing/branch.png" alt = "Branching"></a>
+         <a href = "../../images/tutorials/reactos-contributing/branch.png" ><img src = "../../images/tutorials/reactos-contributing/branch.png" alt = "Branching"></a>
 
          <h3>&nbsp;&#129154; Staging your work</h3>
          <p>
             Now you can proceed on doing your work. For instance, let's edit the <code>main.c</code> file of On-Screen Keyboard. When you perform changes to files the working
             directory becomes dirty. You can understand that by typing <code>git status</code> in the terminal prompt.
          </p>
-         <a href = "../images/reactos-contributing/not-staged.png" ><img src = "../images/reactos-contributing/not-staged.png" alt = "Not Staged"></a>
+         <a href = "../../images/tutorials/reactos-contributing/not-staged.png" ><img src = "../../images/tutorials/reactos-contributing/not-staged.png" alt = "Not Staged"></a>
          <p>
             As you can see Git is aware of specific changes you have done but they're not up in the staging area. Git cannot stack the changes up for commit unless you stage them.
             <code>git status</code> is a very useful command to monitor the activity and overall status of your branch. In order to stage the changes you've to type the following
@@ -276,7 +276,7 @@
          <p>
             As you mark specific changes as staged they can be now prepared for committing. Normally you'd see something like this.
          </p>
-         <a href = "../images/reactos-contributing/staged.png" ><img src = "../images/reactos-contributing/staged.png" alt = "Staged"></a>
+         <a href = "../../images/tutorials/reactos-contributing/staged.png" ><img src = "../../images/tutorials/reactos-contributing/staged.png" alt = "Staged"></a>
          <p>
             Changes that you don't want to be committed can be discarded. By design, Git doesn't take into consideration unstaged or untracked data as Git looks into the staging/tracking
             area of your working directory space. You can begin to commit by typing...
@@ -290,7 +290,7 @@
             which takes a commit title parameter (that must be wrapped in double quotes). This is the faster way to commit if you wish only to provide a commit title although
             for a better descriptive commit with a proper description template we'll only be using <code>git commit</code>.
          </p>
-         <a href = "../images/reactos-contributing/text-editor.png" ><img src = "../images/reactos-contributing/text-editor.png" alt = "Text Editor" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/text-editor.png" ><img src = "../../images/tutorials/reactos-contributing/text-editor.png" alt = "Text Editor" height = "350" width = "590" hspace = "25"></a>
          <p>
             As per the message pointed in the screen of the editor, an empty commit message is prone to aborting your committing. This can be done by exiting the text editor if you wish to
             abort preparing the commit. The commit title (+ the commit description) can be written either at the top or beneath the message wrapped in hash symbol. In ReactOS the
@@ -333,11 +333,11 @@
          <p>
             The GitHub page should show up like this when you log in.
          </p>
-         <a href = "../images/reactos-contributing/pushed.png" ><img src = "../images/reactos-contributing/pushed.png" alt = "Pushed" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/pushed.png" ><img src = "../../images/tutorials/reactos-contributing/pushed.png" alt = "Pushed" height = "350" width = "590" hspace = "25"></a>
          <p>
             To get through pull request submission click on "Compare & pull request" as shown in the light yellow background. You'll be greeted with this page.
          </p>
-         <a href = "../images/reactos-contributing/pr.png" ><img src = "../images/reactos-contributing/pr.png" alt = "Pull Request" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/pr.png" ><img src = "../../images/tutorials/reactos-contributing/pr.png" alt = "Pull Request" height = "350" width = "590" hspace = "25"></a>
          <p>
             It is recommended to read the contribution rules and pull request template guideline to get a better overview when contributing to ReactOS. In the edit box
             you can fill out information about your PR, its purpose and what changes does it bring. The pull request can be marked as "Draft" by cliking on the arrow
@@ -350,7 +350,7 @@
             Branches can clutter up the branch list when dealing with many PRs. It is a good practice to remove old branches that you don't work on them anymore
             or your work has been merged. In the fork page click on "X branches" to access your branch list as well as the upstream remote branches.
          </p>
-         <a href = "../images/reactos-contributing/branch-list.png" ><img src = "../images/reactos-contributing/branch-list.png" alt = "Branches" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/branch-list.png" ><img src = "../../images/tutorials/reactos-contributing/branch-list.png" alt = "Branches" height = "350" width = "590" hspace = "25"></a>
          <p>
             Keep in mind you've to fetch and rebase your forked repository because your branch is still present in the local origin repository. Alternatively a branch can be deleted
             through terminal by <code>git branch -D BRANCH_NAME</code> with <code>-D</code> flag indicating a force delete in case the branch is pushed to origin. Otherwise
@@ -518,13 +518,13 @@
             Where <code>N</code> is the number of commits to be listed in the interactive rebase as interactive rebasing opens the default text editor. Alternatively you can
             use <code>git rebase -i COMMIT_HASH^</code> with <code>^</code> which takes the commit based on the hash.
          </p>
-         <a href = "../images/reactos-contributing/squash.png" ><img src = "../images/reactos-contributing/squash.png" alt = "Squashing" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/squash.png" ><img src = "../../images/tutorials/reactos-contributing/squash.png" alt = "Squashing" height = "350" width = "590" hspace = "25"></a>
          <p>
             As you can see in the image, I have made 3 commits for my branch hence I typed <code>HEAD~3</code>. The word before the commit hash represents a verb. The verb
             indicates a specific action to be taken with the commits within interactive rebase. As we want to squash commits the verb must be <i>squash</i> (or <i>s</i> the shorter way).
-            
+
          </p>
-         <a href = "../images/reactos-contributing/squash-all.png" ><img src = "../images/reactos-contributing/squash-all.png" alt = "Squashing" height = "350" width = "590" hspace = "25"></a>
+         <a href = "../../images/tutorials/reactos-contributing/squash-all.png" ><img src = "../../images/tutorials/reactos-contributing/squash-all.png" alt = "Squashing" height = "350" width = "590" hspace = "25"></a>
          <p>
             A general rule to be respected when squashing is to have at least one commit preserved otherwise Git may not squash properly. As you close the editor Git will open it again
             to specify a commit title and message. You can freely keep the commit title of the first commit and remove the other commit descriptions of commits you want them squashed.

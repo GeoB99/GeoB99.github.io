@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>Writing your first basic built-in program for ReactOS</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;Writing your first basic built-in program for ReactOS</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "ros-tutorials.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -77,7 +77,7 @@
          <p>
             I'll be using On-Screen Keyboard as an example to describe the overall skeleton directory structure. Consider this image below:
          </p>
-         <a href = "../images/write-built-in-program/skeleton.png" ><img src = "../images/write-built-in-program/skeleton.png" alt = "Skeleton"></a>
+         <a href = "../../images/tutorials/write-built-in-program/skeleton.png" ><img src = "../../images/tutorials/write-built-in-program/skeleton.png" alt = "Skeleton"></a>
          <p>
             Leaving other stuff aside that's only related with the program in question, by standard every built-in software must come with a <b>CMakeLists</b> file, <b>lang</b> and <b>res</b> directories,
             a main resource file for including translation files and a precompiled and resource headers. <b>lang</b> is the directory that contains the translation files, <b>res</b> contains resource based files such as icons, sound WAV files and whatnot.
@@ -109,13 +109,13 @@
             directory as "simpleprogram". Within the <b>applications</b> directory there's a CMakeLists file used to list all the application folders and the next step is to actually add our program on that file too.
             Keep in mind the list is ordered in lexicographic order and as such you must check where does the program directory stand. With that said, you should end up like in this screenshot.
          </p>
-         <a href = "../images/write-built-in-program/add-directory.png" ><img src = "../images/write-built-in-program/add-directory.png" alt = "Add Dir"></a>
+         <a href = "../../images/tutorials/write-built-in-program/add-directory.png" ><img src = "../../images/tutorials/write-built-in-program/add-directory.png" alt = "Add Dir"></a>
 
          <h3>&nbsp;&#129154; Prepare the program files</h3>
          <p>
             Now it's time to prepare the necessary files for the program, as shown in the screenshot below:
          </p>
-         <a href = "../images/write-built-in-program/directory-structure.png" ><img src = "../images/write-built-in-program/directory-structure.png" alt = "Dir Structure"></a>
+         <a href = "../../images/tutorials/write-built-in-program/directory-structure.png" ><img src = "../../images/tutorials/write-built-in-program/directory-structure.png" alt = "Dir Structure"></a>
          <p>
             Without going too much in detail, here's a summarised explanation of what's told above regarding the skeleton structure of a built-in program:
             <br>
@@ -152,19 +152,19 @@
             manipulated through various of ways based on the ID itself, such as, displaying or removing a static text control by giving its ID. This should be done in <b>resource.h</b>,
             as you can in the screenshot as follows:
          </p>
-         <a href = "../images/write-built-in-program/resource-id.png" ><img src = "../images/write-built-in-program/resource-id.png" alt = "Resource IDs"></a>
+         <a href = "../../images/tutorials/write-built-in-program/resource-id.png" ><img src = "../../images/tutorials/write-built-in-program/resource-id.png" alt = "Resource IDs"></a>
          <p>
             <code>#pragma once</code> tells the compiler that the header must be included only once during the compilation of the source. <code>IDC_STATIC</code> is the static control used
             for static text, whereas <code>IDD_SIMPLE_DIALOG</code> will be our control ID used for our dialog box of the program. <code>IDC_WELCOME_STRING</code> and <code>IDC_SIMPLE_BUTTON</code>
             are the other controls needed for our dialog. Finally, <code>IDI_ICON_SIMPLEPROGRAM</code> will be our control ID for the icon. It's worth noting the icon must be 16x16 in size and <code>.ico</code> as filename extension type.
             Now that we defined the control IDs, it's time to create a translation file and include it within the main resource file. The translation file must be in the <b>lang</b> directory.
          </p>
-         <a href = "../images/write-built-in-program/english-translation.png" ><img src = "../images/write-built-in-program/english-translation.png" alt = "English translation"></a>
+         <a href = "../../images/tutorials/write-built-in-program/english-translation.png" ><img src = "../../images/tutorials/write-built-in-program/english-translation.png" alt = "English translation"></a>
          <p>
             For more information about the controls in Windows/ReactOS, consult <a href = "reactos-translate.html">my article about translating ReactOS</a> and the <a href = "https://docs.microsoft.com/en-us/windows/win32/menurc/resource-definition-statements">MSDN documentation</a>.
             Afterwards, we must include the translation file in the main resource file which is our <b>simpleprogram.rc</b>, as follows:
          </p>
-         <a href = "../images/write-built-in-program/main-resource-file.png" ><img src = "../images/write-built-in-program/main-resource-file.png" alt = "Main resource file"></a>
+         <a href = "../../images/tutorials/write-built-in-program/main-resource-file.png" ><img src = ".../../images/tutorials/write-built-in-program/main-resource-file.png" alt = "Main resource file"></a>
          <p>
             The first three ReactOS related constants, <code>REACTOS_STR_FILE_DESCRIPTION</code>, <code>REACTOS_STR_INTERNAL_NAME</code> and <code>REACTOS_STR_ORIGINAL_FILENAME</code> define
             the basic information of the program such the internal string name, original file name and whatnot. Such constants are used, for example, when you check at <b>Properties > Details</b>
@@ -175,7 +175,7 @@
          <p>
             The next step is to set up our CMakeLists file for the program, which should go along the lines like this:
          </p>
-         <a href = "../images/write-built-in-program/cmakelists.png" ><img src = "../images/write-built-in-program/cmakelists.png" alt = "CMakeLists"></a>
+         <a href = "../../images/tutorials/write-built-in-program/cmakelists.png" ><img src = "../../images/tutorials/write-built-in-program/cmakelists.png" alt = "CMakeLists"></a>
          <p>
             It can be confusing at first but I'll explain part by part what these commands mean. Bear in mind that only two commands are coming from CMake itself (<code>list</code> and <code>add_executable</code>), whilst the rest are ReactOS related.
             <br>
@@ -204,7 +204,7 @@
             Regarding the precompiled header, what we'll include are some basic Windows API headers, the standard C I/O library, the resource header with the control IDs, function prototypes and whatnot.
             You should end up with a header like this, more or less:
          </p>
-         <a href = "../images/write-built-in-program/precomp.png" ><img src = "../images/write-built-in-program/precomp.png" alt = "Precomp"></a>
+         <a href = "../../images/tutorials/write-built-in-program/precomp.png" ><img src = "../../images/tutorials/write-built-in-program/precomp.png" alt = "Precomp"></a>
 
          <h3>&nbsp;&#129154; Write the main source code file</h3>
          <p>
@@ -212,24 +212,24 @@
             the translation file and such. First we'll start by including the header and initialise the global variables that we'll be using them later for other stuff. With that said, you should end up like
             this:
          </p>
-         <a href = "../images/write-built-in-program/main-initial.png" ><img src = "../images/write-built-in-program/main-initial.png" alt = "Main"></a>
+         <a href = "../../images/tutorials/write-built-in-program/main-initial.png" ><img src = "../../images/tutorials/write-built-in-program/main-initial.png" alt = "Main"></a>
          <p>
             As stated previously, our goal is to create the program as a simple modal dialog box. Modal dialog boxes are windows but with the sole difference that user input is required to continue further
             with a certain operation, an example of such a modal dialog box is "Save As" dialog. We need to write a function for dialog handling initialisation, for the mere sake of wrapping the code in a function
             instead of writing it directly to the <code>WM_INITDIALOG</code> window case message, for readability purposes. The function code should look as follows:
          </p>
-         <a href = "../images/write-built-in-program/main-dlghandler.png" ><img src = "../images/write-built-in-program/main-dlghandler.png" alt = "DlgHandler"></a>
+         <a href = "../../images/tutorials/write-built-in-program/main-dlghandler.png" ><img src = "../../images/tutorials/write-built-in-program/main-dlghandler.png" alt = "DlgHandler"></a>
          <p>
             What does this function do is basically centering the dialog at the center of the screen, extracts the icon handle from the instance memory of the program and displays it to the non-client
             area of the dialog. There's no definite rule for how a dialog code initialisation should be, one can simply return <code>TRUE</code> in <code>WM_INITDIALOG</code> as is. Afterwards, we must
             write the dialog procedure function code that deals with message pumping. The code should look as follows:
          </p>
-         <a href = "../images/write-built-in-program/main-dlgproc.png" ><img src = "../images/write-built-in-program/main-dlgproc.png" alt = "DlgProc"></a>
+         <a href = "../../images/tutorials/write-built-in-program/main-dlgproc.png" ><img src = "../../images/tutorials/write-built-in-program/main-dlgproc.png" alt = "DlgProc"></a>
          <p>
             Pretty basic and simple, considering the fact we don't do anything complex or advanced with our program. The dialog procedure mostly handles the message pump being sent and received by
             the window manager of Win32k, the USER. Finally, we must write the entry point of the program that looks like this:
          </p>
-         <a href = "../images/write-built-in-program/main-winmain.png" ><img src = "../images/write-built-in-program/main-winmain.png" alt = "WinMain"></a>
+         <a href = "../../images/tutorials/write-built-in-program/main-winmain.png" ><img src = "../../images/tutorials/write-built-in-program/main-winmain.png" alt = "WinMain"></a>
          <p>
             <code>wWinMain</code> is like the equivalent of <code>main</code> in the standard tenets of C but with the difference that <code>wWinMain</code> is reserved solely as an entry point for a
             Windows/ReactOS user mode program. The only operation that we do here within the entry point is to cache the instance of the program loaded into the memory space in a global variable and display the modal dialog
@@ -257,7 +257,7 @@
             the program during the compilation process. The compiled program is located in <code>base\applications\simpleprogram</code> if the program is compiled standalone otherwise it's located in the <code>system32</code> directory
             of ReactOS. Now, launch the program and you'll should see something like this:
          </p>
-         <a href = "../images/write-built-in-program/program.png" ><img src = "../images/write-built-in-program/program.png" alt = "Program"></a>
+         <a href = "../../images/tutorials/write-built-in-program/program.png" ><img src = "../../images/tutorials/write-built-in-program/program.png" alt = "Program"></a>
          <p>
             If you've made this far then good job! You now learnt how to develop a simple built-in program for ReactOS as well as familiarising yourself with interacting with the basic stuff of the Windows API,
             CMake and understanding the overall building/compiling procedures of built-in applications in ReactOS.

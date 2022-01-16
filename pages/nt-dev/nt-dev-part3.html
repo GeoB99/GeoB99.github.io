@@ -1,4 +1,4 @@
-<!-- Filename: nt-internals-part3.html -->
+<!-- Filename: nt-dev-part3.html -->
 <!-- Purpose: "Introduction to the NT kernel development (Part 3)" HTML page -->
 <!-- Created by George Bișoc (GeoB99) -->
 
@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>Introduction to the NT kernel development (Part 3)</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;Introduction to the NT kernel development (Part 3)</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "nt-dev-intro.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -77,7 +77,7 @@
             Before we're going to dwell into kernel coding development, from this point I'm assuming you already know how is the NT kernel structured like, the foundation behind the "Executive" layer of the kernel and such. Now as the first step I am
             going to explain thoroughly how are the headers and their prototypes declared and organized.
          </p>
-         <a href = "../images/nt-internals/part3/headers.png"><img src = "../images/nt-internals/part3/headers.png" alt = "Headers"></a>
+         <a href = "../../images/nt-dev/part3/headers.png"><img src = "../../images/nt-dev/part3/headers.png" alt = "Headers"></a>
          <p>
             The ReactOS' NT kernel bases upon a software development kit (SDK) and the internal directory. The internal directory serves as a place where all the underlying parts of the kernel shall be put there, with such parts not exposed to the outside
             world (or in other words, exported) other than the kernel itself. This includes internal data structures, functions, certain datatypes and whatnot. The SDK on the other hand serves as primary development kit where the kernel routines
@@ -100,7 +100,7 @@
          <p>
             In this example I'll be going to declare a very simplistic internal function for the kernel itself, Ke. With that said, we'll be thoroughly jumping to the internal directory structure. The header that we're interested in is <b>ke.h</b>.
          </p>
-         <a href = "../images/nt-internals/part3/prototype.png"><img src = "../images/nt-internals/part3/prototype.png" alt = "Prototype"></a>
+         <a href = "../../images/nt-dev/part3/prototype.png"><img src = "../../images/nt-dev/part3/prototype.png" alt = "Prototype"></a>
          <p>
             Since we won't be using it for serious development means, we'll just choose a silly name for the function <code>KiDoesRosRock</code>.
          </p>
@@ -108,7 +108,7 @@
          <p>
             Now that we have our own prototype declared, the next step is to write the function. We'll take the <b>krnlinit.c</b> file as an example.
          </p>
-         <a href = "../images/nt-internals/part3/function.png"><img src = "../images/nt-internals/part3/function.png" alt = "Function"></a>
+         <a href = "../../images/nt-dev/part3/function.png"><img src = "../../images/nt-dev/part3/function.png" alt = "Function"></a>
          <p>
             Assuming that you already know the NT datatypes and their purposes, I'll continue explaining some new parts of the code as you can see. Otherwise check my previous articles. <code>CODE_SEG</code> is a pragma macro where functions are stored in specific object files based upon the text section segment code.
             Since we're dealing with kernel initialization code, <code>INIT</code> is the appropriate code text segment for that. You can check the <a href = "https://docs.microsoft.com/en-us/cpp/preprocessor/code-seg?view=msvc-160">documentation here</a> regarding CODE_SEG. <code>DPRINT1</code> is a specific ReactOS debug print macro
@@ -119,11 +119,11 @@
          <p>
             Now it's time for another example, a little more nuanced. Let's consider <code>MmAllocatePool</code>. As usuall we'll introduce a prototype for the function and write its body code.
          </p>
-         <a href = "../images/nt-internals/part3/pool.png"><img src = "../images/nt-internals/part3/pool.png" alt = "Pool"></a>
+         <a href = "../../images/nt-dev/part3/pool.png"><img src = "../../images/nt-dev/part3/pool.png" alt = "Pool"></a>
          <p>
             And the function.
          </p>
-         <a href = "../images/nt-internals/part3/pool2.png"><img src = "../images/nt-internals/part3/pool2.png" alt = "Pool 2"></a>
+         <a href = "../../images/nt-dev/part3/pool2.png"><img src = "../../images/nt-dev/part3/pool2.png" alt = "Pool 2"></a>
          <p>
             Still nothing spectacular here but you might notice some new stuff in the code. <code>_Must_inspect_result_</code> is a function SAL annotation attribute that tells the compiler the caller must always inspect the result of the returned function, the said result being the returned value that is. If the result of the call is not checked, the compiler
             raises a warning. For a list of function annotations, <a href = "https://docs.microsoft.com/en-us/cpp/code-quality/annotating-function-behavior?view=msvc-160">consult this article</a>. <code>_IRQL_requires_max_</code> on the other hand is a SAL IRQL annotation that tells the compiler at which maximum IRQL the function can work. So for example, if we annotate
@@ -134,7 +134,7 @@
             For a list of IRQL annotations, <a href = "https://docs.microsoft.com/en-us/windows-hardware/drivers/devtest/irql-annotations-for-drivers">check this article</a>. And finally, <code>PAGED_CODE</code> is nothing more other than a simple macro that checks if the current IRQL of the function of the calling thread is at PASSIVE_LEVEL. Since paging is not allowed above the IRQL threshold,
             an assertion failure is raised if IRQL is above PASSIVE_LEVEL. Most of the kernel code is usually paged so usually you'd rather use this macro at the top of the function code after the variables declaration, unless you are implementing special or exceptional operations that require an interrupt request level above PASSIVE_LEVEL.
          </p>
-         <a href = "../images/nt-internals/part3/pool3.png"><img src = "../images/nt-internals/part3/pool3.png" alt = "Pool 3"></a>
+         <a href = "../../images/nt-dev/part3/pool3.png"><img src = "../../images/nt-dev/part3/pool3.png" alt = "Pool 3"></a>
          <p>
             As I've said before, with the <code>_Must_inspect_result_</code> annotation attribute defined to the function prototype, the caller is expected that the returned value must be checked. <code>NT_SUCCESS</code> is a macro that tests the expression wrapped in the parenthesis if the status code is a failure code. In this case, the condition tests if the status code is not STATUS_SUCCESS and if the condition is deemed as TRUE
             the conditional body code is followed by clearing the bitmap and returning the status code to the caller.
@@ -158,7 +158,7 @@
          <p>
             Once the compilation process has finished with success, you should see a screen as follows, albeit the output may slightly differ.
          </p>
-         <a href = "../images/nt-internals/part3/compile.png"><img src = "../images/nt-internals/part3/compile.png" alt = "Compile"></a>
+         <a href = "../../images/nt-dev/part3/compile.png"><img src = "../../images/nt-dev/part3/compile.png" alt = "Compile"></a>
       </div>
 
       <!-- Add a separator -->
@@ -186,13 +186,13 @@
             By default you get a compiled ReactOS 32-bit build therefore you have to use the 32-bit version of WinDBG. It's also possible to compile a 64-bit version of ReactOS and use the 64-bit WinDBG for debugging but we're going to focus solely on 32-bit since it doesn't make much of a big difference in debugging steps. Assuming that you've got WinDBG installed by now, launch WinDBG and you should be greeted
             with this screen.
          </p>
-         <a href = "../images/nt-internals/part3/windbg.png"><img src = "../images/nt-internals/part3/windbg.png" alt = "WinDBG"></a>
+         <a href = "../../images/nt-dev/part3/windbg.png"><img src = "../../images/nt-dev/part3/windbg.png" alt = "WinDBG"></a>
          <h3>&nbsp;&#129154; Setting up symbols path</h3>
          <p>
             Now the first step to start debugging is to actually set up our symbols path as WinDBG must understand where are the PDBs located. Without the PDBs debugging with WinDBG is literally useless. In order to set up the path, go to <b>File > Symbol Search Path</b>. For more information regarding path symbols, please check <a href = "https://reactos.org/wiki/WinDBG">this article</a>.
             An example of such path looks as follows, like mine:
          </p>
-         <a href = "../images/nt-internals/part3/windbg2.png"><img src = "../images/nt-internals/part3/windbg2.png" alt = "WinDBG 2"></a>
+         <a href = "../../images/nt-dev/part3/windbg2.png"><img src = "../../images/nt-dev/part3/windbg2.png" alt = "WinDBG 2"></a>
          <h3>&nbsp;&#129154; Firing up the debugger</h3>
          <p>
             The final step on starting debugging is to actually typing the defined pipe name which is used for communication between the VM and the debugger. Normally a named pipe path should look like as follows:
@@ -203,7 +203,7 @@
          <p>
             With <code>pipe_name</code> being the actual named pipe that you defined in the VM settings. To start debugging, go to <b>File > Kernel Debug...</b> and you should see a screen as follows:
          </p>
-         <a href = "../images/nt-internals/part3/windbg3.png"><img src = "../images/nt-internals/part3/windbg3.png" alt = "WinDBG 3"></a>
+         <a href = "../../images/nt-dev/part3/windbg3.png"><img src = "../../images/nt-dev/part3/windbg3.png" alt = "WinDBG 3"></a>
          <p>
             Instead of connecting the debugger to a COM port, here we'll connect the debugger to a named pipe instead thus the <b>Port</b> field must be your named pipe path. <b>Baud rate</b> and <b>Resets</b> fields should be left as is. <b>Pipe</b> and <b>Reconnect</b> boxes must be ticked and finally debugging can be started with the OK button.
             Fire up your VM and choose <b>ReactOS (Debug)</b> in the FreeLoader boot options. The virtual machine will soon start to communicate with the debugger.
@@ -212,11 +212,11 @@
          <p>
             As both the debugger and VM communicate with each other, the Command terminal window will start to get populated with debug stuff from the machine itself. The screen should look as follows:
          </p>
-         <a href = "../images/nt-internals/part3/windbg4.png"><img src = "../images/nt-internals/part3/windbg4.png" alt = "WinDBG 4"></a>
+         <a href = "../../images/nt-dev/part3/windbg4.png"><img src = "../../images/nt-dev/part3/windbg4.png" alt = "WinDBG 4"></a>
          <p>
             Now the virtual machine can be debugged! To break the machine into the debugger you have to click <b>Debug > Break</b>. This will freeze the machine and the Command window should look as follows:
          </p>
-         <a href = "../images/nt-internals/part3/windbg5.png"><img src = "../images/nt-internals/part3/windbg5.png" alt = "WinDBG 5"></a>
+         <a href = "../../images/nt-dev/part3/windbg5.png"><img src = "../../images/nt-dev/part3/windbg5.png" alt = "WinDBG 5"></a>
          <p>
             Now you have total control of the machine. From that point you can set up breakpoints, execute instructions manually, alter the memory and whatnot. As part of "debugging your code" we'll be going to set up a breakpoint on a function.
          </p>
@@ -224,7 +224,7 @@
          <p>
             Setting up a breakpoint means we're going to insert a hit point on a function. Once that point is hit that means we're currently calling that function and the debugger immediately stops the execution of the system on that function. Setting up a breakpoint is done by using the <code>bm</code> command. As follows:
          </p>
-         <a href = "../images/nt-internals/part3/windbg6.png"><img src = "../images/nt-internals/part3/windbg6.png" alt = "WinDBG 6"></a>
+         <a href = "../../images/nt-dev/part3/windbg6.png"><img src = "../../images/nt-dev/part3/windbg6.png" alt = "WinDBG 6"></a>
          <p>
             The syntax of this command is pretty straightforward. In order to set up a breakpoint we have to specify the name of the module where the function resides. As we are debugging the kernel definitely the name of it is <code>nt</code>. The name after the exclamation point is the function. Basically, the syntax is like this:
          </p>
@@ -234,7 +234,7 @@
          <p>
             Once you set up the breakpoint we have to continue with the execution of the system, to do that type the command <code>g</code>. This not only lets the system continue its operation but also you'll lose the control of the system until the system breaks onto that breakpoint. Once the system hits it, you should see a screen as follows:
          </p>
-         <a href = "../images/nt-internals/part3/windbg7.png"><img src = "../images/nt-internals/part3/windbg7.png" alt = "WinDBG 7"></a>
+         <a href = "../../images/nt-dev/part3/windbg7.png"><img src = "../../images/nt-dev/part3/windbg7.png" alt = "WinDBG 7"></a>
          <p>
             At that right moment the system breaks into the debugger again and this time WinDBG will also spawn a new window automatically, the <b>Source</b> window. The window is used as such to display the source code of the specific part where the breakpoint was set based on the symbols from the PDBs.
          </p>
@@ -242,7 +242,7 @@
          <p>
             A very nice and powerful feature of WinDBG is to interactively check the contents (actual values) behind the local variables of a function. To view the local variables you have to click <b>View > Locals</b>. A new window should appear like so:
          </p>
-         <a href = "../images/nt-internals/part3/windbg8.png"><img src = "../images/nt-internals/part3/windbg8.png" alt = "WinDBG 8"></a>
+         <a href = "../../images/nt-dev/part3/windbg8.png"><img src = "../../images/nt-dev/part3/windbg8.png" alt = "WinDBG 8"></a>
          <p>
             The <b>Locals</b> windows gets populated once the system is into the debugger. From there you can view the values of the variables as well as the members' values of structures.
          </p>
@@ -250,17 +250,17 @@
          <p>
             Alternatively from setting breakpoints with the command line, you can also set breakpoints visually in the Source window. What you have to do is to just click on whatever line you want to set up a breakpoint and then press F9. What will exactly happen is shown like in this screen:
          </p>
-         <a href = "../images/nt-internals/part3/windbg10.png"><img src = "../images/nt-internals/part3/windbg10.png" alt = "WinDBG 10"></a>
+         <a href = "../../images/nt-dev/part3/windbg10.png"><img src = "../../images/nt-dev/part3/windbg10.png" alt = "WinDBG 10"></a>
          <p>
             Some colors here, huh? The blue color as seen in Source window is where the current position of the instruction code line you are currently executing and red color is the breakpoint that's been set which it'll be triggered once you reach that line. Once we continue the execution again with the <code>g</code> command line, the system will break into
             the debugger again on the new breakpoint as you can see. The pink color indicates the current breakpoint that's been hit just now.
          </p>
-         <a href = "../images/nt-internals/part3/windbg11.png"><img src = "../images/nt-internals/part3/windbg11.png" alt = "WinDBG 11"></a>
+         <a href = "../../images/nt-dev/part3/windbg11.png"><img src = "../../images/nt-dev/part3/windbg11.png" alt = "WinDBG 11"></a>
          <h3>&nbsp;&#129154; Clearing breakpoints</h3>
          <p>
             When you're done with whatever investigations you had and you no longer need the breakpoints, you can clear them so that they won't be triggered anymore. To do so type the <code>bl</code> command and the screen should show up as follows:
          </p>
-         <a href = "../images/nt-internals/part3/windbg12.png"><img src = "../images/nt-internals/part3/windbg12.png" alt = "WinDBG 12"></a>
+         <a href = "../../images/nt-dev/part3/windbg12.png"><img src = "../../images/nt-dev/part3/windbg12.png" alt = "WinDBG 12"></a>
          <p>
             The breakpoints can either be disabled or fully cleared by clicking on one of the current breakpoints in the list.
          </p>
@@ -308,7 +308,7 @@
          <p>
             Using <code>ASSERT</code> and similar ensures that you are evaluating the code from defects and that the predicate tested in question is always true. Consider this piece of code as follows:
          </p>
-         <a href = "../images/nt-internals/part3/assert.png"><img src = "../images/nt-internals/part3/assert.png" alt = "Assert"></a>
+         <a href = "../../images/nt-dev/part3/assert.png"><img src = "../../images/nt-dev/part3/assert.png" alt = "Assert"></a>
          <p>
             What we're testing here is that <code>Token</code> should ALWAYS be a valid pointer to a token object in the memory address space of the kernel and that is properly initialized. This condition that is being tested here is like doing <code>Token != NULL</code> with such condition in question must TRUE.
             If it ever happens that the condition in the assert is not met, hence the predicate is FALSE, then something's wrong with the caller who has called the function or the cause is even way deep down before the caller actually called the said routine. Using asserts in the kernel is highly recommended for such cases.

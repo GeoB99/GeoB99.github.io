@@ -1,4 +1,4 @@
-﻿<!-- Filename: nt-internals-part1.html -->
+﻿<!-- Filename: nt-dev-part1.html -->
 <!-- Purpose: "Introduction to the NT kernel development (Part 1)" HTML page -->
 <!-- Created by George Bișoc (GeoB99) -->
 
@@ -8,15 +8,15 @@
    <head>
       <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
       <title>Introduction to the NT kernel development (Part 1)</title>
-      <link href = "../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../images/ROS.png">
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
    </head>
 
    <body>
-      <img src = "../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
       <h1>&nbsp;ReactOS Tutorials</h1>
       <h2>&nbsp;Introduction to the NT kernel development (Part 1)</h2>
-      <h4>&nbsp;<a href = "../ros-tutorials-home.html"><< Go Back</a></h4>
+      <h4>&nbsp;<a href = "nt-dev-intro.html"><< Go Back</a></h4>
 
       <!-- Add a separator -->
       <hr id = "thick">
@@ -61,14 +61,9 @@
 
          <!-- Actual content -->
          <p>
-            <b>"Introduction to the NT kernel development"</b> is a collection of articles and guidelines for novice people who know coding and OS development but are
-            unfamiliar with the tenets of NT and its principles. Such collection covers theoretical aspects, focusing primarily on the internal specifications and their
-            purpose of the kernel, the overall infrastructure of the kernel, rules and remarks to be addressed whilst contributing for the NT kernel as well as advanced
-            programming topics and whatnot. The articles are also for enthusiasts who wish to know how Windows (and ReactOS) work at the kernel mode level.
-         </p>
-
-         <p>
-            The collection will be updated regularly based on my experience and overall journey during the course of my contributions to the kernel.
+            In this article I will cover the initial part of "Introduction to the NT kernel development", namely getting you started with the right tools to begin your journey,
+            brief aspects about the kernel, classification of the NT API of the kernel and whatnot. With each article I will be going to explain as well the technical parts of the
+            kernel, how to write kernel code and document in detail every component of the kernel itself.
          </p>
       </div>
 
@@ -91,7 +86,7 @@
 
          <p>
             The Windows SDK is necessary to get the Microsoft Visual C/C++ compiler (or MSVC for short) as we'll use it primarily to compile the ReactOS kernel code, ReactOS Build Environment (RosBE)
-            is also mandatory as the foundation infrastructure of ROS compilation build environments (CMake, etc). In case you still haven't gotten RosBE yet, consult <a href = "reactos-build-gcc.html">this</a>
+            is also mandatory as the foundation infrastructure of ROS compilation build environments (CMake, etc). In case you still haven't gotten RosBE yet, consult <a href = "../../pages/tutorials/reactos-build-gcc.html">this</a>
             article.
          </p>
       </div>
@@ -128,7 +123,7 @@
             The NT kernel, which Windows is based upon, is used on the desktop computer sector, industrial appliances and other fields. In the collection of <b>Introduction to the NT kernel development</b> articles,
             we'll focus solely on the NT kernel. Here's a screenshot graph of the interaction between the user, OS, and the hardware.
          </p>
-         <a href = "../images/nt-internals/part1/OS.png" ><img src = "../images/nt-internals/part1/OS.png" alt = "OS"></a>
+         <a href = "../../images/nt-dev/part1/OS.png" ><img src = "../../images/nt-dev/part1/OS.png" alt = "OS"></a>
       </div>
 
       <!-- Add a separator -->
@@ -212,11 +207,11 @@
             In essence, an operating system like Windows functions in two distinct worlds, or entities if you want to call them like that. Such entities are called <b>user</b> and <b>kernel</b> modes. As said earlier, the kernel is divided
             amongst layered parts that all reside in kernel mode and these parts belong to a larger chunk called the <b>Executive</b>, as shown in the graph below:
          </p>
-         <a href = "../images/nt-internals/part1/kernel.png" ><img src = "../images/nt-internals/part1/kernel.png" alt = "Kernel"></a>
+         <a href = "../../images/nt-dev/part1/kernel.png" ><img src = "../../images/nt-dev/part1/kernel.png" alt = "Kernel"></a>
          <p>
             And if we further bisect the Executive layer, we'll see a bunch of subsystem components as shown:
          </p>
-         <a href = "../images/nt-internals/part1/executive.png" ><img src = "../images/nt-internals/part1/executive.png" alt = "Executive"></a>
+         <a href = "../../images/nt-dev/part1/executive.png" ><img src = "../../images/nt-dev/part1/executive.png" alt = "Executive"></a>
          <br>
          <br>
          <h3>&nbsp;&#129154; The Executive</h3>
@@ -225,7 +220,7 @@
             Each component operates dependently, with each of them accomplishing very specific tasks that represent the purpose of the said component(s) as a whole. It is <b><u>WORTH NOTING</u></b> that the
             Executive does not represent the actual kernel itself as you can see in the other graph above the kernel is a separate entity that operates on its own but cooperates significantly with the Executive
             and in some part with the HAL. Both the kernel and the Executive layers are embodied in a process image called <b>ntoskrnl.exe</b>, also referred as the NT kernel image (or if we want to go even more verbose,
-            NTOS as in the NT operating system and kernel). To get a detailed presentation of the NT kernel source tree, consult <a href = "doc/ntoskrnl/tree.html">this</a> article.
+            NTOS as in the NT operating system and kernel). To get a detailed presentation of the NT kernel source tree, consult <a href = "../../pages/doc/nt-internals/tree.html">this</a> article.
          </p>
 
          <p>
