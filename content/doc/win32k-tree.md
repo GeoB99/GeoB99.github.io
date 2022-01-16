@@ -1,60 +1,18 @@
-﻿<!-- Filename: win32k-tree.html -->
-<!-- Purpose: Win32k (Windows kernel subsystem) driver layout tree -->
-<!-- Created by George Bișoc (GeoB99) -->
++++
+title = "Win32K Tree"
+slug = "win32k-tree"
++++
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-<html lang = "en">
-   <head>
-      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
-      <title>Win32k tree</title>
-      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../../images/ROS.png">
-   </head>
+## Windows Subsystem Kernel layout tree
 
-   <body>
-      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
-      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
-      <h2>&nbsp;Win32k source tree</h2>
-      <h4>&nbsp;<a href = "documentation.html"><< Go Back</a></h4>
-      <h4>&nbsp;<a href = "../../index.html"><< Home Page</a></h4>
+The Windows subsystem environment is divided amongst two chunks that make up the entirety of the said subsystem. The user mode, with client libraries used by applications and components that interact within the user mode space (**Kernel32.dll**, **Gdi32.dll**, **User32.dll** et al) and a large portion being the kernel mode. The latter portion is in itself left undocumented, with no major details or explanation provided about the inner implementation of the kernel mode side. And what I am referring about the kernel mode portion is, without a doubt, **Win32k.sys**.
 
-      <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
+**Win32k.sys**, which is merely a kernel mode system driver, is responsible for graphics management -- what do you see on the screen. The kernel driver is separated into two major subset components: **GDI** (also known as Graphics Device Interface) and USER (known as the window manager of Windows). GDI is implemented internally in a directory named **ntgdi** (as you'd see in the tree layout below) whereas the window manager is named as **ntuser**. Within GDI source tree you'll see directories called **fontdrv**, **gre** and **halftone**. **Gre** (or Graphics rendering engine) is what it makes up the most of GDI source code base for implementation of primitive graphics handling, brushes, palette, colour objects and whatnot. When capturing the function calls in the call stack of Win32k with WinDBG, whilst in the course of debugging something, you may get across kernel routines such as `GreSetDCOwnerEx` with the prefix Gre\* denoting the function belongs to the GDI kernel module.
 
-      <h1>&nbsp;<u>Windows Subsystem Kernel layout tree</u></h1>
+**ntuser**, or just USER, is the window manager that has the responsibility for the creation and management of USER objects such as windows, menus, cursor and other stuff. In other words, USER is the internal compoment that provides graphical interaction between the system and user. An important remark is worth noting -- whilst GDI is primarily written in C++, USER for its entirety remains written in C. It's not really surprising considering USER is a massive historic source code dating back with the very early versions of Windows (including the 9x editions as well such as Windows 95 and 98). The inception of Win32k started with the development and release of the successive Windows operating system, Windows NT 4.0. With the 4.0 version of Windows NT all the GDI and USER code were moved into a kernel mode system driver for the sake of improving overall performance in terms of handling GDI/USER objects in a timely fashion. Before that, the Windows subsystem core code was in a server/client communication process called CSRSS.
 
-      <p>
-         The Windows subsystem environment is divided amongst two chunks that make up the entirety of the said subsystem. The user mode, with client libraries used by applications
-         and components that interact within the user mode space (<b>Kernel32.dll</b>, <b>Gdi32.dll</b>, <b>User32.dll</b> et al) and a large portion being the kernel mode. The latter
-         portion is in itself left undocumented, with no major details or explanation provided about the inner implementation of the kernel mode side. And what I am referring about the
-         kernel mode portion is, without a doubt, <b>Win32k.sys</b>.
-      </p>
 
-      <p>
-         <b>Win32k.sys</b>, which is merely a kernel mode system driver, is responsible for graphics management -- what do you see on the screen. The kernel driver is separated into two
-         major subset components: <b>GDI</b> (also known as Graphics Device Interface) and USER (known as the window manager of Windows). GDI is implemented internally in a directory named
-         <b>ntgdi</b> (as you'd see in the tree layout below) whereas the window manager is named as <b>ntuser</b>. Within GDI source tree you'll see directories called <b>fontdrv</b>,
-         <b>gre</b> and <b>halftone</b>. <b>Gre</b> (or Graphics rendering engine) is what it makes up the most of GDI source code base for implementation of primitive graphics handling,
-         brushes, palette, colour objects and whatnot. When capturing the function calls in the call stack of Win32k with WinDBG, whilst in the course of debugging something, you may
-         get across kernel routines such as <code>GreSetDCOwnerEx</code> with the prefix Gre* denoting the function belongs to the GDI kernel module.
-      </p>
-
-      <p>
-         <b>ntuser</b>, or just USER, is the window manager that has the responsibility for the creation and management of USER objects such as windows, menus, cursor and other stuff. In other
-         words, USER is the internal compoment that provides graphical interaction between the system and user. An important remark is worth noting -- whilst GDI is primarily written in C++, USER
-         for its entirety remains written in C. It's not really surprising considering USER is a massive historic source code dating back with the very early versions of Windows (including the 9x editions as well such as Windows 95 and 98).
-         The inception of Win32k started with the development and release of the successive Windows operating system, Windows NT 4.0. With the 4.0 version of Windows NT all the GDI and USER code were moved
-         into a kernel mode system driver for the sake of improving overall performance in terms of handling GDI/USER objects in a timely fashion. Before that, the Windows subsystem core code was in a
-         server/client communication process called CSRSS.
-      </p>
-
-      <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
-
-      <ul class = "tree">
+<ul class="tree">
          <li>d:
             <ul>
                <li>nt
@@ -77,23 +35,19 @@
                            </li>
                         </ul>
                      </li>
-
                      <li>windows (Windows Subsystem)
                         <ul>
                            <li>core (Core Windows Kernel Subsystem)
                               <ul>
-
                                  <!-- Kernel mode -->
                                  <li>kmode (Kernel Mode)
                                     <ul>
                                        <li>w32init.c</li>
                                     </ul>
                                  </li>
-
                                  <!-- Native Graphics Device Interface (NTGDI) -->
                                  <li>ntgdi (Native Graphics Device Interface)
                                     <ul>
-                                       
                                        <!-- Font Driver -->
                                        <li>fontdrv (Font Driver)
                                           <ul>
@@ -104,7 +58,6 @@
                                              </li>
                                           </ul>
                                        </li>
-
                                        <!-- Graphics rendering engine (Gre) -->
                                        <li>gre (Graphics Rendering Engine)
                                           <ul>
@@ -147,7 +100,6 @@
                                              <li>umpdobj.cxx</li>
                                           </ul>
                                        </li>
-
                                        <!-- Halftone GDI Support -->
                                        <li>halftone (Halftone Tecnique Support)
                                           <ul>
@@ -169,7 +121,6 @@
                                        </li>
                                     </ul>
                                  </li>
-
                                  <!-- Native USER module (Window manager -- NTUSER) -->
                                  <li>ntuser (Native USER Window Manager)
                                     <ul>
@@ -179,7 +130,6 @@
                                              <li>user.h</li>
                                           </ul>
                                        </li>
-
                                        <!-- NTUSER Run-Time Library -->
                                        <li>rtl (NTUSER Run-Time Library)
                                           <ul>
@@ -195,7 +145,6 @@
                                              <li>wow.c</li>
                                           </ul>
                                        </li>
-
                                        <!-- Kernel Mode USER -->
                                        <li>kernel (Kernel Mode USER)
                                           <ul>
@@ -318,7 +267,6 @@
                                        </li>
                                     </ul>
                                  </li>
-
                                  <!-- Win32k Run-Time Library -->
                                  <li>rtl (Win32k Run-Time Library)
                                     <ul>
@@ -327,7 +275,6 @@
                                        <li>tag.c</li>
                                     </ul>
                                  </li>
-
                                  <!-- Win32k Header Files -->
                                  <li>w32inc (Win32k Header Files)
                                     <ul>
@@ -343,5 +290,3 @@
             </ul>
          </li>
       </ul>
-   </body>
-</html>

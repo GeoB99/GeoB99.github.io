@@ -1,40 +1,12 @@
-﻿<!-- Filename: user32-tree.html -->
-<!-- Purpose: User32 user-mode library layout tree -->
-<!-- Created by George Bișoc (GeoB99) -->
++++
+title = "User32 Tree"
++++
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-<html lang = "en">
-   <head>
-      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
-      <title>User32 layout tree</title>
-      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../../images/ROS.png">
-   </head>
+## User32 user-mode library layout tree
 
-   <body>
-      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
-      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
-      <h2>&nbsp;User32 source tree</h2>
-      <h4>&nbsp;<a href = "documentation.html"><< Go Back</a></h4>
-      <h4>&nbsp;<a href = "../../index.html"><< Home Page</a></h4>
+**User32.dll** is a user mode DLL library that provides windowing manager APIs to the client. An example of a call brought by the said library is `CreateWindowExW` which creates a window with extended styles. The documented function calls in the **User32.dll** library rely on undocumented internal functions in Win32k, the kernel mode side of the Windows subsystem.
 
-      <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
-
-      <h1>&nbsp;<u>User32 user-mode library layout tree</u></h1>
-
-      <p>
-         <b>User32.dll</b> is a user mode DLL library that provides windowing manager APIs to the client. An example of a call brought by the said library is <code>CreateWindowExW</code> which creates
-         a window with extended styles. The documented function calls in the <b>User32.dll</b> library rely on undocumented internal functions in Win32k, the kernel mode side of the Windows subsystem.
-      </p>
-
-      <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
-
-      <ul class = "tree">
+<ul class = "tree">
          <li>d:
             <ul>
                <li>nt
@@ -43,11 +15,9 @@
                         <ul>
                            <li>core (Core Windows Kernel Subsystem)
                               <ul>
-
                                  <!-- Native USER Window Manager -->
                                  <li>ntuser (Native USER Window Manager)
                                     <ul>
-
                                        <!-- USER user-mode library -->
                                        <li>client (USER user-mode library)
                                           <ul>
@@ -131,14 +101,12 @@
                                              <li>wow.c</li>
                                           </ul>
                                        </li>
-
                                        <!-- Header files -->
                                        <li>inc (Header Files)
                                           <ul>
                                              <li>ntcb.h</li>
                                           </ul>
                                        </li>
-
                                        <!-- User32 Run-Time Library -->
                                        <li>rtl (User32 Run-Time library)
                                           <ul>
@@ -154,7 +122,6 @@
                                        </li>
                                     </ul>
                                  </li>
-
                                  <!-- Win32k Run-Time Library -->
                                  <li>rtl (Win32k Run-Time Library)
                                     <ul>
@@ -170,5 +137,3 @@
             </ul>
          </li>
       </ul>
-   </body>
-</html>

@@ -1,3 +1,9 @@
 theme = "geo"
 baseURL = "https://sigwait.github.io/GeoB99.github.io"
 title = "GeoB99 Website"
+
+[markup]
+  defaultMarkdownHandler = "goldmark"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true

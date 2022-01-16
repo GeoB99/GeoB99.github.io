@@ -5,6 +5,7 @@ date = 2020-07-09
 +++
 
 ## Documentation home page
+
 In this section of the website I'll provide documentation and details of parts that aren't currently documented over the Internet, with the OS platform of interest being Windows Server 2003 as ReactOS primarily targets this edition of Windows. From here I publish details about undocumented functions (and possibly structures) in WS2003, ranging from the NT kernel itself to other areas and fields of the operating system. The section is divived into two separate fields, kernel and user mode.
 
 ### Disclaimer!

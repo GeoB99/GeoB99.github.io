@@ -1,41 +1,13 @@
-﻿<!-- Filename: winsrv-tree.html -->
-<!-- Purpose: Windows USER + Console server library layout tree -->
-<!-- Created by George Bișoc (GeoB99) -->
++++
+title = "Winsrv layout tree"
+slug = "winsrv-tree"
++++
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-<html lang = "en">
-   <head>
-      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
-      <title>Winsrv layout tree</title>
-      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../../images/ROS.png">
-   </head>
+## Windows USER + Console server library layout tree
 
-   <body>
-      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
-      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
-      <h2>&nbsp;Windows USER + Console server library source tree</h2>
-      <h4>&nbsp;<a href = "documentation.html"><< Go Back</a></h4>
-      <h4>&nbsp;<a href = "../../index.html"><< Home Page</a></h4>
+Nothing much has to be said about this library. **Winsrv.dll** is all but a provider for server intercommunication support for console and window manager environment. That is, the server being the kernel mode realm of the Windows subsystem environment (as usual **Winsrv.dll** relies on Win32k). Speaking of the window manager environment, some fundamental aspects of **Winsrv.dll** are the hard-error implementation, shutdown/logout notification mechanism and windowing message communication.
 
-      <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
-
-      <h1>&nbsp;<u>Windows USER + Console server library layout tree</u></h1>
-
-      <p>
-         Nothing much has to be said about this library. <b>Winsrv.dll</b> is all but a provider for server intercommunication support for console and window manager environment. That is,
-         the server being the kernel mode realm of the Windows subsystem environment (as usual <b>Winsrv.dll</b> relies on Win32k). Speaking of the window manager environment, some fundamental
-         aspects of <b>Winsrv.dll</b> are the hard-error implementation, shutdown/logout notification mechanism and windowing message communication.
-      </p>
-
-      <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
-
-      <ul class = "tree">
+<ul class="tree">
          <li>d:
             <ul>
                <li>nt
@@ -44,8 +16,6 @@
                         <ul>
                            <li>core (Core Windows Kernel Subsystem)
                               <ul>
-                                 
-                                 <!-- Native Console -->
                                  <li>ntcon (Native Console)
                                     <ul>
                                        <li>server
@@ -121,5 +91,3 @@
             </ul>
          </li>
       </ul>
-   </body>
-</html>

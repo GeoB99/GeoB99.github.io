@@ -1,54 +1,21 @@
-﻿<!-- Filename: ntdll-tree.html -->
-<!-- Purpose: Native API user-mode layer (NTDLL) layout tree -->
-<!-- Created by George Bișoc (GeoB99) -->
++++
+title = "NTDLL Tree"
+slug = "ntdll-tree"
++++
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-   "http://www.w3.org/TR/html4/loose.dtd">
-<html lang = "en">
-   <head>
-      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
-      <title>NTDLL layout tree</title>
-      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
-      <link rel = "icon" href = "../../images/ROS.png">
-   </head>
+## Native API user-mode layer (NTDLL) layout source tree
 
-   <body>
-      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "125" width = "120" hspace = "10">
-      <h1>&nbsp;ReactOS Tutorials (Documentation)</h1>
-      <h2>&nbsp;Native API user-mode layer (NTDLL) layout source tree</h2>
-      <h4>&nbsp;<a href = "documentation.html"><< Go Back</a></h4>
-      <h4>&nbsp;<a href = "../../index.html"><< Home Page</a></h4>
+The Native API, serving the purpose as a system call interface for subsystem environments, provides the Rtl section known as the Run-Time library as well as Loader and SxS (Side-by-Side Assembly) module source codes. The base library service of the Windows subsystem, **Kernel32.dll**, makes a call into NTDLL which in turn invokes a specific kernel mode service in the NT kernel to accomplish a request. **User32.dll** and **Gdi32.dll** libraries are exceptions as these make calls which are then trapped into kernel mode in Win32k.sys, not NTDLL!
 
-       <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
+With that said, whenever an application makes a function call to `IsProcessInJob` in **Kernel32.dll** library the call flow operation goes through NTDLL and then into the kernel with the path leading to `NtIsProcessInJob` call. Windows ensures that whatever service call happening in user mode must be uniform, that is, the proper number of kernel mode services in the NT kernel have to be requested for a specific work.
 
-      <h1>&nbsp;<u>Native API user-mode layer (NTDLL) layout source tree</u></h1>
-
-      <p>
-         The Native API, serving the purpose as a system call interface for subsystem environments, provides the Rtl section known as the Run-Time library as well as Loader and SxS (Side-by-Side Assembly)
-         module source codes. The base library service of the Windows subsystem, <b>Kernel32.dll</b>, makes a call into NTDLL which in turn invokes a specific kernel mode service
-         in the NT kernel to accomplish a request. <b>User32.dll</b> and <b>Gdi32.dll</b> libraries are exceptions as these make calls which are then trapped into kernel mode in Win32k.sys, not NTDLL!
-      </p>
-
-      <p>
-         With that said, whenever an application makes a function call to <code>IsProcessInJob</code> in <b>Kernel32.dll</b> library the call flow operation goes through NTDLL and then into the kernel
-         with the path leading to <code>NtIsProcessInJob</code> call. Windows ensures that whatever service call happening in user mode must be uniform, that is, the proper number of kernel mode services
-         in the NT kernel have to be requested for a specific work.
-      </p>
-
-       <!-- Add a separator -->
-      <hr id = "thick">
-      <br>
-
-      <ul class = "tree">
+<ul class = "tree">
          <li>d:
             <ul>
                <li>nt
                   <ul>
                      <li>base (Base Operating System)
                         <ul>
-                           
                            <!-- NTDLL layer -->
                            <li>ntdll (Native API layer)
                               <ul>
@@ -73,7 +40,6 @@
                                  <li>verifier.c</li>
                               </ul>
                            </li>
-
                            <!-- NT kernel -->
                            <li>ntos (NT kernel)
                               <ul>
@@ -110,7 +76,6 @@
                                  </li>
                               </ul>
                            </li>
-
                            <!-- Windows Management Instrumentation -->
                            <li>wmi (Windows Management Instrumentation)
                               <ul>
@@ -121,7 +86,6 @@
                                        <li>wmiump.h</li>
                                     </ul>
                                  </li>
-
                                  <li>ntdll (Native API layer)
                                     <ul>
                                        <li>guidapi.c</li>
@@ -143,5 +107,3 @@
             </ul>
          </li>
       </ul>
-   </body>
-</html>
