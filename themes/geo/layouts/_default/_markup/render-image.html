@@ -1,0 +1,3 @@
+<p class="md__image">
+    <img src="{{$.Site.BaseURL}}{{ .Destination | safeURL }}" alt="{{ .Text }}" {{ with .Title}} title="{{ . }}"{{ end }} />
+</p>
