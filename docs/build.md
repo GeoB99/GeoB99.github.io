@@ -14,5 +14,4 @@
 
 Simply execute `hugo build` to generate the directory that contains all the static file. Use `--minify` option to keep HTML and CSS minified. Use `--builddrafts` to build drafts. More flags can be found [here](https://gohugo.io/getting-started/usage/).
 
-###
-WARNING BuildURL does not need trailing slash!!!!!!!
+**Warning**: BuildURL does not need trailing slash!!!!!!!
