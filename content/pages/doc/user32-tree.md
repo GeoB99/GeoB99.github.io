@@ -6,6 +6,7 @@ title = "User32 Tree"
 
 **User32.dll** is a user mode DLL library that provides windowing manager APIs to the client. An example of a call brought by the said library is `CreateWindowExW` which creates a window with extended styles. The documented function calls in the **User32.dll** library rely on undocumented internal functions in Win32k, the kernel mode side of the Windows subsystem.
 
+{{<raw-html>}}
 <ul class = "tree">
          <li>d:
             <ul>
@@ -137,3 +138,4 @@ title = "User32 Tree"
             </ul>
          </li>
       </ul>
+{{</raw-html>}}

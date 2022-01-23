@@ -9,6 +9,7 @@ The Native API, serving the purpose as a system call interface for subsystem env
 
 With that said, whenever an application makes a function call to `IsProcessInJob` in **Kernel32.dll** library the call flow operation goes through NTDLL and then into the kernel with the path leading to `NtIsProcessInJob` call. Windows ensures that whatever service call happening in user mode must be uniform, that is, the proper number of kernel mode services in the NT kernel have to be requested for a specific work.
 
+{{<raw-html>}}
 <ul class = "tree">
          <li>d:
             <ul>
@@ -107,3 +108,4 @@ With that said, whenever an application makes a function call to `IsProcessInJob
             </ul>
          </li>
       </ul>
+{{</raw-html>}}

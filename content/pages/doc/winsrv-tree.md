@@ -7,6 +7,7 @@ slug = "winsrv-tree"
 
 Nothing much has to be said about this library. **Winsrv.dll** is all but a provider for server intercommunication support for console and window manager environment. That is, the server being the kernel mode realm of the Windows subsystem environment (as usual **Winsrv.dll** relies on Win32k). Speaking of the window manager environment, some fundamental aspects of **Winsrv.dll** are the hard-error implementation, shutdown/logout notification mechanism and windowing message communication.
 
+{{<raw-html>}}
 <ul class="tree">
          <li>d:
             <ul>
@@ -91,3 +92,4 @@ Nothing much has to be said about this library. **Winsrv.dll** is all but a prov
             </ul>
          </li>
       </ul>
+{{</raw-html>}}

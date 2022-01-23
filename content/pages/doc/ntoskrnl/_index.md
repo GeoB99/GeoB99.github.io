@@ -8,11 +8,11 @@ The NT kernel is the fundamental core at the deepest level in Windows that inter
     
 ## Kernel Executive service modules list
 
-    <ul>
-         <li>
-            <a href = "/ps/">Ps</a>
-         </li>
-         <li>
-            <a href = "/rtl/">Rtl</a>
-         </li>
-      </ul>
+<ul>
+    <li>
+      <a href = "/ps/">Ps</a>
+   </li>
+   <li>
+      <a href = "/rtl/">Rtl</a>
+   </li>
+</ul>

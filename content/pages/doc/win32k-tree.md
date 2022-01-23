@@ -11,7 +11,7 @@ The Windows subsystem environment is divided amongst two chunks that make up the
 
 **ntuser**, or just USER, is the window manager that has the responsibility for the creation and management of USER objects such as windows, menus, cursor and other stuff. In other words, USER is the internal compoment that provides graphical interaction between the system and user. An important remark is worth noting -- whilst GDI is primarily written in C++, USER for its entirety remains written in C. It's not really surprising considering USER is a massive historic source code dating back with the very early versions of Windows (including the 9x editions as well such as Windows 95 and 98). The inception of Win32k started with the development and release of the successive Windows operating system, Windows NT 4.0. With the 4.0 version of Windows NT all the GDI and USER code were moved into a kernel mode system driver for the sake of improving overall performance in terms of handling GDI/USER objects in a timely fashion. Before that, the Windows subsystem core code was in a server/client communication process called CSRSS.
 
-
+{{<raw-html>}}
 <ul class="tree">
          <li>d:
             <ul>
@@ -290,3 +290,4 @@ The Windows subsystem environment is divided amongst two chunks that make up the
             </ul>
          </li>
       </ul>
+{{</raw-html>}}

@@ -1,6 +1,5 @@
 +++
 title = "List of Tutorials"
-url = "/ros-tutorials/"
 aliases = [
     "/pages/",
     "/ros-tutorial/",
