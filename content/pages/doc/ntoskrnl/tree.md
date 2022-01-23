@@ -3,7 +3,7 @@ title = "ntoskrnl tree"
 slug = "tree"
 +++
 
-## Windows Server 2003 kernel source tree
+## Windows Server 2003 kernel source tree
 
 What you're seeing here is the NT kernel source tree layout of Windows Server 2003 (Service Pack 2). The source layout of Windows Server 2003 kernel is structured in a directory called **ntos** whereas **base** serves as the base operating system directory of Windows as a whole. You may wonder though, how did I obtain the said source layout of the NT kernel?
 
