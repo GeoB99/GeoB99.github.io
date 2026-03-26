@@ -1,0 +1,324 @@
+<!-- Filename: nt-dev-part5.1.html -->
+<!-- Purpose: "Introduction to the NT kernel development -- Configuration Manager (Basic Concepts, Registry Healing and Recovery - Part 5.1)" HTML page -->
+<!-- Created by George Bișoc (GeoB99) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>Introduction to the NT kernel development -- Configuration Manager (Basic Concepts, Registry Healing and Recovery - Part 5.1)</title>
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials</h1>
+      <h2>&nbsp;Introduction to the NT kernel development -- Configuration Manager (Basic Concepts, Registry Healing and Recovery - Part 5.1)</h2>
+      <h4>&nbsp;<a href = "nt-dev-intro.html"><< Go Back</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- Contents table -->
+      <h1>&nbsp;<u>Table of Contents</u></h1>
+      <ol>
+         <li>
+            <a href = "#introduction">Introduction</a>
+         </li>
+
+         <li>
+            <a href = "#preamble">Preamble about the Configuration Manager and the Registry</a>
+         </li>
+
+         <li>
+            <a href = "#origin">The origin of the word "hive"</a>
+         </li>
+
+         <li>
+            <a href = "#looks">How does the Registry look like?</a>
+         </li>
+
+         <li>
+            <a href = "#hive">What is a hive?</a>
+         </li>
+
+         <li>
+            <a href = "#init">The initialization of the Registry</a>
+         </li>
+
+         <li>
+            <a href = "#structure">The structure of a hive</a>
+         </li>
+
+         <li>
+            <a href = "#bincell">Bins and Cells</a>
+         </li>
+
+         <li>
+            <a href = "#types">Type of hives</a>
+         </li>
+
+         <li>
+            <a href = "#baseblock">The base header block</a>
+         </li>
+
+         <li>
+            <a href = "#rootcell">What is a root cell?</a>
+         </li>
+
+         <li>
+            <a href = "#hivelog">Primary hives and logs</a>
+         </li>
+
+         <li>
+            <a href = "#signature">Signatures and registry authenticity</a>
+         </li>
+
+         <li>
+            <a href = "#lazyflush">Registry lazy flushing</a>
+         </li>
+
+         <li>
+            <a href = "#corruption">What are registry corruptions and why do they happen?</a>
+         </li>
+
+         <li>
+            <a href = "#check">Registry Validation & Checks - The CmCheckRegistry function</a>
+         </li>
+
+         <li>
+            <a href = "#solutions">Registry self-healing mechanisms & Algorithms</a>
+         </li>
+
+         <li>
+            <a href = "#determine">How catastrophic a registry corruption can be?</a>
+         </li>
+
+         <li>
+            <a href = "#conclusion">Conclusion</a>
+         </li>
+      </ol>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+
+      <div id = "introduction">
+         <!-- Title -->
+         <h1><u>Introduction</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            You wake up in the morning, have your delicious choccy milk with biscuits, prepare yourself for work and head up to your office and doing your usual boring bureaucratic stuff. Out of a sudden a power outage occurs and
+            you throwing some funky Aussie insults because you've had unsaved work in your PC, so like other employees in the office. Hey, at least your boss is kind and understanding (I hope?) and feels your frustration. Your PC
+            shutting down unexpectedly due to a outage or a hardware problem could happen to anyone, to your girlfriend, your boyfriend, your favorite politician, your best friend, your most annoying buddy, and so on. It could've been worse...
+         </p>
+         <p>
+            Prior to Windows NT consumers, enterprise businesses, organizations and so on knew of Windows 9x editions such as Windows 95, 98 and Millennium Edition. During that time the Registry of such systems didn't have fault proof and tolerance
+            implementations against scenario that can tear apart the Registry such as abnormal shutdown from a power outage or system malfunction. A corrupted Registry is a literal sentence to a Windows re-installation on your PC. Only with the start
+            of Windows NT things have gotten more serious when it comes to system reliability, fault tolerance and whatnot. Windows NT provides implementations and protection against impending doom corruptions of the Registry, such as automatic backup of
+            the Registry itself through "logs", healing and repair mechanisms during boot up of the system as well as Registry validation and checks.
+         </p>
+         <p>
+            In this chapter of "Introduction to the NT kernel development" I will be explaining the basic aspects of the Registry internals, the nature of corruptions and why do they happen and how does the Registry heal itself. More specifically, I will be
+            documenting a critical component of the NT kernel, the <b>Configuration Manager</b>.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "preamble">
+         <!-- Title -->
+         <h1><u>Preamble about the Configuration Manager and the Registry</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            If you stumble upon the <a href = "https://github.com/reactos/reactos/tree/master/ntoskrnl">ntoskrnl directory</a> you'll see a folder called <code>config</code>, serving as the infrastructure code for the Configuration Manager. The Configuration Manager
+            whose kernel prefix goes by <b>Cm</b> is a component of the Executive layer of the NT kernel that is the skeleton of the Registry. In other words, the Configuration Manager is a formal way of saying "Registry", for people that aren't actually aware of. It
+            implements the critical algorithms necessary for what it makes the "Registry", configuration data management within the Registry, NT API system calls interface so that outside callers can communicate with the Registry, etc.
+            The Configuration Manager also takes responsibility on the boot up of the system.
+         </p>
+         <p>
+            The Registry is a hierarchical database consisting of arranged data set up in structured place to store configuration information of a system. For example user specific data such as applications data, critical system data, hardware information related data,
+            and a whole lot more. You probably used the Registry Editor program that comes with your Windows installation quite a lot of times to do some tasks or tweak certain settings. You have seen names like HKEY_LOCAL_MACHINE or HKEY_CURRENT_USER, they're kind of strange
+            looking, right? For simplicity we call them root keys (the <code>HK</code> prefix stands for <b>Handle Key</b>). But the adventure doesn't really stop here as you stumble within the Configuration Manager you will see weird terminologies like <b>hives</b>, <b>cells</b>,
+            <b>bins</b>, <b>roots</b>, <b>leaves</b>, etc. These are all of the entities that compose the skeleton of the Registry and its functionality as a database.
+         </p>
+         <a href = "../../images/nt-dev/part5-1/cm.png"><img src = "../../images/nt-dev/part5-1/cm.png" alt = "CM"></a>
+         <p>
+            The Configuration Manager comes with a subset manager subsystem that deals solely with hive management, called the <b>Hive Manager</b>. This is not an official name envisioned by Microsoft nor ReactOS but just a placeholder to better understand the two distinctive parts
+            of the component, albeit in one single core in the Executive. The Hive Manager is responsible for the internal handling of a registry hive data, those being the hive cells, bins, leaves and so on. It also provides hive initialization code (that can be triggered with the <code>HvInitialize</code> function).
+            Speaking of functions themselves, they are annotated with the <b>Hv</b> prefix, <b>Hvp</b> for private functions.
+         </p>
+         <p>
+            The Configuration Manager itself on the other hand deals with the rest of the implementation of the Registry such as lazy flushing mechanism (which I will be explaining that later), internal Configuration Manager APIs, etc. The functions that embody within such manager are annotated with the <b>Cm</b> prefix,
+            <b>Cmp</b> for private functions.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "origin">
+         <!-- Title -->
+         <h1><u>The origin of the word "hive"</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            As we will dwell into the deep internals of the Configuration Manager, most of the time you will hear the word "hive" and getting somewhat confused how is it related to the topic about the registry. Generally when you hear the word "hive" you are going to think about a bee-hive, right?
+            You're not alone! The developers at Microsoft who worked for the registry adopted this word as an inside joke about honey bees and whatnot. Raymond Chen confirms <a href = "https://devblogs.microsoft.com/oldnewthing/20030808-00/?p=42943">this</a>.
+         </p>
+         <p>
+            The developer who was responsible for the registry is a mean person! He may hate bees, but in this article we will instead show love. Honey bees are cute! Anyway going back to our serious stuff, in order to understand the meaning of each bee terminology used in the registry internals, let's
+            make an analogy. A <b>hive</b> is typically a registry file, a <b>hive bin</b> (or just simply called <b>bin</b>) is the space used to store <b>cells</b> (in the context of honey bees stuff that would be the hexagonal prismatic shape). And <b>cells</b> are the actual registry data such keys,
+            key values, value data, etc. In the context of bees, a cell would be a bee pupae, a larvae, pollen, honey and such.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "looks">
+         <!-- Title -->
+         <h1><u>How does the Registry look like?</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            For those who toyed around with the registry by using the Registry Editor tool (aka <code>regedit.exe</code>), you may have already been familiarized with its semantics, properties and such. But for those who don't, try to launch that tool and you will see something like this:
+         </p>
+         <a href = "../../images/nt-dev/part5-1/regedit.png"><img src = "../../images/nt-dev/part5-1/regedit.png" alt = "Regedit"></a>
+         <p>
+            So, a bunch of directories in the left and that is pretty much what is there. What's so special here you may ask? Well, these "directories" (or "folders") on the left that what you would call them are not directories per se but instead they are <b>handles to registry root keys</b>
+            or in other words, they are registry points that lead to the specific registry data of your system. Think of them as registry hints more or less. The <code>HKEY</code> acronym literally stands for <b>Handle to a Key</b> and what comes after the acronym is the scope of what kind of
+            registry data should contain inside a root key. Each of these root keys have specific meaning and purpose behind them. The meaning of the following root keys are:
+         </p>
+         <h3>&nbsp;&#129154; HKEY_CLASSES_ROOT</h3>
+         <p>
+            This root key contains data about applications that are installed in your computer. Typically such information is the filename extension that a specific application adds support for it. Basically whenever you install an application such as MediBang Paint, the associated file extensions
+            of this application will be added into this root key. This root key is a merged view of two registry keys in <code>HKLM\Software\Classes</code> and <code>HKCU\Software\Classes</code> respectively. The abbreviation of this key is <code>HKCR</code>.
+         </p>
+         <h3>&nbsp;&#129154; HKEY_CURRENT_USER</h3>
+         <p>
+            This root key contains data about the current logged-in user. A peculiarity of this key is that it points to one of the user key from <code>HKEY_USERS</code>, associated with a security identifier (or SID) representing the user in this context. Whenever a user logs in to the system
+            its associated user data hive gets loaded in memory and pointed to this root key. Only one user hive profile is loaded. The registry data of each user is stored in <code>NTUSER.DAT</code> file. The abbreviation of this key is <code>HKCU</code>.
+         </p>
+         <h3>&nbsp;&#129154; HKEY_LOCAL_MACHINE</h3>
+         <p>
+            This root key contains about the computer. Such information about the computer include the device drivers installed on the system, system boot startup control parameters, critical system settings, installed software and miscellaneous data. The following root key links several physical
+            registry hives on the system, of which are <code>SAM</code>, <code>SECURITY</code>, <code>SYSTEM</code>, <code>SOFTWARE</code> and <code>HARDWARE</code>. The only exception here is <code>HARDWARE</code> as it is not a physical hive per se but instead is a volatile hive created on run-time
+            during the bootstrap of the system and stored in memory, aka RAM (hence the word "volatile"). Volatile hives vanish as soon as the system shuts down. More of that stuff I will explain in detail later. The abbreviation of this key is <code>HKLM</code>.
+         </p>
+         <h3>&nbsp;&#129154; HKEY_USERS</h3>
+         <p>
+            This root key contains data about each user profiles. Tipically only one user profile that corresponds to the interactively logged-in user gets loaded in memory and linked to the <code>HKEY_CURRENT_USER</code> root key. The identity of a user is denoted by a security identifier (SID).
+            The abbreviation of this key is <code>HKU</code>.
+         </p>
+         <h3>&nbsp;&#129154; HKEY_CURRENT_CONFIG</h3>
+         <p>
+            This root key contains data about the current configuration of a hardware profile being effectively used. Pretty much as <code>HKEY_CURRENT_USER</code>, this key points to the contents of <code>HKLM\System\CurrentControlSet\Hardware Profiles\Current</code> key. The purpose of this root key
+            is to differentiate between the standard hardware configuration and the current one being used, and to easily access such current hardware profile through this key. The abbreviation of this key is <code>HKCC</code>.
+         </p>
+
+         <p>
+            There are several different kinds of root keys such as <code>HKEY_PERFORMANCE_DATA</code> and <code>HKEY_DYN_DATA</code> although I am not going to talk about those. As you will stumble upon these root keys you will find a plethora of keys with a multitude of registry values and value data.
+            In this scenario your Registry Editor would look like this:
+         </p>
+         <a href = "../../images/nt-dev/part5-1/regedit2.png"><img src = "../../images/nt-dev/part5-1/regedit2.png" alt = "Regedit 2"></a>
+         <p>
+            In this screenshot I marked the following contents of the registry describing what are the keys, values and value data. As you can see, a <b>key</b> is a container (think of it as a directory more or less) that holds registry values, a <b>subkey</b> is a container as well but succeeds a key
+            (basically it is a sub-directory). A subkey that contains several subkeys is a key and subkey at the same time. A <b>value</b> is like a file, bound to the key, and contains the actual registry data. Such registry data is called a <b>value data</b>. In this example, the following value is of
+            <code>REG_SZ</code> type which means it is a null-terminated string-type value that contains a string as data. There are other types of values although I am not going to explain those for now.
+         </p>
+         <p>
+            An important aspect to keep in mind is that, while the registry on itself is a hierarchical database, the real presentation of the registry does not look like you see from Registry Editor. What you see instead is a translated presentation of the registry so that a human could interact with the
+            registry whether through registry API calls or directly through the Registry Editor itself. I am going to further explain it in the next section. Now, to summarize what we learnt so far...
+         </p>
+         <a href = "../../images/nt-dev/part5-1/registry-summary.png"><img src = "../../images/nt-dev/part5-1/registry-summary.png" alt = "Registry Summary"></a>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "hive">
+         <!-- Title -->
+         <h1><u>What is a hive?</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            As discussed earlier, the real presentation of the registry is based upon a set of physical files stored on the system called <b>hives</b>. A <b>hive</b> is a file created and initialized by the Configuration Manager of the kernel, of which the structures of a hive are not publicly exposed.
+            That is, a registry hive cannot be manipulated directly since it is the kernel that can understand what are the contents inside a hive. Instead, whenever a registry API call is invoked to write into the registry or a key or value is changed directly via the Registry Editor, the Configuration
+            Manager is responsible to manage the target hive file.
+         </p>
+         <p>
+            The hives are stored on their specific location, <code>ReactOS\system32\config</code>. On the same location you will find other registry files such as those that end with <code>.LOG</code> extension although I will talk about registry logs later. The internal contents of a registry hive is in
+            binary form. For more details about the structure of a hive itself, I will explain it down below.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "init">
+         <!-- Title -->
+         <h1><u>The initialization of the Registry</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+            The initialization of the registry is done in two different phases -- the <b>passive</b> phase and <b>active</b> phase. In passive phase the entirety of the registry database and configuration are not initialized by the kernel but instead only one hive is loaded in memory during boot-time
+            by FreeLdr (or also called FreeLoader, our bootloader). The hive file in question being loaded is the <code>SYSTEM</code> hive. The purpose of this phase is to grab critical data from the registry such as boot drivers list and Last Known Good Configuration (LKG) information in order to continue
+            execution of the bootstrap procedure.
+         </p>
+         <a href = "../../images/nt-dev/part5-1/passive-init-graph.png"><img src = "../../images/nt-dev/part5-1/passive-init-graph.png" alt = "Pasive Init"></a>
+         <p>
+            During the early stages of boot initialization, FreeLdr attempts to load the primary <code>SYSTEM</code> hive by invoking the <code>WinLdrLoadSystemHive</code> function. It does that by opening the target hive within the configuration directory where other hives are stored at, it allocates some chunk
+            of memory to hold the read data from the file and then with the said chunk of memory is used to import the binary data of the <code>SYSTEM</code> hive that is present in memory. The procedure of importing binary data is done by initializing a hive descriptor by invoking <code>HvInitialize</code> and
+            after that the registry hive is validated with <code>CmCheckRegistry</code> to ensure the consistency of the registry hive. If one of the following operations fail, FreeLdr will attempt to load the alternate variant of the hive, aka <code>SYSTEM.ALT</code>.
+         </p>
+         <p>
+            The initialization of the registry can continue forward <b><u>ONLY WHEN</u></b> the passive initialization has completed successfully. That is, with the fully loaded <code>SYSTEM</code> hive in memory, FreeLdr will pass the hive memory pointer to the kernel through a <code>LOADER_PARAMETER_BLOCK</code>
+            structure, in <code>RegistryBase</code> pointer respectively. This is where the active phase kicks in...
+         </p>
+         <p>
+            During the active phase the initialization procedure is divided among two parts -- <b>Configuration Manager</b> and <b>Registry</b> startup. The startup of the Configuration Manager is handled by the <code>CmInitSystem1</code> function, which is responsible to initialize Configuration Manager internal
+            structures and pointers such hives list, locks, initializing the registry caching, the registry root node, object keys, etc. This procedure is done when the kernel initializes the components of the Executive layer and the code of the Configuration Manager initialization can be found <a href = "https://git.reactos.org/?p=reactos.git;a=blob;f=ntoskrnl/config/cmsysini.c;hb=a2a063a2823f74b3e751160c75049ca879c6bf22#l1503">here</a>.
+            The initialization of the registry itself however is done by <code>NtInitializeRegistry</code>.
+         </p>
+         <a href = "../../images/nt-dev/part5-1/active-init-graph.png"><img src = "../../images/nt-dev/part5-1/active-init-graph.png" alt = "Active Init"></a>
+         <p>
+            Bear in mind that registry initialization occurs when the Configuration Manager has fully started up and is effectively operational, or in other words, the Configuration Manager is initialized before the registry. The registry is initialized during Winlogon startup (specifically <a href = "https://git.reactos.org/?p=reactos.git;a=blob;f=base/system/winlogon/winlogon.c;hb=a2a063a2823f74b3e751160c75049ca879c6bf22#l605">here</a>).
+            During this phase, the following <code>SAM</code>, <code>SECURITY</code>, <code>SOFTWARE</code> and <code>SYSTEM</code> hives are loaded. An interesting aspect though is that I did talk earlier that FreeLdr passes a pointer to <code>SYSTEM</code> hive data in memory to the kernel, right? This pointer is used
+            in the <code>CmpInitializeSystemHive</code> function to initialize a newly fresh hive descriptor from an already loaded hive data in memory, with the newly set up hive added to the list of machine hives.
+         </p>
+      </div>
+
+      <!-- Add a separator -->
+      <hr>
+
+      <div id = "structure">
+         <!-- Title -->
+         <h1><u>The structure of a hive</u></h1>
+
+         <br>
+
+         <!-- Actual content -->
+         <p>
+
+         </p>
+      </div>
+   </body>
+</html>

@@ -1,0 +1,88 @@
+<!-- Filename: nt-dev-part4.3.html -->
+<!-- Purpose: "Introduction to the NT kernel development -- Security Manager (Access Checks - Part 4.3)" HTML page -->
+<!-- Created by George Bișoc (GeoB99) -->
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+   "http://www.w3.org/TR/html4/loose.dtd">
+<html lang = "en">
+   <head>
+      <meta http-equiv = "Content-Type" content = "text/html; charset = UTF-8">
+      <title>Introduction to the NT kernel development -- Security Manager (Access Checks - Part 4.3)</title>
+      <link href = "../../StyleSheet.css" rel = "StyleSheet" type = "text/css">
+      <link rel = "icon" href = "../../images/ROS.png">
+   </head>
+
+   <body>
+      <img src = "../../images/ROS.png" alt = "ReactOS Icon" align = "left" height = "100" width = "120" hspace = "10">
+      <h1>&nbsp;ReactOS Tutorials</h1>
+      <h2>&nbsp;Introduction to the NT kernel development -- Security Manager (Access Checks - Part 4.3)</h2>
+      <h4>&nbsp;<a href = "nt-dev-intro.html"><< Go Back</a></h4>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+      <br>
+
+      <!-- Contents table -->
+      <h1>&nbsp;<u>Table of Contents</u></h1>
+      <ol>
+         <li>
+            <a href = "#introduction">Introduction</a>
+         </li>
+
+         <li>
+            <a href = "#preamble">Preamble about access checks</a>
+         </li>
+
+         <li>
+            <a href = "#types">Types of access checks</a>
+         </li>
+
+         <li>
+            <a href = "#coop">Cooperation between the Object and Security Managers</a>
+         </li>
+
+         <li>
+            <a href = "#anatomy">Anatomy of SepAccessCheck internal function</a>
+         </li>
+
+         <li>
+            <a href = "#tokens">Primary and client tokens</a>
+         </li>
+
+         <li>
+            <a href = "#mask">ACCESS_MASK and access rights</a>
+         </li>
+
+         <li>
+            <a href = "#state">Anatomy and relevance of ACCESS_STATE structure</a>
+         </li>
+
+         <li>
+            <a href = "#typelist">Difference between access check by type and by type result list</a>
+         </li>
+
+         <li>
+            <a href = "#traverse">Traversal access checks</a>
+         </li>
+
+         <li>
+            <a href = "#ace">Access Control Entries (ACEs) and their types</a>
+         </li>
+
+         <li>
+            <a href = "#map">Analysis & Mapping of access rights</a>
+         </li>
+
+         <li>
+            <a href = "#audit">Access checks with auditing and alarm</a>
+         </li>
+
+         <li>
+            <a href = "#conclusion">Conclusion</a>
+         </li>
+      </ol>
+
+      <!-- Add a separator -->
+      <hr id = "thick">
+   </body>
+</html>
